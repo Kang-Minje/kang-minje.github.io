@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+  <title>JEJU, 2018 | Kang Minje </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+  <div id="grid">
+
+    <div>
+      <a href="home.html"><img src="logo4.png" class="logo" id="logo"></a>
+      <ul id="main">
+
+        <li><a href="index.html" class="other">Home</a></li>
+        <li><a href="works.html" class="current">Works</a>
+
+                <ul id="sub">
+                  <li><a class="first" href="둘러보다.html">- 둘러보다</a></li>
+                  <li><a class="second" href="Palette.html">- Palette</a></li>
+                  <li><a class="third" href="공간.html">- 공간</a></li>
+                  <li><a class="fourth" href="빛오색.html">- 빛과 오후, 그리고 색</li>
+                  <li><a class="fifth" href="제주.html">- JEJU, 2018</li>
+
+                </ul>
+        </li>
+        <li><a href="about.html" class="other">About</a></li>
+        <li><a href="Contacts.html" class="other">Contacts</a></li>
+
+        <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
+        <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
+        <li class="description01">2018</li>
+        <li class="description02">JEJU</li>
+        <li id="simpnav">
+            <img src="prev01.png" id="prev">
+            <img src="slash01.png"id="slash">
+            <img src="next01.png" id="next"></li>
+
+      </ul>
+    </div>
+
+
+          <p class="p5-1">2018</p>
+          <p class="p5-2">JEJU</p>
+          <p class="p5-3">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -<br>Polaroid Land 250  X  FUJI FP-100c</p>
+
+        <div
+            id="jeju">
+        </div>
+
+
+
+                <script type="text/javascript">
+
+                   var currentFlower = 0;
+                  next.onclick = function(){
+                      currentFlower++;
+                      if(currentFlower == 6){ currentFlower = 1;}
+                      changeFlower(currentFlower);
+                  }
+
+                  prev.onclick = function(){
+                      currentFlower--;
+                      if(currentFlower == 0){ currentFlower = 5;}
+                      changeFlower(currentFlower);
+                  }
+
+                  function changeFlower(f){
+                      jeju.style.background = "url('jeju" + f + ".jpg')";
+                      jeju.style.backgroundSize = "cover";
+                    }
+
+
+
+                </script>
+
+
+  </div>
+</body>

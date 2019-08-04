@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-  <title>Works | Kang Minje </title>
+  <title>둘러보다 | Kang Minje </title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css">
 
@@ -11,7 +11,7 @@
   <div id="grid">
 
     <div>
-      <a href="index.html"><img src="logo4.png" class="logo" id="logo"></a>
+      <a href="home.html"><img src="logo4.png" class="logo" id="logo"></a>
       <ul id="main">
 
         <li><a href="index.html" class="other">Home</a></li>
@@ -21,10 +21,12 @@
                   <li><a class="first" href="둘러보다.html">- 둘러보다</a></li>
                   <li><a class="second" href="Palette.html">- Palette</a></li>
                   <li><a class="third" href="공간.html">- 공간</a></li>
-
+                  <li><a class="fourth" href="빛오색.html">- 빛과 오후, 그리고 색</li>
+                  <li><a class="fifth" href="제주.html">- JEJU, 2018</li>
 
                 </ul>
         </li>
+        <li><a href="about.html" class="other">About</a></li>
         <li><a href="Contacts.html" class="other">Contacts</a></li>
 
         <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
@@ -40,6 +42,10 @@
     </div>
 
 
+          <p class="p1-1">2017</p>
+          <p class="p1-2">둘러보다</p>
+          <p class="p1-3">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -<br>사물에 비치는 빛과 그 이면에 대한 탐구</p>
+
         <div
             id="둘러보다">
         </div>
@@ -51,19 +57,19 @@
                    var currentFlower = 0;
                   next.onclick = function(){
                       currentFlower++;
-                      if(currentFlower == 16){ currentFlower = 1;}
+                      if(currentFlower == 15){ currentFlower = 1;}
                       changeFlower(currentFlower);
                   }
 
                   prev.onclick = function(){
                       currentFlower--;
-                      if(currentFlower == 0){ currentFlower = 15;}
+                      if(currentFlower == 0){ currentFlower = 14;}
                       changeFlower(currentFlower);
                   }
 
                   function changeFlower(f){
-                      flower.style.background = "url('둘러보다" + f + ".jpeg')";
-                      flower.style.backgroundSize = "cover";
+                      둘러보다.style.background = "url('둘러보다" + f + ".jpeg')";
+                      둘러보다.style.backgroundSize = "cover";
                     }
 
 

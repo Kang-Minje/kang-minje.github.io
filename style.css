@@ -14,6 +14,129 @@ ul{
   left: 18px
 }
 
+.p1-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 280px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p1-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 310px;
+  left: 489px;
+}
+
+.p1-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 350px;
+  left: 420px;
+  text-align: center;
+}
+
+.p2-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 350px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p2-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 335px;
+}
+
+.p2-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 320px;
+  left: 290px;
+  text-align: center;
+}
+
+.p3-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 360px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p3-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 367px;
+}
+
+.p3-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 330px;
+  left: 300px;
+  text-align: center;
+}
+
+.p5-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 390px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p5-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 387px;
+}
+
+.p5-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 320px;
+  left: 305px;
+  text-align: center;
+}
+
 .current{
   color: grey;
 }
@@ -58,7 +181,7 @@ ul{
   position: relative;
   top: 100px;
   left: 0px;
-  letter-spacing: 8px;
+  letter-spacing: 5px;
   width: 200px;
 }
 
@@ -92,10 +215,10 @@ top: 30px;
 }
 
 #grid{
-  position: relative;
+  position: fixed;
   left: 50px;
   display: grid;
-  grid-template-columns: 500px 150px;
+  grid-template-columns: 500px 200px;
 }
 
 #contact{
@@ -104,6 +227,12 @@ top: 30px;
   top:70px;
 }
 
+#cv{
+  position: absolute;
+  right: 150px;
+  top: 0px;
+  margin-bottom: 200px;
+}
 
 #prev{
   width: 30px;
@@ -141,6 +270,7 @@ top: 30px;
   position: absolute;
   top: 30px;
   left: 135px;
+  width: 200px
 }
 
 #simpnav{
@@ -154,8 +284,8 @@ top: 30px;
   background: url(둘러보다1.jpeg);
   background-size: cover;
   position: relative;
-  left: 250px;
-  top: 32px;
+  left: 200px;
+  top: 50px;
 }
 
 #flower{
@@ -167,6 +297,36 @@ top: 30px;
   left: 250px;
   top: 50px;
 }
+
+#공간{
+  width:600px;
+  height: 600px;
+  background: url(공간1.jpg);
+  background-size: cover;
+  position: absolute;
+  left: 600px;
+  top: 50px;
+}
+
+#Palette{
+  width:800px;
+  height: 622px;
+  background: url(Palette1.jpg);
+  background-size: cover;
+  position: relative;
+  left: 60px;
+  top: 30px;
+}
+
+#jeju{
+  width:540px;
+  height: 652px;
+  background: url(jeju1.jpg);
+  background-size: cover;
+  position: relative;
+  left: 220px;
+  top: 30px;}
+
 @media(max-width:600px) {
   .img01{
     position: relative;
