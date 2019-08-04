@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap&subset=korean');
+
+a{text-decoration: none;
+  color: black;
+ }
+
+ul{
+  width: 100px;
+  font-family: 'arial';
+  font-size: 12px;
+  line-height: 2em;
+  list-style-type: none;
+  position: relative;
+  left: 18px
+}
+
+.other{
+  color: grey;
+      }
+
+      .instagram{
+        margin-top: 40px;}
+
+.img01{
+  position: relative;
+  left: 500px;
+  top: 40px;
+}
+
+.copyright{
+  font-family:'arial';
+  font-size: 11px;
+  line-height: 2em;
+  color: gray;
+  margin-top: 30px;
+}
+
+.description{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  color: black;
+  position: relative;
+  left: 550px;
+  top: 595px;
+}
+
+
+
+#logo{
+  width: 75%;
+  padding: 25px;
+}
+
+#grid{
+  position: relative;
+  top: 10px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: 250px 150px;
+}
+
+#contact{
+  position: relative;
+  left: 500px;
+  top:70px;
+}
+#flower{
+  width:380px;
+  height: 560px;
+  background: url(flower1.jpg);
+  background-size: cover;
+  position: relative;
+  left: 620px;
+  top: 32px;
+}
+
+#prev{
+  width: 30px;
+  position: relative;
+  left:-5px;
+  top: 100px;
+}
+
+#slash{
+  width: 20px;
+  position: relative;
+  left:-10px;
+  top: 101px;
+}
+
+#next{
+  width: 30px;
+  position: relative;
+  left:-14px;
+  top: 98.1px;
+}
+
+@media(max-width:600px) {
+  .img01{
+    position: relative;
+    left: 200px;
+  }
+}
