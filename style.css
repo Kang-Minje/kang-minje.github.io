@@ -8,18 +8,22 @@ ul{
   width: 100px;
   font-family: 'arial';
   font-size: 12px;
-  line-height: 2em;
+  line-height: 2.5em;
   list-style-type: none;
   position: relative;
   left: 18px
 }
 
-.other{
+.current{
   color: grey;
+}
+
+.other{
+  color: black;
       }
 
-      .instagram{
-        margin-top: 40px;}
+.instagram{
+  margin-top: 40px;}
 
 .img01{
   position: relative;
@@ -31,73 +35,162 @@ ul{
   font-family:'arial';
   font-size: 11px;
   line-height: 2em;
-  color: gray;
-  margin-top: 30px;
-}
-
-.description{
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px;
   color: black;
   position: relative;
-  left: 550px;
-  top: 595px;
+  top: 50px;
 }
 
+.description01{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: relative;
+  top: 100px;
+  left: 0px;
+  letter-spacing: 5px;
+  width: 200px;
+}
 
+.description02{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: relative;
+  top: 100px;
+  left: 0px;
+  letter-spacing: 8px;
+  width: 200px;
+}
+
+.instagram{
+  position: relative;
+  top: 10px;
+}
+
+.simpnav{
+  position: absolute;
+  top: 50px
+}
+
+.first{
+  color: black;
+}
+
+.second{
+  color: black;
+}
+
+.third{
+  color: black;
+}
 
 #logo{
-  width: 75%;
-  padding: 25px;
+  width: 35%;
+position: relative;
+left: 25px;
+top: 30px;
 }
 
 #grid{
   position: relative;
-  top: 10px;
-  left: 20px;
+  left: 50px;
   display: grid;
-  grid-template-columns: 250px 150px;
+  grid-template-columns: 500px 150px;
 }
 
 #contact{
   position: relative;
-  left: 500px;
+  left: 200px;
   top:70px;
 }
-#flower{
-  width:380px;
-  height: 560px;
-  background: url(flower1.jpg);
-  background-size: cover;
-  position: relative;
-  left: 620px;
-  top: 32px;
-}
+
 
 #prev{
   width: 30px;
   position: relative;
-  left:-5px;
-  top: 100px;
+  left:-2px;
+  top: 80px;
 }
 
 #slash{
   width: 20px;
   position: relative;
-  left:-10px;
-  top: 101px;
+  left:-5px;
+  top: 81px;
 }
 
 #next{
   width: 30px;
   position: relative;
-  left:-14px;
-  top: 98.1px;
+  left:-8px;
+  top: 78.1px;
 }
 
+
+
+#main{
+  position:relative;
+  top: 60px;
+}
+
+#sub{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  top: 30px;
+  left: 135px;
+}
+
+#simpnav{
+  position: relative;
+  top: 40px;
+}
+
+#둘러보다{
+  width:600px;
+  height: 600px;
+  background: url(둘러보다1.jpeg);
+  background-size: cover;
+  position: relative;
+  left: 250px;
+  top: 32px;
+}
+
+#flower{
+  width:400px;
+  height: 600px;
+  background: url(flower1.jpg);
+  background-size: cover;
+  position: relative;
+  left: 250px;
+  top: 50px;
+}
 @media(max-width:600px) {
   .img01{
     position: relative;
     left: 200px;
+
   }
+}
+
+
+ul ul {display: none;}
+ul li:hover > ul {display: block;}
+
+li:hover{
+  font-style: italic;
+}
+
+.first:hover{
+  color: black;
+}
+
+.second:hover{
+  color: black;
+}
+
+.third:hover{
+  color: black;
 }

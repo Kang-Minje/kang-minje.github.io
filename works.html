@@ -9,23 +9,36 @@
   <div id="grid">
 
     <div>
-        <img src="logo4.png" class="logo" id="logo">
-      <ul>
-        <li><a href="index.html" class="current">Home</a></li>
-        <li><a href="works.html" class="other">Works</a></li>
+      <a href="index.html"><img src="logo4.png" class="logo" id="logo"></a>
+      <ul id="main">
+
+        <li><a href="index.html" class="other">Home</a></li>
+        <li><a href="works.html" class="current">Works</a>
+
+                <ul id="sub">
+                  <li><a class="first" href="둘러보다.html">- 둘러보다</a></li>
+                  <li><a class="second" href="Palette.html">- Palette</a></li>
+                  <li><a class="third" href="공간.html">- 공간</a></li>
+
+
+                </ul>
+        </li>
         <li><a href="Contacts.html" class="other">Contacts</a></li>
+
         <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
         <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
-        <li><img src="prev01.png" id="prev">
+        <li id="simpnav"><img src="prev01.png" id="prev">
             <img src="slash01.png"id="slash">
             <img src="next01.png" id="next"></li>
-
       </ul>
     </div>
-    <div class="description">
-      공간, 2018
-    </div>
-    <div id="flower"></div>
+
+        <div class="description">
+          공간, 2018
+        </div>
+        <div
+            id="flower">
+        </div>
 
 
 
@@ -48,8 +61,14 @@
                       flower.style.background = "url('flower" + f + ".jpg')";
                       flower.style.backgroundSize = "cover";
                     }
+
+
+                  function submenuon(x) {
+
+                  }
+
                 </script>
 
 
-</div>
+  </div>
 </body>

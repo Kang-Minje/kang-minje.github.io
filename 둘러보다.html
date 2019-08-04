@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <head>
-  <title>Home | Kang Minje </title>
+  <title>Works | Kang Minje </title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css">
+
+
 </head>
 
 <body>
@@ -12,8 +14,8 @@
       <a href="index.html"><img src="logo4.png" class="logo" id="logo"></a>
       <ul id="main">
 
-        <li><a href="index.html" class="current">Home</a></li>
-        <li><a href="works.html" class="other">Works</a>
+        <li><a href="index.html" class="other">Home</a></li>
+        <li><a href="works.html" class="current">Works</a>
 
                 <ul id="sub">
                   <li><a class="first" href="둘러보다.html">- 둘러보다</a></li>
@@ -27,50 +29,44 @@
 
         <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
         <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
-        <div class="description01">
-          2018
-        </div>
-        <div class="description02">
-          공간
-        </div>
+        <li class="description01">2017</li>
+        <li class="description02">둘러보다</li>
         <li id="simpnav">
             <img src="prev01.png" id="prev">
             <img src="slash01.png"id="slash">
             <img src="next01.png" id="next"></li>
 
+      </ul>
     </div>
 
 
         <div
-            id="flower">
+            id="둘러보다">
         </div>
 
 
 
                 <script type="text/javascript">
 
-                   var currentFlower = 1;
+                   var currentFlower = 0;
                   next.onclick = function(){
                       currentFlower++;
-                      if(currentFlower == 5){ currentFlower = 1;}
+                      if(currentFlower == 16){ currentFlower = 1;}
                       changeFlower(currentFlower);
                   }
 
                   prev.onclick = function(){
                       currentFlower--;
-                      if(currentFlower == 0){ currentFlower = 4;}
+                      if(currentFlower == 0){ currentFlower = 15;}
                       changeFlower(currentFlower);
                   }
 
                   function changeFlower(f){
-                      flower.style.background = "url('flower" + f + ".jpg')";
+                      flower.style.background = "url('둘러보다" + f + ".jpeg')";
                       flower.style.backgroundSize = "cover";
                     }
 
 
-                  function submenuon(x) {
-
-                  }
 
                 </script>
 
