@@ -109,6 +109,38 @@ ul{
   text-align: center;
 }
 
+.p4-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 365px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p4-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 292px;
+  left: 302px;
+}
+
+.p4-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 320px;
+  left: 305px;
+  text-align: center;
+}
+
+
 .p5-1{
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 14px;
@@ -283,13 +315,13 @@ top: 30px;
 }
 
 #둘러보다{
-  width:600px;
-  height: 600px;
+  width:750px;
+  height: 750px;
   background: url(둘러보다1.jpeg);
   background-size: cover;
   position: relative;
   left: 200px;
-  top: 50px;
+  top: 0px;
 }
 
 #flower{
@@ -330,6 +362,15 @@ top: 30px;
   position: relative;
   left: 220px;
   top: 30px;}
+
+  #빛오색{
+    width:540px;
+    height: 800px;
+    background: url(빛오색1.jpg);
+    background-size: cover;
+    position: relative;
+    left: 220px;
+    top: 30px;}
 
 @media(max-width:600px) {
   .img01{
