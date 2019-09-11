@@ -15,6 +15,10 @@ ul{
 }
 
 
+p{
+  visibility: hidden;
+}
+
 
 .p1-1{
   font-family: 'Noto Sans KR', sans-serif;
@@ -114,7 +118,7 @@ ul{
   font-size: 14px;
   color: black;
   position: absolute;
-  top: 260px;
+  top: 20px;
   left: 365px;
   font-size: 16px;
   letter-spacing: 5px;
@@ -126,7 +130,7 @@ ul{
   color: black;
   letter-spacing: 5px;
   position: absolute;
-  top: 292px;
+  top: 40px;
   left: 302px;
 }
 
@@ -135,7 +139,7 @@ ul{
   line-height: 2.5em;
   font-size: 13px;
   position: absolute;
-  top: 320px;
+  top: 50px;
   left: 305px;
   text-align: center;
 }
