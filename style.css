@@ -19,6 +19,13 @@ p{
   visibility: hidden;
 }
 
+video{
+  width: 640px;
+  height: 480px;
+  position: relative;
+  left: -50px;
+  top: 70px;
+}
 
 .p1-1{
   font-family: 'Noto Sans KR', sans-serif;
