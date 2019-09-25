@@ -376,6 +376,15 @@ top: 30px;
     left: 220px;
     top: 30px;}
 
+    #david{
+    width:640px;
+    height:480px;
+    background: url(david_2.mp4);
+    background-size: cover;
+    position: relative;
+    left: -100px;
+    top: 70px;}
+
 @media(max-width:600px) {
   .img01{
     position: relative;
