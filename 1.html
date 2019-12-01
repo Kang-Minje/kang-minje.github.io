@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>image slide</title>
+<style type="text/css">
+    #flower{width:400px; height: 600px; background: url(flower1.jpg);
+    background-size: cover;}
+</style>
+  </head>
+
+  <body>
+    <div id="flower"></div>
+    <img src="prev01.png" id="prev">
+    <img src="next01.png" id="next">
+
+
+    <script type="text/javascript">
+
+       var currentFlower = 1;
+      next.onclick = function(){
+          currentFlower++;
+          if(currentFlower == 5){ currentFlower = 1;}
+          changeFlower(currentFlower);
+      }
+
+      prev.onclick = function(){
+          currentFlower--;
+          if(currentFlower == 0){ currentFlower = 4;}
+          changeFlower(currentFlower);
+      }
+
+      function changeFlower(f){
+          flower.style.background = "url('flower" + f + ".jpg')";
+          flower.style.backgroundSize = "cover";
+        }
+    </script>
+  </body>
+</html>

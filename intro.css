@@ -1,0 +1,34 @@
+@font-face {
+  font-family: HelveticaLTStd;
+  src: url('/Users/kangminje/Library/Fonts/HelveticaLTStd-Bold.otf');
+
+}
+
+.centered { position: absolute;
+  left: 50%; transform: translateX(-50%);
+  top: 30%;
+  font-size: 40px;
+  font-family: 'HelveticaLTStd';}
+
+
+.pc{
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 48%;
+    border: 1px;
+    font-size: 26px;
+    font-family: HelveticaLTStd;
+}
+
+.mobile{
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 55%;
+    border: 1px;
+    font-size: 26px;
+    font-family: HelveticaLTStd;
+}
+
+p{
+  color: black;
+}
