@@ -21,9 +21,11 @@
 li{
   color: black;
   position: absolute;
-  left: 15px;
-  top: 15px;
+  left: 20px;
+  top: 30px;
+  font-size: 1.5em;
 }
+
 
 .copyright{
   font-size: 0.6875em;
@@ -36,11 +38,21 @@ footer{
 }
 
 .insta{
-  width: 5%;
-  padding-left: 12%;
-  padding-top: 13%;
+  width: 8%;
+  padding-left: 17%;
+  padding-top: 25%;
 }
 
+.description{
+  font-size: 0.6em;
+  font-style: italic;
+  width: 100%;
+  position: absolute;
+  top: 8%;
+  left: 60%;
+  color: grey;
+  display: block;
+}
 
 /*----------------designing css------------------*/
 .mm-menu.mm-horizontal > .mm-panel {
@@ -118,13 +130,14 @@ footer{
     position: relative; }
     .mm-list > li > a,
     .mm-list > li > span {
+      font-size: 1.5em;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
       color: inherit;
-      line-height: 20px;
+      line-height: 40px;
       display: block;
-      padding: 10px 10px 10px 20px;
+      padding: 50px 10px 40px 60px;
       margin: 0; }
   .mm-list > li:not(.mm-subtitle):not(.mm-label):not(.mm-search):not(.mm-noresults):after {
     content: '';
