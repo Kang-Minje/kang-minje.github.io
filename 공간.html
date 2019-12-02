@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-  <title>Palette | Kang Minje </title>
+  <title>공간 | Kang Minje </title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,8 +22,6 @@
                   <li><a class="fourth" href="빛오색.html">- 사소한 것들에 관하여</li>
                   <li><a class="fifth" href="제주.html">- JEJU, 2018</li>
                   <li><a class="sixth" href="david.html">- David</a></li>
-
-
                 </ul>
         </li>
         <li><a href="about.html" class="other">About</a></li>
@@ -32,10 +30,10 @@
         <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
         <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
         <div class="description01">
-          2018
+          2019
         </div>
         <div class="description02">
-          Palette
+          공간
         </div>
         <li id="simpnav">
             <img src="prev01.png" id="prev">
@@ -43,12 +41,12 @@
             <img src="next01.png" id="next"></li>
 
     </div>
-          <p class="p2-1">2018</p>
-          <p class="p2-2">Palette</p>
-          <p class="p2-3">- - - - - - - - - - - - - - - - - - - - - - -<br>사람들의 색채<br>화려하지만, 어둡고 탁하기도 한<br>사람들의 그런 팔레트</p>
+          <p class="p3-1">2019</p>
+          <p class="p3-2">공간</p>
+          <p class="p3-3">- - - - - - - - - - - - - - - - - - - - - - -<br>점, 선, 면에 기초한 공간의 형태<br>그리고 단순함을 넘어선 아름다움</p>
 
         <div
-            id="Palette">
+            id="공간">
         </div>
 
 
@@ -58,21 +56,25 @@
                    var currentFlower = 1;
                   next.onclick = function(){
                       currentFlower++;
-                      if(currentFlower == 4){ currentFlower = 1;}
+                      if(currentFlower == 12){ currentFlower = 1;}
                       changeFlower(currentFlower);
                   }
 
                   prev.onclick = function(){
                       currentFlower--;
-                      if(currentFlower == 0){ currentFlower = 3;}
+                      if(currentFlower == 0){ currentFlower = 11;}
                       changeFlower(currentFlower);
                   }
 
                   function changeFlower(f){
-                      Palette.style.background = "url('Palette" + f + "_2.jpg')";
-                      Palette.style.backgroundSize = "cover";
+                      공간.style.background = "url('공간" + f + ".jpg')";
+                      공간.style.backgroundSize = "cover";
                     }
 
+
+                  function submenuon(x) {
+
+                  }
 
                 </script>
 

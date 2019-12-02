@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <head>
-  <title>Palette | Kang Minje </title>
+  <title>둘러보다 | Kang Minje </title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css">
+
+
 </head>
 
 <body>
@@ -23,7 +25,6 @@
                   <li><a class="fifth" href="제주.html">- JEJU, 2018</li>
                   <li><a class="sixth" href="david.html">- David</a></li>
 
-
                 </ul>
         </li>
         <li><a href="about.html" class="other">About</a></li>
@@ -31,47 +32,47 @@
 
         <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
         <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
-        <div class="description01">
-          2018
-        </div>
-        <div class="description02">
-          Palette
-        </div>
+        <li class="description01">2017</li>
+        <li class="description02">둘러보다</li>
         <li id="simpnav">
             <img src="prev01.png" id="prev">
             <img src="slash01.png"id="slash">
             <img src="next01.png" id="next"></li>
 
+      </ul>
     </div>
-          <p class="p2-1">2018</p>
-          <p class="p2-2">Palette</p>
-          <p class="p2-3">- - - - - - - - - - - - - - - - - - - - - - -<br>사람들의 색채<br>화려하지만, 어둡고 탁하기도 한<br>사람들의 그런 팔레트</p>
+
+
+          <p class="p1-1">2017</p>
+          <p class="p1-2">둘러보다</p>
+          <p class="p1-3">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -<br>사물에 비치는 빛과 그 이면에 대한 탐구</p>
 
         <div
-            id="Palette">
+            id="둘러보다">
         </div>
 
 
 
                 <script type="text/javascript">
 
-                   var currentFlower = 1;
+                   var currentFlower = 0;
                   next.onclick = function(){
                       currentFlower++;
-                      if(currentFlower == 4){ currentFlower = 1;}
+                      if(currentFlower == 15){ currentFlower = 1;}
                       changeFlower(currentFlower);
                   }
 
                   prev.onclick = function(){
                       currentFlower--;
-                      if(currentFlower == 0){ currentFlower = 3;}
+                      if(currentFlower == 0){ currentFlower = 14;}
                       changeFlower(currentFlower);
                   }
 
                   function changeFlower(f){
-                      Palette.style.background = "url('Palette" + f + "_2.jpg')";
-                      Palette.style.backgroundSize = "cover";
+                      둘러보다.style.background = "url('둘러보다" + f + ".jpeg')";
+                      둘러보다.style.backgroundSize = "cover";
                     }
+
 
 
                 </script>
