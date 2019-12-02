@@ -117,8 +117,8 @@ li{
     position: relative;
     left: auto; }
   .mm-list a.mm-subopen {
-    background: rgba(255, 255, 255, 0.1);
-    width: 40px;
+    background: rgba(255,255,255, 0.1);
+    width: 1000px;
     height: 100%;
     padding: 0;
     position: absolute;
