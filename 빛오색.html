@@ -57,18 +57,18 @@
                    var currentFlower = 1;
                   next.onclick = function(){
                       currentFlower++;
-                      if(currentFlower == 13){ currentFlower = 1;}
+                      if(currentFlower == 15){ currentFlower = 1;}
                       changeFlower(currentFlower);
                   }
 
                   prev.onclick = function(){
                       currentFlower--;
-                      if(currentFlower == 0){ currentFlower = 12;}
+                      if(currentFlower == 0){ currentFlower = 14;}
                       changeFlower(currentFlower);
                   }
 
                   function changeFlower(f){
-                      빛오색.style.background = "url('빛오색" + f + ".jpg')";
+                      빛오색.style.background = "url('light" + f + ".jpg')";
                       빛오색.style.backgroundSize = "cover";
                     }
 
