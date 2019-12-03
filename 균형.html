@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<head>
+  <title>균형 | Kang Minje </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="grid">
+
+    <div>
+      <a href="home.html"><img src="logo4.png" class="logo" id="logo"></a>
+      <ul id="main">
+
+        <li><a href="home.html" class="other">Home</a></li>
+        <li><a href="works.html" class="current">Works</a>
+
+                <ul id="sub">
+                  <li><a class="first" href="둘러보다.html">- 둘러보다</a></li>
+                  <li><a class="second" href="palette.html">- Palette</a></li>
+                  <li><a class="third" href="공간.html">- 공간</a></li>
+                  <li><a class="fourth" href="빛오색.html">- 사소한 것들에 관하여</li>
+                  <li><a class="fifth" href="제주.html">- JEJU, 2018</li>
+                  <li><a class="sixth" href="david.html">- David</a></li>
+                  <li><a class="seventh "href="균형.html">균형</a></li>
+
+                </ul>
+        </li>
+        <li><a href="about.html" class="other">About</a></li>
+        <li><a href="Contacts.html" class="other">Contacts</a></li>
+
+        <li><a href="https://www.instagram.com/minje_02/?hl=ko"><img src="instagram03.png" class="instagram" width="15px"><a/></li>
+        <li class="copyright">ⓒ 2019<br>minjekang all right reserved.</li>
+        <div class="description01">
+          2019
+        </div>
+        <div class="description02">
+          균형
+        </div>
+        <li id="simpnav">
+            <img src="prev01.png" id="prev">
+            <img src="slash01.png"id="slash">
+            <img src="next01.png" id="next"></li>
+
+    </div>
+          <p class="p4-1">2019</p>
+          <p class="p4-2">사소한 것들에 관하여</p>
+          <p class="p4-3">빛의 커튼에 둘러싸인 외로운 것들<br>그들의 색에 관하여</p>
+
+        <div
+            id="균형">
+        </div>
+
+
+
+                <script type="text/javascript">
+
+                   var currentFlower = 1;
+                  next.onclick = function(){
+                      currentFlower++;
+                      if(currentFlower == 5){ currentFlower = 1;}
+                      changeFlower(currentFlower);
+                  }
+
+                  prev.onclick = function(){
+                      currentFlower--;
+                      if(currentFlower == 0){ currentFlower = 4;}
+                      changeFlower(currentFlower);
+                  }
+
+                  function changeFlower(f){
+                      균형.style.background = "url('bal" + f + ".jpg')";
+                      균형.style.backgroundSize = "cover";
+                    }
+
+
+                  function submenuon(x) {
+
+                  }
+
+                </script>
+
+
+  </div>
+</body>

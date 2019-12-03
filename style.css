@@ -392,6 +392,15 @@ top: 30px;
     left: -100px;
     top: 70px;}
 
+    #균형{
+      width:700px;
+      height: 875px;
+      background: url(bal1.jpg);
+      background-size: cover;
+      position: relative;
+      left: 220px;
+      top: 30px;}
+
 @media(max-width:600px) {
   .img01{
     position: relative;
