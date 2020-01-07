@@ -4,12 +4,27 @@
   <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
     <style type="text/css" rel="stylesheet" >
-#cv {
-  width: 83%;
+.whitebox{
+  width: 330px;
+  height: 600px;
+  background-color: #ffffff;
+  opacity: 0.9;
+  z-index: 2;
   position: fixed;
-  top: 2%;
-  left: 16%;
+  left: 3%;
   margin: 0%;
+}
+
+#cv {
+  width: 110%;
+  position: fixed;
+  top: -8%;
+  left: 0%;
+  z-index: 1;
+}
+
+#grid{
+  z-index: 3;
 }
     </style>
 </head>
@@ -47,5 +62,8 @@
   </div>
   <div>
     <img id="cv" src="about.jpg" >
+  </div>
+
+  <div class="whitebox">
   </div>
 </body>
