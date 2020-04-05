@@ -335,71 +335,81 @@ top: 30px;
   top: 0px;
 }
 
-#flower{
-  width:400px;
-  height: 600px;
-  background: url(flower1.jpg);
-  background-size: cover;
-  position: relative;
-  left: 250px;
-  top: 50px;
-}
+      #flower{
+        width:900px;
+        height: 900px;
+        background: url(공간1.jpg);
+        background-size: cover;
+        position: absolute;
+        left: 600px;
+        top: 50px;
+      }
 
-#공간{
-  width:600px;
-  height: 600px;
-  background: url(공간1.jpg);
-  background-size: cover;
-  position: absolute;
-  left: 600px;
-  top: 50px;
-}
+      #공간{
+        width:900px;
+        height: 900px;
+        background: url(공간1.jpg);
+        background-size: cover;
+        position: absolute;
+        left: 600px;
+        top: 50px;
+      }
 
-#Palette{
-  width:800px;
-  height: 622px;
-  background: url(Palette1_2.jpg);
-  background-size: cover;
-  position: relative;
-  left: 60px;
-  top: 30px;
-}
+      #Palette{
+        width:800px;
+        height: 622px;
+        background: url(Palette1_2.jpg);
+        background-size: cover;
+        position: relative;
+        left: 60px;
+        top: 30px;
+      }
 
-#jeju{
-  width:540px;
-  height: 652px;
-  background: url(jeju1.jpg);
-  background-size: cover;
-  position: relative;
-  left: 220px;
-  top: 30px;}
+      #jeju{
+        width:540px;
+        height: 652px;
+        background: url(jeju1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
 
-  #빛오색{
-    width:540px;
-    height: 800px;
-    background: url(light1.jpg);
-    background-size: cover;
-    position: relative;
-    left: 220px;
-    top: 30px;}
+      #빛오색{
+        width:600px;
+        height: 870px;
+        background: url(light1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
 
-    #david{
-    width:640px;
-    height:480px;
-    background: url(david_2.mp4);
-    background-size: cover;
-    position: relative;
-    left: -100px;
-    top: 70px;}
-
-    #균형{
-      width:700px;
-      height: 875px;
-      background: url(bal1.jpg);
+      #david{
+      width:640px;
+      height:480px;
+      background: url(david_2.mp4);
       background-size: cover;
       position: relative;
-      left: 220px;
-      top: 30px;}
+      left: -100px;
+      top: 70px;}
+
+      #균형{
+        width:700px;
+        height: 875px;
+        background: url(bal1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
+
+      #aboutthings{
+        width: 600px;
+        height: 900px;
+        background: url(aboutthings1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 200px;
+        top: 40px;
+      }
 
 @media(max-width:600px) {
   .img01{
