@@ -271,8 +271,8 @@ top: 30px;
 #contact{
   position: relative;
   left: 0px;
-  top:0px;
-  max-width: 100%;
+  top:50px;
+  max-width: 70%;
   height:auto;
 }
 
