@@ -272,6 +272,8 @@ top: 30px;
   position: relative;
   left: 0px;
   top:0px;
+  max-width: 100%;
+  height:auto;
 }
 
 #cv{
