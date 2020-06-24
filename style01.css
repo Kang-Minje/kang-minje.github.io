@@ -1,0 +1,456 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap&subset=korean');
+
+a{text-decoration: none;
+  color: black;
+ }
+
+ul{
+  width: 100px;
+  font-family: 'arial';
+  font-size: 12px;
+  line-height: 2.5em;
+  list-style-type: none;
+  position: relative;
+  left: 18px
+}
+
+
+p{
+  visibility: hidden;
+}
+
+video{
+  width: 640px;
+  height: 480px;
+  position: relative;
+  left: -50px;
+  top: 70px;
+}
+
+.p1-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 280px;
+  left: 503px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p1-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 310px;
+  left: 489px;
+}
+
+.p1-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 350px;
+  left: 420px;
+  text-align: center;
+}
+
+.p2-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 350px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p2-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 335px;
+}
+
+.p2-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 320px;
+  left: 290px;
+  text-align: center;
+}
+
+.p3-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 360px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p3-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 367px;
+}
+
+.p3-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 330px;
+  left: 300px;
+  text-align: center;
+}
+
+.p4-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 20px;
+  left: 365px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p4-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 40px;
+  left: 302px;
+}
+
+.p4-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 50px;
+  left: 305px;
+  text-align: center;
+}
+
+
+.p5-1{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: absolute;
+  top: 260px;
+  left: 390px;
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+
+.p5-2{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  color: black;
+  letter-spacing: 5px;
+  position: absolute;
+  top: 290px;
+  left: 387px;
+}
+
+.p5-3{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  font-size: 13px;
+  position: absolute;
+  top: 320px;
+  left: 305px;
+  text-align: center;
+}
+
+.current{
+  color: grey;
+}
+
+.other{
+  color: black;
+      }
+
+.instagram{
+  margin-top: 40px;}
+
+.img01{
+  position: relative;
+  left: 500px;
+  top: 40px;
+}
+
+.copyright{
+  font-family:'arial';
+  font-size: 11px;
+  line-height: 2em;
+  color: black;
+  position: relative;
+  top: 50px;
+}
+
+.description01{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: relative;
+  top: 100px;
+  left: 0px;
+  letter-spacing: 5px;
+  width: 200px;
+}
+
+.description02{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  color: black;
+  position: relative;
+  top: 100px;
+  left: 0px;
+  letter-spacing: 5px;
+  width: 200px;
+}
+
+.instagram{
+  position: relative;
+  top: 10px;
+}
+
+.simpnav{
+  position: absolute;
+  top: 50px
+}
+
+.first{
+  color: black;
+}
+
+.second{
+  color: black;
+}
+
+.third{
+  color: black;
+}
+
+#logo{
+  width: 35%;
+position: relative;
+left: 25px;
+top: 30px;
+}
+
+#grid{
+  position: fixed;
+  left: 50px;
+  margin-top: 3%;
+  display: grid;
+  grid-template-columns: 500px 200px;
+}
+
+#contact{
+  position: relative;
+  left: 0px;
+  top:70px;
+  max-width: 200%;
+  height:auto;
+}
+
+#cv{
+  position: absolute;
+  right: 150px;
+  top: 0px;
+  margin-bottom: 200px;
+}
+
+#prev{
+  width: 30px;
+  position: relative;
+  left:-2px;
+  top: 80px;
+}
+
+#slash{
+  width: 20px;
+  position: relative;
+  left:-5px;
+  top: 81px;
+}
+
+#next{
+  width: 30px;
+  position: relative;
+  left:-8px;
+  top: 78.1px;
+}
+
+
+
+#main{
+  position:relative;
+  top: 60px;
+}
+
+#sub{
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 2.5em;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  top: 30px;
+  left: 135px;
+  width: 200px
+}
+
+#simpnav{
+  position: relative;
+  top: 40px;
+}
+
+#둘러보다{
+  width:750px;
+  height: 750px;
+  background: url(둘러보다1.jpeg);
+  background-size: cover;
+  position: relative;
+  left: 200px;
+  top: 0px;
+}
+
+      #flower{
+        width:900px;
+        height: 900px;
+        background: url(공간1.jpg);
+        background-size: cover;
+        position: absolute;
+        left: 600px;
+        top: 50px;
+      }
+
+      #공간{
+        width:900px;
+        height: 900px;
+        background: url(공간1.jpg);
+        background-size: cover;
+        position: absolute;
+        left: 600px;
+        top: 50px;
+      }
+
+      #Palette{
+        width:800px;
+        height: 622px;
+        background: url(Palette1_2.jpg);
+        background-size: cover;
+        position: relative;
+        left: 60px;
+        top: 30px;
+      }
+
+      #jeju{
+        width:540px;
+        height: 652px;
+        background: url(jeju1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
+
+      #빛오색{
+        width:600px;
+        height: 870px;
+        background: url(light1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
+
+      #david{
+      width:640px;
+      height:480px;
+      background: url(david_2.mp4);
+      background-size: cover;
+      position: relative;
+      left: -100px;
+      top: 70px;}
+
+      #균형{
+        width:700px;
+        height: 875px;
+        background: url(bal1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 220px;
+        top: 30px;}
+
+      #aboutthings{
+        width: 600px;
+        height: 900px;
+        background: url(aboutthings1.jpg);
+        background-size: cover;
+        position: relative;
+        left: 200px;
+        top: 40px;
+      }
+
+@media(max-width:600px) {
+  .img01{
+    position: relative;
+    left: 200px;
+
+  }
+}
+
+
+ul ul {display: none;}
+ul li:hover > ul {display: block;}
+
+li:hover{
+  font-style: italic;
+}
+
+.first:hover{
+  color: black;
+}
+
+.second:hover{
+  color: black;
+}
+
+.third:hover{
+  color: black;
+}
+
+html {height: 100%;}
+body {height: 100%;}
+.scene{height: 100%; position: relative;}
+
+#contact{
+  position: absolute;
+  }
+  
+#contact img {
+  position: absolute;
+  heiht: 100%;
+  width: 100%;
+  }
