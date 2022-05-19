@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap');
 @font-face {
     font-family: 'Migra Italic';
-    src: url('srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
+    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
 }
 @font-face {
     font-family: 'Noto Sans KR';
-    src: url('srcs/fonts/NotoSansKR-Bold.otf') format('truetype');
+    src: url('../srcs/fonts/NotoSansKR-Bold.otf') format('truetype');
 }
 @font-face {
     font-family: 'Europa Grotesk SH';
-    src: url('srcs/fonts/EuropaGroteskSH-Med.otf') format('truetype');
+    src: url('../srcs/fonts/EuropaGroteskSH-Med.otf') format('truetype');
 }
 
 html,body{
