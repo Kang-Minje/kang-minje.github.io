@@ -494,7 +494,7 @@ html{
 .line02{
   /* Line02 */
   position: absolute;
-  width: 100%;
+  width: 300%;
   height: 0px;
   top: 38.9%;
   left: -100%;
@@ -1191,9 +1191,9 @@ li{
   position: absolute;
   left: 0%;
   top: 76%;
-  font-family: 'Noto Sans med';
+  font-family: 'Noto Sans';
   font-style: normal;
-  font-weight: 100;
+  font-weight: 500;
   font-size: 15px;
   line-height: 20px;
 }
@@ -1325,6 +1325,7 @@ li{
   height: 30px;
   top: 403vh;
   left: -2%;
+    margin-bottom: 500px;
 
   font-family: 'Helvetica Neue';
   font-style: normal;
@@ -1336,62 +1337,58 @@ li{
 }
 
 .footer_email{
-  /* kangminje000@gmail.com +82)10-9323-9432 */
-
-  position: absolute;
-  width: 298px;
-  height: 57px;
-  top: 372vh;
-  left: 28.5%;
-
-  font-family: 'Helvetica Neue';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 27px;
-
-  color: #000000;
-
+position: absolute;
+    width: 185px;
+    height: 22px;
+    top: 373.5vh;
+    left: 28.6%;
+    display: flex;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 27px;
+    color: #000000;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
 }
 
+
 .footer_phone{
-  /* kangminje000@gmail.com +82)10-9323-9432 */
-
-  position: absolute;
-  width: 298px;
-  height: 57px;
-  top: 375vh;
-  left: 28.5%;
-
-  font-family: 'Helvetica Neue';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 27px;
-
-  color: #000000;
-
+    position: absolute;
+    width: 185px;
+    height: 22px;
+    top: 378vh;
+    left: 28.3%;
+    display: flex;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 27px;
+    color: #000000;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .footer_location{
   /* Seoul, Korea */
-
-  position: absolute;
-  width: 186px;
-  height: 31px;
-  top: -80%;
-  left: 322%;
-
-  font-family: 'Helvetica Neue';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 27px;
-  display: flex;
-  align-items: center;
-  text-align: right;
-
-  color: #000000;
+    position: absolute;
+    width: 186px;
+    height: 31px;
+    top: 373.5vh;
+    right: 0;
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #000000;
+    margin: 0;
 
 }
 
@@ -1399,7 +1396,6 @@ li{
   background-color: #10F901;
   transition: 0.2s;
   text-decoration: underline;
-  cursor: url("cursor_01.png") 24 24,auto;
 }
 
 .tD_list a:hover{
@@ -1407,3 +1403,109 @@ li{
     transition: 0.2s;
     text-decoration: underline;
   }
+
+.newwork-circle {
+    position: absolute;
+    right: 10%;
+    top: 75%;
+    width: 128px;
+    height: 128px;
+    border-radius: 64px;
+    border-style: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    z-index: 999;
+        
+    background-color: #fff;
+    border-color: #000;
+    
+    animation: rotate_image 10s linear infinite;
+    transform-origin: 50% 50%;}
+    @keyframes rotate_image{
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+
+
+#newwork {
+    position: absolute;
+    left: 4px;
+    top: 55px;
+    text-align: center;
+    
+    width: 120px;
+    font-family: 'migra';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    z-index: 999;
+
+}
+
+.newwork-circle:hover {
+    transition: 0.2s;
+    cursor: pointer;
+    background-color: rgba(16, 249, 1, 1);
+}
+
+.newwork-circle:hover > #newwork{
+    transition: 0.2s;
+    transform: scale(250%);
+    color: black;
+/*    filter: blur(1px);*/
+}
+
+.blur{
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 500vh;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 900;
+    display: none; 
+}
+
+.newwork-circle:hover + .blur {
+    display: block;
+    backdrop-filter: blur(5px);
+    transition: all 1s;
+}
+.newwork-navy {
+    position: absolute;
+    right: 20%;
+    top: 81%;
+    width: 250px;
+    z-index: 999;
+    
+    font-family: "NanumMyeongjo";
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15px;
+    
+}
+
+.dash {
+    position: absolute;
+    right: 21%;
+    top: 81.7%;
+    width: 30px;
+    height: 1px;
+    z-index: 999;
+    background-color: #000;
+    
+}
+
+.newwork_text {
+    display: none;
+}
+
+.newwork-circle:hover ~ .newwork_text {
+    display: block;
+}

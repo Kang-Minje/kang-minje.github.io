@@ -4,27 +4,30 @@
     <meta charset="utf-8">
     <meta name="description" content="비주얼 미디어를 만드는 강민제입니다.">
     <link rel="stylesheet" href="css/main.css"`123`123>
+      <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+      <script src="circletype.min.js"></script>
+      <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
     <title>kangminjedotcom</title>
-    <script type="text/javascript">
-    var $circle = $('.circle');
-
-function moveCircle(e) {
-  TweenLite.to($circle, 0.3, {
-    css: {
-      left: e.pageX,
-      top: e.pageY
-    }
-  });
-}
-
-$(window).on('mousemove', moveCircle);
-    </script>
   </head>
-  <body>
+  <body style="overflow-x: hidden">
     <div class="wrapper">
       <div class="main-container">
           <div class="page01">
-
+              <a href="navy.html">
+                  <div class="newwork-circle">
+                      <span id="newwork">
+                        NEW WORK
+                      </span>
+                  </div>
+                  <div class="blur"></div>
+                  <div class="newwork_text">
+                    <span class="newwork-navy">대한민국 해군 홍보대, 2022</span>
+                    <div class="dash"></div>
+                  </div>
+              </a>
+              
+              
+<!--
             <div class="notice_panel">
               <div class="text-kr-div">
                 <h1 class="text-kr">웹사이트가<br>제작되는 중입니다</h1>
@@ -33,6 +36,7 @@ $(window).on('mousemove', moveCircle);
                 <div class="notice-backplate"></div>
               </div>
             </div>
+-->
 
             <div class="PINKGUIDE_KR">
               <h1 class="name-kr">강민제</h1>
@@ -114,9 +118,9 @@ $(window).on('mousemove', moveCircle);
                     </div>
                   </div>
                   <ul class="photo_list">
-                    <a href="#" class="list_photo_01"> 대한민국 해군 홍보대</a>
+                    <a href="navy.html" class="list_photo_01"> 대한민국 해군 홍보대</a>
                     <a href="dust.html" class="list_photo_02"> 먼지</a>
-                    <a href="#" class="list_photo_03"> 여운</a>
+                    <a href="afterglow.html" class="list_photo_03"> 여운</a>
                   </ul>
               </div>
               <div class="tD">
@@ -162,8 +166,10 @@ $(window).on('mousemove', moveCircle);
             <div class="footerline"></div>
             <h1 class="footer_name">kangminje<br>visual communicator</h1>
             <h5 class="footer_copyright">© 2022. kangminje.</h5>
-            <a href="mailto:kangminje000@gmail.com" class="footer_email">kangminje000@gmail.com</a>
-            <a href="tel:01093239432" class="footer_phone"> +82)10-9323-9432</h2>
+            <a href="mailto:kangminje000@gmail.com" class="footer_email">
+                kangminje000@gmail.com
+            </a>
+            <a href="tel:01093239432" class="footer_phone">+82)10-9323-9432</a>
             <h2 class="footer_location">Seoul, Korea</h2>
           </div>
       </div>
