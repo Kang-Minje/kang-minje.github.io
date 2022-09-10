@@ -15,9 +15,15 @@
     font-family: 'Migra Italic';
     src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
 }
+
+@font-face {
+    font-family: 'migra';
+    src: url('../srcs/fonts/Migra_Extralight_200.otf') format('opentype');
+}
+
 @font-face {
     font-family: 'Noto Sans KR';
-    src: url('../srcs/fonts/NotoSansKR-Bold.otf') format('truetype');
+    src: url('../srcs/fonts/NotoSansKR-Regular.otf') format('truetype');
 }
 @font-face {
     font-family: 'Europa Grotesk SH';
@@ -778,7 +784,7 @@ html{
   position: absolute;
   width: 209px;
   height: 17px;
-  left: 12%;
+  left: 11.5%;
   top: 141%;
 }
 
@@ -791,7 +797,7 @@ html{
   top: 0px;
   margin: 0;
 
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
@@ -883,6 +889,7 @@ html{
   font-weight: 200;
   font-size: 15px;
   line-height: 17px;
+  transform : rotate(0.04deg);
   /* identical to box height, or 113% */
 
   display: -webkit-box;
@@ -927,11 +934,12 @@ html{
   top: 39px;
   margin: 0;
 
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 17px;
+  transform : rotate(0.04deg);
   /* or 113% */
 
   display: -webkit-box;
@@ -954,11 +962,10 @@ html{
   left: 0%;
   top: 60px;
 
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
+  font-family: 'Noto Sans KR';
   font-size: 15px;
   line-height: 20px;
+  transform : rotate(0.04deg);
   /* or 113% */
 
   display: -webkit-box;
@@ -1020,6 +1027,7 @@ html{
   font-weight: 400;
   font-size: 15px;
   line-height: 17px;
+  transform : rotate(0.04deg);
   /* or 113% */
 
   display: -webkit-box;
@@ -1069,6 +1077,7 @@ html{
   font-weight: 400;
   font-size: 15px;
   line-height: 17px;
+  transform : rotate(0.04deg);
   /* or 113% */
 
   display: -webkit-box;
@@ -1083,32 +1092,33 @@ html{
   color: #000000;
   }
 
-    .brief_en_03{
-      /* brief_en */
-      position: absolute;
-      width: 421px;
-      height: 47px;
-      left: 0px;
-      top: 90px;
+.brief_en_03{
+  /* brief_en */
+  position: absolute;
+  width: 421px;
+  height: 47px;
+  left: 0px;
+  top: 90px;
 
-      font-family: 'Times New Roman';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 17px;
-      /* or 113% */
+  font-family: 'Times New Roman';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 17px;
+  transform : rotate(0.04deg);
+  /* or 113% */
 
-      display: -webkit-box;
+  display: -webkit-box;
 
-      display: -ms-flexbox;
+  display: -ms-flexbox;
 
-      display: flex;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 
-      color: #000000;
-      }
+  color: #000000;
+  }
 
 .PINKGUIDE_PAGE02_01{
 
@@ -1194,7 +1204,7 @@ li{
   top: 257%;
   left: 13%;
 
-  font-family: 'Helvetica';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
@@ -1234,7 +1244,7 @@ li{
   height: 20px;
   left: 45%;
 
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
@@ -1264,7 +1274,7 @@ li{
   position: absolute;
   width: 144px;
   height: 80px;
-  left: 55%;
+  left: 50%;
   top: 100%;
 }
 
@@ -1272,7 +1282,7 @@ li{
   position: absolute;
   left: 0%;
   top: 6%;
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -1283,7 +1293,7 @@ li{
   position: absolute;
   left: 0%;
   top: 41%;
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -1294,7 +1304,7 @@ li{
   position: absolute;
   left: 0%;
   top: 76%;
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -1334,7 +1344,7 @@ li{
   height: 20px;
   left: 45%;
 
-  font-family: 'Noto Sans';
+  font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
@@ -1364,7 +1374,7 @@ li{
   position: absolute;
   width: 144px;
   height: 80px;
-  left: 55%;
+  left: 50%;
   top: 17%;
 }
 
@@ -1382,7 +1392,7 @@ li{
 .list_tD_02{
   position: absolute;
   left: 0%;
-  top: 35%;
+  top: 0%;
   font-family: 'Noto Sans med';
   font-style: normal;
   font-weight: 500;
@@ -1393,7 +1403,7 @@ li{
 .list_tD_03{
   position: absolute;
   left: 0%;
-  top: 70%;
+  top: 35%;
   font-family: 'Noto Sans med';
   font-style: normal;
   font-weight: 500;

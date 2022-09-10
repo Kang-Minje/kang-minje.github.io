@@ -537,7 +537,7 @@ top: 3.7px;
   width: 195px;
   height: 0px;
   left: 20%;
-    top: 25px;  
+    top: 25px;
 
   border-style: solid;
   border-color: #FA00FF;
@@ -719,18 +719,19 @@ color: #000000;
     width: 120px;
     height: 20px;
     right: 19%;
-    top: 624%;
+    top: 625%;
     text-align: left;
     font-family: 'helvetica';
     font-style: normal;
     font-weight: 600;
     font-size: 15px;
     line-height: 20px;
+    transform:rotate(-0.03deg);
     color: #000000;
 }
 
 .nextproj:hover{
-text-decoration: underline; 
+text-decoration: underline;
 background-color: #10F901;
 /*cursor: url(cursor_01.png) 16 16,auto;*/
 cursor: pointer;
@@ -1000,13 +1001,14 @@ transform: translateX(15px);
     width: 150px;
     height: 20px;
     left: 20%;
-    top: 624%;
+    top: 625%;
     text-align: right;
     font-family: 'helvetica';
     font-style: normal;
     font-weight: 600;
     font-size: 15px;
     line-height: 20px;
+    transform:rotate(-0.03deg);
     color: #000000;
 }
 
@@ -1021,7 +1023,7 @@ transform: translateX(15px);
 }
 
 .prevproj:hover{
-    text-decoration: underline; 
+    text-decoration: underline;
     background-color: #10F901;
     cursor: pointer;
 }
@@ -1031,5 +1033,3 @@ transform: translateX(15px);
     transform: rotateY(180deg);
     transition: 0.2s;
 }
-
-
