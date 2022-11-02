@@ -1,12 +1,41 @@
 @font-face {
-    font-family: 'Noto Sans KR';
-    src: url('../srcs/fonts/NotoSansKR-Bold.otf') format('truetype');
-  }
+    font-family: 'NM ExtraBold';
+    src: url('../srcs/fonts/NanumMyeongjoBold.otf') format('opentype');
+}
 
-  @font-face {
-      font-family: 'Noto Sans';
-      src: url('../srcs/fonts/NotoSansDisplay-SemiBold.ttf') format('truetype');
-  }
+@font-face {
+    font-family: 'Migra Italic';
+    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'migra';
+    src: url('../srcs/fonts/Migra_Extralight_200.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('../srcs/fonts/NotoSansKR-Regular.otf') format('truetype');
+}
+@font-face {
+    font-family: 'Europa Grotesk SH';
+    src: url('../srcs/fonts/EuropaGroteskSH-Med.otf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../srcs/fonts/NotoSansDisplay-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans Med';
+    src: url('../srcs/fonts/NotoSansDisplay-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans Reg';
+    src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf') format('truetype');
+}
 
 /* 노말라이즈 */
 body, ul, li {
@@ -32,7 +61,7 @@ li{
     white-space: nowrap;
     overflow: hidden;
     color: inherit;
-    line-height: 45px;
+    line-height: 37px;
     display: block;
     padding: 20px 00px 20px 60px;
     margin: 0;
@@ -65,7 +94,7 @@ li{
   cursor: pointer;
   padding-top: 5%;
   padding-left: 4%;
-  padding-bottom: 4%;
+  padding-bottom: 0%;
   padding-right: 100%;
   background-color: white;
 }
@@ -170,4 +199,15 @@ footer{
   text-align: center;
   padding-top: 5%;
   padding-bottom: 5%;
+}
+
+.name{
+  background-color: #f1f;
+  color: #fff;
+  font-size: 36px;
+  font-family: "NotoSansKR";
+  position: absolute;
+  top: 20%;
+  left: 4%;
+  padding: 2%;
 }
