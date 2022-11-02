@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/iframepage.css">
+  </head>
   <body>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="detectmobilebrowser.js"></script>
+    <script>
+     console.log(jQuery.browser.mobile);
+     // alert(jQuery.browser.mobile);
+    </script>
+    <script>
+      if(jQuery.browser.mobile == false){
+		      location.href="./mobile/home_mobile.html";
+        } else {
+		      location.href="home_pc.html";
+  }
 
-    <h1>Mobile test</h1>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="detectmobilebrowser.js"></script>
-<script>
- console.log(jQuery.browser.mobile);
- alert(jQuery.browser.mobile);
-</script>
+    </script>
 
-</body>
+  </body>
 </html>
