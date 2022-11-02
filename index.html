@@ -2,185 +2,30 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="canonical" href="http://kangminje.com">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="./srcs/og_image.jpg">
-      <meta property="og:image:width" content="800">
-      <meta property="og:image:height" content="400">
-    <meta property="og:title" content="kangminjedotcom">
-    <meta property="og:description" content="이미지를 다루는 강민제입니다.">
-    <meta name="description" content="이미지를 다루는 강민제입니다.">
-
-    <link rel="stylesheet" href="css/main_fixed.css"`123`123>
-      <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-      <script src="circletype.min.js"></script>
-      <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
-    <link rel="icon" href="favicon.png">
-
-    <title>kangminjedotcom</title>
+    <title></title>
+    <link rel="stylesheet" href="css/iframepage.css">
   </head>
-  <body style="overflow-x: hidden">
-    <div class="wrapper">
-      <div class="main-container">
-          <div class="page01">
-              <a href="navy.html">
-                  <div class="newwork-circle">
-                      <span id="newwork">
-                        RECENT work
-                      </span>
-                  </div>
-                  <div class="blur"></div>
-                  <div class="newwork_text">
-                    <span class="newwork-navy">대한민국 해군 홍보대, 2022</span>
-                    <div class="dash"></div>
-                  </div>
-              </a>
+  <body>
 
+    <iframe class="pc" src="home_pc.html" width="100%" height="100%"></iframe>
+    <iframe class="mobile" src="../mobile/home_mobile.html" width="100%" height="100%"></iframe>
 
-<!--
-            <div class="notice_panel">
-              <div class="text-kr-div">
-                <h1 class="text-kr">웹사이트가<br>제작되는 중입니다</h1>
-                <h1 class="dot">.</h1>
-                <h1 class="text-en">Website is<br>Under Construction.</h1>
-                <div class="notice-backplate"></div>
-              </div>
-            </div>
--->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js">
+    </script>
 
-            <div class="PINKGUIDE_KR">
-              <h1 class="name-kr">강민제</h1>
-              <div class="line01"></div>
-              <div class="line02"></div>
-              <div class="line03"></div>
-              <div class="rect01"></div>
-            </div>
-            <div class="PINKGUIDE_EN">
-              <h1 class="name-en">KANGMINJE</h1>
-              <div class="rect02"></div>
-              <div class="line04"></div>
-              <div class="line05"></div>
-            </div>
+    <script>
 
+      if (Modernizr.touchevents) {
+        // supported
+        document.querySelector('.pc').style.display = 'none';
+        document.querySelector('.mobile').style.display = 'block';
+      } else {
+        // not-supported
+        document.querySelector('.pc').style.display = 'block';
+        document.querySelector('.mobile').style.display = 'none';
+      }
 
-            <div id="arrow">
-              <div class="arrow-line01"></div>
-              <div class="arrow-line02"></div>
-              <div class="arrow-line03"></div>
-            </div>
-          </div>
+    </script>
 
-          <div class="page02">
-            <div class="div_brief_main_kr">
-              <h2 class="brief_main_kr">시각 매체를 다루는 강민제입니다.</h2>
-            </div>
-            <div class="div_link_aboutme">
-              <a href="#" class="link_aboutme">About me</a>
-              <div class="line_link_aboutme"></div>
-            </div>
-            <div class="div_brief_kr">
-              <h3 class="brief_kr_serif">시각적인 쾌락을 추구하며, 생산해낸 - 낼 이미지를 통해 즐기게 한다.</h3>
-              <div class="brief_kr_box"></div>
-                <p class="brief_kr_sans01">
-                  이것이 강민제가 이미지를 만드는 이유입니다.</p>
-                <p class="brief_kr_sans02">
-                  이미지의 풍요로움은 사람들로 하여금 욕구의 만족을 보장했습니다.
-              <br>강민제는 현재의 범람하는 이미지들 속에서 높은 질의 이미지를 생산하여<br>시각적 쾌락이라는 욕망을 실현합니다.
-                </p>
-              <div class="brief_dot01"></div>
-            </div>
-
-
-
-            <div class="div_brief_en">
-            <p class="brief_en_01">Pursuing visual pleasure and make people to enjoy it
-              <br>through the images that I produced. (and will produce).</p>
-            <div class="brief_en_01_box"></div>
-            <p class="brief_en_02">This is why Kang Minje creates images.</p>
-            <p class="brief_en_03">The richness of the image ensured the satisfaction of people's needs.
-              <br>Kang Min-je realizes his desire for visual pleasure <br> by producing high-quality images among the current flooding images.
-            </p>
-            </div>
-
-            <div class="PINKGUIDE_PAGE02">
-              <div class="PINKGUIDE_PAGE02_01"></div>
-              <div class="PINKGUIDE_PAGE02_02"></div>
-            </div>
-          </div>
-
-          <div class="page03">
-            <div class="line06"></div>
-            <div class="works_maintxt">
-              작업물<br>Works
-            </div>
-            <div class="works_main">
-              <div class="photo">
-                  <div class="photo_main">
-                    <div class="photo_01">
-                      01
-                    </div>
-                    <div class="photo_02">
-                      사진
-                    </div>
-                    <div class="photo_03">
-                      Photography
-                    </div>
-                  </div>
-                  <ul class="photo_list">
-                    <a href="navy.html" class="list_photo_01"> 대한민국 해군 홍보대</a>
-                    <a href="dust.html" class="list_photo_02"> 먼지</a>
-                    <a href="afterglow.html" class="list_photo_03"> 여운</a>
-                  </ul>
-              </div>
-              <div class="tD">
-                  <div class="tD_main">
-                    <div class="tD_01">
-                      02
-                    </div>
-                    <div class="tD_02">
-                      그래픽
-                    </div>
-                    <div class="tD_03">
-                      3D Graphic
-                    </div>
-                  </div>
-                  <ul class="tD_list">
-                    <a href="#" class="list_tD_02"> Personal Works</a>
-                    <a href="#" class="list_tD_03"> NFT Collections</a>
-                  </ul>
-              </div>
-              <!--
-              <div class="commercial">
-                  <div class="3D_main">
-                    <div class="3D_01">
-                      02
-                    </div>
-                    <div class="3D_02">
-                      3D 그래픽
-                    </div>
-                    <div class="3D_03">
-                      3D Graphic
-                    </div>
-                  </div>
-                  <ul class="3D_list">
-                    <li>- SEEKER Project</li>
-                    <li>- Personal Works</li>
-                    <li>- NFT Collections</li>
-                  </ul>
-              </div>
-            -->
-            </div>
-          <div class="footer">
-            <div class="footerline"></div>
-            <h1 class="footer_name">kangminje<br>visual communicator</h1>
-            <h5 class="footer_copyright">© 2022. kangminje.</h5>
-            <a href="mailto:kangminje000@gmail.com" class="footer_email">
-                kangminje000@gmail.com
-            </a>
-            <a href="tel:01093239432" class="footer_phone">+82)10-9323-9432</a>
-            <h2 class="footer_location">Seoul, Korea</h2>
-          </div>
-      </div>
-    </div>
   </body>
 </html>
