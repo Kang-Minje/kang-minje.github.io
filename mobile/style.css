@@ -37,6 +37,19 @@
     src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf') format('truetype');
 }
 
+
+.photo{
+  text-align:center;
+}
+div img{
+  max-width: 80%;
+          height: auto;
+          display: block;
+          padding-top: 10%;
+          margin: 0px auto;
+          display: inline-block;
+}
+
 /* 노말라이즈 */
 body, ul, li {
     padding:0;
@@ -196,6 +209,8 @@ li > a {
 }
 
 .copyright{
+  padding-top: 5%;
+  padding-bottom: 2%;
   font-size: 0.6875em;
 }
 
