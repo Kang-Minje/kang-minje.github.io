@@ -37,6 +37,10 @@
     src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'bit';
+    src: url('../srcs/fonts/PressStart2P-Regular.ttf') format('truetype');
+}
 
 .photo{
   text-align:center;
@@ -208,17 +212,16 @@ li > a {
   margin: 0;
 }
 
+footer{
+  text-align: center;
+}
+
 .copyright{
   padding-top: 5%;
   padding-bottom: 2%;
   font-size: 0.6875em;
 }
 
-footer{
-  text-align: center;
-  padding-top: 5%;
-  padding-bottom: 5%;
-}
 
 .name{
   background-color: #f1f;
@@ -229,4 +232,26 @@ footer{
   top: 20%;
   left: 4%;
   padding: 2%;
+}
+
+#bitfont{
+  color: #000;
+  font-family: "bit";
+  font-size: 24px;
+}
+
+.body{
+  position: absolute;
+  width: 100%;
+  height: 80%;
+  display: flex;
+}
+
+.body h1{
+  padding: 30px;
+  margin: auto;
+
+  font-family: "bit";
+  font-size: 24px;
+  text-decoration: underline;
 }
