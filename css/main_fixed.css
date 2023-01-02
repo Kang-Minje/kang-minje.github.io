@@ -7,23 +7,27 @@
 
 
 @font-face {
-    font-family: 'NM ExtraBold';
-    src: url('../srcs/fonts/NanumMyeongjo-Bold.ttf') format('opentype');
+    font-family: 'NanumMyeongjo';
+    src: url('../srcs/fonts/NanumMyeongjo-Bold.ttf');
+    format('opentype');
 }
 
 @font-face {
     font-family: 'Migra Italic';
-    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
+    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf');
+    format('opentype');
 }
 
 @font-face {
     font-family: 'migra';
-    src: url('../srcs/fonts/Migra_Extralight_200.otf') format('opentype');
+    src: url('../srcs/fonts/Migra_Extralight_200.otf')
+    format('opentype');
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
-    src: url('../srcs/fonts/NotoSansKR-Regular.otf') format('truetype');
+    src: url('../srcs/fonts/NotoSansKR-Regular.otf')
+    format('truetype');
 }
 @font-face {
     font-family: 'Europa Grotesk SH';
@@ -884,7 +888,7 @@ html{
   margin: 0%;
   z-index: 1;
 
-  font-family: 'NM ExtraBold';
+  font-family: 'NanumMyeongjo';
   font-style: normal;
   font-weight: 200;
   font-size: 15px;

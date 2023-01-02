@@ -1,12 +1,12 @@
 
 @font-face {
-    font-family: 'NM ExtraBold';
-    src: url('../srcs/fonts/NanumMyeongjo-Bold.ttf') format('opentype');
+    font-family: 'NanumMyeongjo';
+    src: url('../srcs/fonts/NanumMyeongjo-Bold.ttf'); format('opentype');
 }
 
 @font-face {
     font-family: 'Migra Italic';
-    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
+    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf'); format('opentype');
 }
 @font-face {
     font-family: 'Noto Sans KR';
@@ -14,22 +14,22 @@
 }
 @font-face {
     font-family: 'Europa Grotesk SH';
-    src: url('../srcs/fonts/EuropaGroteskSH-Med.otf') format('truetype');
+    src: url('../srcs/fonts/EuropaGroteskSH-Med.otf'); format('truetype');
 }
 
 @font-face {
     font-family: 'Noto Sans';
-    src: url('../srcs/fonts/NotoSansDisplay-SemiBold.ttf') format('truetype');
+    src: url('../srcs/fonts/NotoSansDisplay-SemiBold.ttf'); format('truetype');
 }
 
 @font-face {
     font-family: 'Noto Sans Med';
-    src: url('../srcs/fonts/NotoSansDisplay-Medium.ttf') format('truetype');
+    src: url('../srcs/fonts/NotoSansDisplay-Medium.ttf'); format('truetype');
 }
 
 @font-face {
     font-family: 'Noto Sans Reg';
-    src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf') format('truetype');
+    src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf'); format('truetype');
 }
         /*! normalize.css v8.0.1  */
 
@@ -466,7 +466,7 @@ html{
   left: 24.24%;
   top: 33.2%;
 
-  font-family: 'NM ExtraBold';
+  font-family: 'NanumMyeongjo';
   font-style: normal;
   font-weight: 500;
   font-size: 36px;
@@ -823,7 +823,7 @@ html{
   margin: 0%;
   z-index: 1;
 
-  font-family: 'NM ExtraBold';
+  font-family: 'NanumMyeongjo';
   font-style: normal;
   font-weight: 200;
   font-size: 15px;
