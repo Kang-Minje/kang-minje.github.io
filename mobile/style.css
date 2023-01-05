@@ -221,8 +221,8 @@ footer{
 .copyright{
   width: 500px;
   margin: 0 auto;
-  padding-top: 80%;
-  padding-bottom: 2%;
+  padding-top: 20%;
+  padding-bottom: 15%;
   font-size: 0.6875em;
   z-index: 999;
 }
