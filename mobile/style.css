@@ -1,0 +1,285 @@
+@font-face {
+    font-family: 'NM ExtraBold';
+    src: url('../srcs/fonts/NanumMyeongjoBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Migra Italic';
+    src: url('../srcs/fonts/Migra_Italic_Extralight_Italic_200.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'migra';
+    src: url('../srcs/fonts/Migra_Extralight_200.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('../srcs/fonts/NotoSansKR-Regular.otf') format('truetype');
+}
+@font-face {
+    font-family: 'Europa Grotesk SH';
+    src: url('../srcs/fonts/EuropaGroteskSH-Med.otf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../srcs/fonts/NotoSansDisplay-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans Med';
+    src: url('../srcs/fonts/NotoSansDisplay-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Noto Sans Reg';
+    src: url('../srcs/fonts/NotoSansDisplay-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'bit';
+    src: url('../srcs/fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+.photo{
+  text-align:center;
+}
+div img{
+  max-width: 80%;
+          height: auto;
+          display: block;
+          padding-top: 10%;
+          margin: 0px auto;
+          display: inline-block;
+}
+
+/* 노말라이즈 */
+body, ul, li {
+    padding:0;
+    margin:0;
+    list-style:none;
+    display: inline;
+}
+a {
+    text-decoration:none;
+    color:inherit;
+}
+/* 노말라이즈 끝 */
+
+/* 라이브러리 */
+/* 상단바 */
+
+
+
+li{
+    /* font-size: 1.5em; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: inherit;
+    line-height: 37px;
+    display: block;
+    padding: 20px 00px 20px 60px;
+    margin: 0;
+}
+
+#menu_home,#menu_works,#menu_about,#menu_contacts{
+  padding: 20px 60px 20px 60px;
+}
+
+.mobile-top-bar {
+    background-color:#f1f;
+    position:fixed;
+    left:0;
+    width:100%;
+    z-index:999;
+}
+.mobile-top-bar > .logo {
+    text-align:center;
+    color:white;
+    font-weight:bold;
+    font-size:1.5rem;
+    z-index: 999;
+}
+
+/* 토글 사이드바 버튼 아이콘 */
+.ico {
+  width: 30%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  cursor: pointer;
+  padding-top: 5%;
+  padding-left: 4%;
+  padding-bottom: 0%;
+  padding-right: 100%;
+  background-color: white;
+}
+
+}
+/* 라이브러리 끝 */
+
+/* 커스텀 */
+/* 좌측 사이드 바 */
+/* 좌측 사이드바 배경 */
+.left-side-bar-box {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,0);
+    visibility:hidden;
+    transition:visibility .5s, background-color .5s;
+    z-index: 5;
+}
+.left-side-bar-box.active {
+    background-color:rgba(0,0,0,0);
+    visibility:visible;
+    z-index: 5;
+}
+
+/* 좌측 사이드바 */
+.left-side-bar {
+    position:fixed;
+    top:130px;
+    left:-65%;
+    width:65%;
+    height:100%;
+    background-color:#fff;
+    padding-top:150px;
+    transition:left .5s;
+    z-index: 5;
+}
+.left-side-bar-box.active > .left-side-bar {
+    left:40px;
+}
+.left-side-bar > .menu-1 ul > li > a {
+    display:block;
+    padding:5px;
+}
+.left-side-bar > .menu-1 ul > li:hover > a {
+    background-color:rgb(16,249,1);
+    text-decoration: underline;
+}
+
+/* 혼자가 아닌 a 에 +를 붙혀준다 */
+/* .left-side-bar > .menu-1 ul > li > a:not(:only-child)::after {
+    content:"+";
+    float:right;
+} */
+/* 엑티브가 있는 메뉴(펼쳐진 메뉴)에 a에 - 를 붙혀준다 */
+/* .left-side-bar > .menu-1 ul > li.active > a:not(:only-child)::after {
+    content:"-";
+} */
+.left-side-bar > .menu-1 > ul ul {
+    display:none;
+    background-color:#fff;
+    padding-left: 30px;
+}
+.left-side-bar > .menu-1 > ul ul ul {
+    background-color:#fff;
+    padding-left: 30px;
+}
+.left-side-bar > .menu-1 ul > li.active > ul {
+    display:block;
+}
+
+li > a {
+  font-family: "Noto Sans KR";
+  font-size: 32px;
+  width: 100%;
+  margin-right: 30px;
+}
+
+/* #menu_td{
+  margin-top: 80px;
+} */
+
+.first{
+  /* margin-bottom: 30px; */
+}
+
+#divider{
+  margin-bottom: 40px;
+}
+
+.insta{
+  width: 36px;
+  display: block;
+  padding: 35px 0px 35px 63px;
+  margin: 0;
+}
+
+footer{
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.copyright{
+  width: 500px;
+  margin: 0 auto;
+  padding-top: 20%;
+  padding-bottom: 15%;
+  font-size: 0.6875em;
+  z-index: 999;
+}
+
+
+.name{
+  background-color: #f1f;
+  color: #fff;
+  font-size: 36px;
+  font-family: "NotoSansKR";
+  position: absolute;
+  top: 20%;
+  left: 4%;
+  padding: 2%;
+}
+
+#bitfont{
+  color: #000;
+  font-family: "bit";
+  font-size: 24px;
+}
+
+.body{
+  top: 300px;
+  position: relative;
+  height: 100%;
+  display: flex;
+  /* border: 1px solid #000; */
+}
+
+.body h1{
+  position: absolute;
+  padding: 40px;
+  background-color: #fff;
+  margin: auto;
+  left: 50%;
+  top: 50%;
+
+  font-family: "bit";
+  font-size: 24px;
+  text-decoration: underline;
+  color: #000;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+}
+
+video{
+  max-width: 83%;
+  position: relative;
+  margin: auto;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#top-bar{
+  background-color: rgba(0,0,0,0);
+}

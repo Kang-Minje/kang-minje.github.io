@@ -1,0 +1,885 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    overflow-x: hidden;
+     -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#works{
+    display:block;
+    overflow:auto;
+    height:fit-content;
+}
+
+#works span{
+/*        background-color: rgba(0,0,255,0.5)*/
+}
+
+#works span:not(.yet):hover{
+    background-color: rgba(0,255,0);
+}
+
+#headername span{
+    color: red;
+}
+
+.yet{
+    color: lightgray;
+    text-decoration: line-through;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover{
+    background-color: rgba(0,255,0);
+    cursor: pointer;
+}
+
+
+.linevertical1 {
+    position: absolute;
+    width: 100%;
+    height: 470%;
+    left: 28.6%;
+    top: -100%;
+    border-style: solid;
+    border-color: #FA00FF;
+    border-width: 0px 0px 0px 0.1px;
+}
+
+.mediaViewInfo {
+    --web-view-name: Landing Page;
+    --web-view-id: Landing_Page;
+    --web-scale-on-resize: true;
+    --web-enable-deep-linking: true;
+}
+
+:root {
+    --web-view-ids: Landing_Page;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+svg {
+    margin: -15px;
+}
+
+#Landing_Page {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 1);
+/*    overflow: hidden;*/
+    --web-view-name: Landing Page;
+    --web-view-id: Landing_Page;
+    --web-scale-on-resize: true;
+    --web-enable-deep-linking: true;
+}
+
+#Lines {
+    z-index: 998;
+    position: fixed;
+    width: 1883.49px;
+    height: 1080px;
+    left: -0.49px;
+    top: 0px;
+}
+
+#Linevertical1 {
+    fill: transparent;
+    stroke: rgba(255, 113, 250, 1);
+    stroke-width: 0.30000001192092896px;
+    stroke-linejoin: miter;
+    stroke-linecap: butt;
+    stroke-miterlimit: 4;
+    shape-rendering: auto;
+}
+
+.Linevertical1 {
+    overflow: visible;
+    position: absolute;
+    width: 0.3px;
+    height: 3000px;
+    left: 67px;
+    top: -15px;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
+#Linevertical2 {
+    fill: transparent;
+    stroke: rgba(255, 113, 250, 1);
+    stroke-width: 0.30000001192092896px;
+    stroke-linejoin: miter;
+    stroke-linecap: butt;
+    stroke-miterlimit: 4;
+    shape-rendering: auto;
+}
+
+.Linevertical2 {
+    overflow: visible;
+    position: absolute;
+    width: 0.3px;
+    height: 3000px;
+    left: 480px;
+    top: -15px;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
+#Linevertical3 {
+    fill: transparent;
+    stroke: rgba(255, 113, 250, 1);
+    stroke-width: 0.30000001192092896px;
+    stroke-linejoin: miter;
+    stroke-linecap: butt;
+    stroke-miterlimit: 4;
+    shape-rendering: auto;
+}
+
+.Linevertical3 {
+    overflow: visible;
+    position: absolute;
+    width: 0.3px;
+    height: 3000px;
+    right: 900px;
+    top: -15px;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
+#LineHeader {
+    fill: transparent;
+    stroke: rgba(255, 113, 250, 1);
+    stroke-width: 0.30000001192092896px;
+    stroke-linejoin: miter;
+    stroke-linecap: butt;
+    stroke-miterlimit: 4;
+    shape-rendering: auto;
+}
+
+.LineHeader {
+    overflow: visible;
+    position: absolute;
+    width: 6000px;
+    height: 0.3px;
+    left: -40px;
+    top: 50px;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
+#Sec02 {
+    z-index: 999;
+    position: fixed;
+    width: 340px;
+    height: 147px;
+    left: 510px;
+    top: 114px;
+    overflow: visible;
+}
+
+#selectedworks {
+    position: absolute;
+    width: 336px;
+    height: 147px;
+    left: 0px;
+    top: 0px;
+    overflow: visible;
+}
+
+#yearSuperposition {
+    left: 286px;
+    top: 132px;
+    position: absolute;
+    overflow: visible;
+    width: 41px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksSuperposition {
+    left: 0px;
+    top: 132px;
+    position: absolute;
+    overflow: visible;
+    width: 84px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearTheWhiteWall {
+    left: 296px;
+    top: 112px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksTheWhiteWall {
+    left: 0px;
+    top: 112px;
+    position: absolute;
+    overflow: visible;
+    width: 96px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearSuseok {
+    left: 286px;
+    top: 92px;
+    position: absolute;
+    overflow: visible;
+    width: 41px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksSuseok {
+    left: 0px;
+    top: 92px;
+    position: absolute;
+    overflow: visible;
+    width: 43px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearPortraits {
+    left: 296px;
+    top: 72px;
+    position: absolute;
+    overflow: visible;
+    width: 41px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksPortraits {
+    left: 0px;
+    top: 72px;
+    position: absolute;
+    overflow: visible;
+    width: 53px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearFlyingBobs {
+    left: 296px;
+    top: 40px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksFlyingBobs {
+    left: 0px;
+    top: 40px;
+    position: absolute;
+    overflow: visible;
+    width: 180px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearAfterglow {
+    left: 296px;
+    top: 20px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksAfterglow {
+    left: 0px;
+    top: 20px;
+    position: absolute;
+    overflow: visible;
+    width: 61px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearDust {
+    left: 296px;
+    top: 0px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksDust {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    overflow: visible;
+    width: 30px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#Sec01 {
+    z-index: 999;
+    position: fixed;
+    width: 400px;
+    height: 1022px;
+    left: 31px;
+    top: 29px;
+    overflow: visible;
+}
+
+#footer {
+    position: fixed;
+    width: 147px;
+    height: 82px;
+    left: 31px;
+    bottom: 24px;
+    overflow: visible;
+}
+
+#footerfindme {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    overflow: visible;
+    width: 52px;
+    height: 14px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#footerloc {
+    left: 0px;
+    top: 68px;
+    position: absolute;
+    overflow: visible;
+    width: 72px;
+    height: 14px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#footerinsta {
+    left: 0px;
+    top: 40px;
+    position: absolute;
+    overflow: visible;
+    width: 57px;
+    height: 14px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#footernumber {
+    left: 0px;
+    top: 29px;
+    position: absolute;
+    overflow: visible;
+    width: 104px;
+    height: 14px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#footermail {
+    left: 0px;
+    top: 15px;
+    position: absolute;
+    overflow: visible;
+    width: 148px;
+    height: 14px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#dsc {
+    position: absolute;
+    width: 403px;
+    height: 267px;
+    left: 0px;
+    top: 85px;
+    overflow: visible;
+}
+
+#dscko {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    overflow: visible;
+    width: 404px;
+    height: 105px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#dscen {
+    left: 0px;
+    top: 139px;
+    position: absolute;
+    overflow: visible;
+    width: 404px;
+    height: 128px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#header {
+    position: absolute;
+    width: 44px;
+    height: 16px;
+    left: 0px;
+    top: 0px;
+    overflow: visible;
+}
+
+#Headername {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    overflow: visible;
+    width: 45px;
+    height: 16px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#guide {
+    position: absolute;
+    width: 8px;
+    height: 151px;
+    left: 42px;
+    top: 109px;
+    display: none;
+    overflow: visible;
+}
+
+#Rectangle_1 {
+    opacity: 0.618;
+    fill: rgba(56, 76, 183, 1);
+}
+
+.Rectangle_1 {
+    position: absolute;
+    overflow: visible;
+    width: 8px;
+    height: 8px;
+    left: 0px;
+    top: 0px;
+}
+
+#Rectangle_2 {
+    opacity: 0.618;
+    fill: rgba(56, 76, 183, 1);
+}
+
+.Rectangle_2 {
+    position: absolute;
+    overflow: visible;
+    width: 8px;
+    height: 8px;
+    left: 0px;
+    top: 143px;
+}
+
+#footer a {
+    color: black;
+    text-decoration: none
+}
+
+#worksbadedu {
+    left: 0px;
+    top: 166px;
+    position: absolute;
+    overflow: visible;
+    width: 53px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearbadedu {
+    left: 296px;
+    top: 166px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearsejong {
+    left: 296px;
+    top: 186px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#workssejong {
+    left: 0px;
+    top: 186px;
+    position: absolute;
+    overflow: visible;
+    width: 105px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksdd {
+    left: 0px;
+    top: 206px;
+    position: absolute;
+    overflow: visible;
+    width: 240px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yeardd {
+    left: 296px;
+    top: 206px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+.imgs {
+    display: block;
+    position: relative;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    border-bottom: 0.3px solid #000000;
+}
+
+#Sec03 {
+    border-left: 0.3px solid #FF71fa;
+/*    display: flex;*/
+    position: absolute;
+    background-color: rgba(255,0,0,0.01);
+    position: absolute;
+    width: calc(100vw - 915px);
+    height: fit-content;
+    right: 0px;
+    top: 35px;
+    font-size: 0;
+}
+
+#white {
+    position: fixed;
+    background-color: white;
+    display: block;
+    width: 1300px;
+    height: 35px;
+    right: 0;
+    z-index: 997;
+}
+
+.imgs_hori {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    border-bottom: 0.3px solid #000000;
+}
+
+.imgs_vert {
+    display: inline-block;
+    position: relative;
+    width: 50%;
+    top: 0px;
+    left: 0px;
+    border-bottom: 0.3px solid #000000;
+    border-right: 0.3px solid #000000;
+}
+
+.circle {
+        margin: 0 auto;
+        width: 4px;
+        height: 0.1px;
+        border: 1px solid #000000;
+        background-color: #000000;
+        display: none; 
+/*        border-radius: 50%;*/
+}
+
+#dots {
+    position: fixed;
+/*    border: 1px solid red;*/
+    width: 10px;
+    height: 221px;
+    left: 495px;
+    top: 118px;
+}
+
+.circle-wrap {
+/*    background-color: rgba(0,255,0,1);*/
+    margin: 0 auto;
+    height: 14px;
+    padding-top: 3px;
+    margin-bottom: 6px;
+}
+
+.circle-wrap-blank {
+/*    background-color: rgba(0,255,0,1);*/
+    margin: 0 auto;
+    height: 14px;
+    padding-top: 3px;
+    margin-bottom: 17px;
+}
+
+.circle-wrap-blank2 {
+/*    background-color: rgba(0,255,0,1);*/
+    margin: 0 auto;
+    height: 14px;
+    padding-top: 3px;
+    margin-bottom: 20px;
+}
+
+.circle-current {
+        margin: 0 auto;
+        width: 4px;
+        height: 0.1px;
+        border: 1px solid #000000;
+        background-color: #000000;
+/*        display: none; */
+/*        border-radius: 50%;*/
+}
+
+#Sec02-1 {
+    z-index: 999;
+    position: fixed;
+    width: 336px;
+    height: 147px;
+    left: 510px;
+    top: 584px;
+    overflow: visible;
+/*    background-color: rgba(255,0,0,0.3);*/
+}
+
+.iframe {
+    z-index: 999;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    border-bottom: 0.3px solid #000000;
+}
+
+#link {
+    text-decoration: none;
+    color: black;
+}
+
+h3 {
+    left: 0px;
+    top: 112px;
+    position: absolute;
+    overflow: visible;
+    width: 96px;
+    height: 15px;
+    text-align: left;
+    font-family: Nanum Myeongjo;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+.imgs_tri {
+        display: inline-block;
+    position: relative;
+    width: 33.333%;
+    top: 0px;
+    left: 0px;
+    border-bottom: 0.3px solid #000000;
+    border-right: 0.3px solid #000000;
+}
