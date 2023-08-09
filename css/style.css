@@ -783,7 +783,6 @@ svg {
         margin: 0 auto;
         width: 4px;
         height: 0.1px;
-        border: 1px solid #000000;
         background-color: #000000;
         display: none; 
 /*        border-radius: 50%;*/
@@ -825,8 +824,7 @@ svg {
 .circle-current {
         margin: 0 auto;
         width: 4px;
-        height: 0.1px;
-        border: 1px solid #000000;
+        height: 1px;
         background-color: #000000;
 /*        display: none; */
 /*        border-radius: 50%;*/
@@ -882,4 +880,25 @@ h3 {
     left: 0px;
     border-bottom: 0.3px solid #000000;
     border-right: 0.3px solid #000000;
+}
+
+#logo {
+    font-family: "Helvetica Neue", Helvetica, sans-serif, "Helvetica Neue Bold", Icons;
+    font-style: normal;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    font-size: 3.7rem;
+    line-height: 1.1;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: -0.6rem;
+}
+}
+
+.circle {
+    
+}
+
+.circle {
+    
 }
