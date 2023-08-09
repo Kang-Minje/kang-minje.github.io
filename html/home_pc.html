@@ -2839,9 +2839,12 @@
         window.application = new Application();
 
     </script>
+    <script type="text/javascript">
+        document.oncontextmenu = function(){return false;}
+    </script>
 </head>
 
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onkeydown="return false">
     <div id="Landing_Page">
         <div id="Lines">
             <svg class="Linevertical1" viewBox="0 0 0.30000001192092896 3000">
