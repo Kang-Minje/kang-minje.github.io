@@ -42,6 +42,10 @@
     src: url('../srcs/fonts/PressStart2P-Regular.ttf') format('truetype');
 }
 
+ul > li > a {
+    padding: 0px;
+}
+
 .photo{
   text-align:center;
 }
@@ -49,7 +53,7 @@ div img{
   max-width: 80%;
           height: auto;
           display: block;
-          padding-top: 10%;
+/*          padding-top: 10%;*/
           margin: 0px auto;
           display: inline-block;
 }
@@ -80,7 +84,7 @@ li{
     color: inherit;
     line-height: 37px;
     display: block;
-    padding: 20px 00px 20px 60px;
+    padding: 20px 00px 20px 20px;
     margin: 0;
 }
 
@@ -157,7 +161,7 @@ li{
 }
 .left-side-bar > .menu-1 ul > li > a {
     display:block;
-    padding:5px;
+    padding: 15px 5px 15px 5px;
 }
 .left-side-bar > .menu-1 ul > li:hover > a {
     background-color:rgb(16,249,1);
@@ -208,7 +212,7 @@ li > a {
 .insta{
   width: 36px;
   display: block;
-  padding: 35px 0px 35px 63px;
+  padding: 60px 0px 35px 63px;
   margin: 0;
 }
 
@@ -283,3 +287,27 @@ video{
 #top-bar{
   background-color: rgba(0,0,0,0);
 }
+
+#logo {
+    
+    font-family: "Helvetica Neue", Helvetica, sans-serif, "Helvetica Neue Bold", Icons;
+    font-style: normal;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    font-size: 3.7rem;
+    line-height: 1.1;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: -0.6rem;
+    text-align: center;
+}
+
+.youtubeurl {
+    font-family: "NanumMyeongjo";
+    text-decoration: underline;
+    margin-top: 20%;
+    margin-bottom: 10%;
+    font-size: 20px;
+    width: 100%;
+/*    margin-right: 30px;*/
+    }
