@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
 *{
     padding: 0;
     margin: 0;
@@ -208,7 +210,7 @@ svg {
     width: 41px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -224,7 +226,7 @@ svg {
     width: 84px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -240,7 +242,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -256,7 +258,7 @@ svg {
     width: 96px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -272,7 +274,7 @@ svg {
     width: 41px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -288,7 +290,7 @@ svg {
     width: 43px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -304,7 +306,7 @@ svg {
     width: 41px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -320,7 +322,7 @@ svg {
     width: 53px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -336,7 +338,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -352,7 +354,7 @@ svg {
     width: 180px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -368,7 +370,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -384,7 +386,7 @@ svg {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -400,7 +402,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -416,7 +418,7 @@ svg {
     width: 30px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -451,7 +453,7 @@ svg {
     width: 52px;
     height: 14px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -467,7 +469,7 @@ svg {
     width: 120px;
     height: 14px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -483,7 +485,7 @@ svg {
     width: 57px;
     height: 14px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -499,7 +501,7 @@ svg {
     width: 104px;
     height: 14px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -515,7 +517,7 @@ svg {
     width: 148px;
     height: 14px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -540,7 +542,7 @@ svg {
     width: 404px;
     height: 105px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: 700;
     font-size: 13px;
@@ -556,7 +558,7 @@ svg {
     width: 404px;
     height: 128px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -581,7 +583,7 @@ svg {
     width: 45px;
     height: 16px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -640,7 +642,7 @@ svg {
     width: 53px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -656,7 +658,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -672,7 +674,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -688,7 +690,7 @@ svg {
     width: 105px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -704,7 +706,7 @@ svg {
     width: 240px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -720,7 +722,7 @@ svg {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -864,7 +866,7 @@ h3 {
     width: 96px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -911,7 +913,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -927,7 +929,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -943,7 +945,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -959,7 +961,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -975,7 +977,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -991,7 +993,7 @@ h3 {
     width: 31px;
     height: 15px;
     text-align: right;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1007,7 +1009,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1023,7 +1025,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1039,7 +1041,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1055,7 +1057,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1071,7 +1073,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1087,7 +1089,7 @@ h3 {
     width: 61px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
@@ -1118,7 +1120,7 @@ hr {
     width: 84px;
     height: 15px;
     text-align: left;
-    font-family: Nanum Myeongjo;
+    font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
