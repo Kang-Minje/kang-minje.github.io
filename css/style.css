@@ -439,10 +439,11 @@ svg {
 #footer {
     position: fixed;
     width: 147px;
-    height: 82px;
+    height: 100px;
     left: 31px;
-    bottom: 24px;
+    bottom: 35px;
     overflow: visible;
+/*    border: 1px solid #000;*/
 }
 
 #footerfindme {
@@ -463,7 +464,7 @@ svg {
 
 #footerloc {
     left: 0px;
-    top: 68px;
+    bottom: 0;
     position: absolute;
     overflow: visible;
     width: 120px;
@@ -548,11 +549,12 @@ svg {
     font-size: 13px;
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.3px;
+    line-height: 20px;
 }
 
 #dscen {
     left: 0px;
-    top: 139px;
+    top: 80px;
     position: absolute;
     overflow: visible;
     width: 404px;
@@ -564,6 +566,7 @@ svg {
     font-size: 14px;
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.3px;
+    line-height: 19px
 }
 
 #header {
@@ -1124,6 +1127,22 @@ hr {
     font-style: normal;
     font-weight: bold;
     font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#footeryoutube {
+    left: 0px;
+    top: 54px;
+    position: absolute;
+    overflow: visible;
+    width: 104px;
+    height: 14px;
+    text-align: left;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.3px;
 }
