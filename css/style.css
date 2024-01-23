@@ -1146,3 +1146,35 @@ hr {
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.3px;
 }
+
+#workstable {
+    left: 0px;
+    top: 380px;
+    position: absolute;
+    overflow: visible;
+    width: 240px;
+    height: 15px;
+    text-align: left;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yeartable {
+    left: 296px;
+    top: 380px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
