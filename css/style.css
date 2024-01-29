@@ -268,7 +268,7 @@ svg {
 
 #yearSuseok {
     left: 286px;
-    top: 224px;
+    top: 260px;
     position: absolute;
     overflow: visible;
     width: 41px;
@@ -284,7 +284,7 @@ svg {
 
 #worksSuseok {
     left: 0px;
-    top: 224px;
+    top: 260px;
     position: absolute;
     overflow: visible;
     width: 43px;
@@ -332,7 +332,7 @@ svg {
 
 #yearFlyingBobs {
     left: 296px;
-    top: 20px;
+    top: 60px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -348,7 +348,7 @@ svg {
 
 #worksFlyingBobs {
     left: 0px;
-    top: 20px;
+    top: 60px;
     position: absolute;
     overflow: visible;
     width: 180px;
@@ -364,7 +364,7 @@ svg {
 
 #yearAfterglow {
     left: 296px;
-    top: 60px;
+    top: 120px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -380,7 +380,7 @@ svg {
 
 #worksAfterglow {
     left: 0px;
-    top: 60px;
+    top: 120px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -396,7 +396,7 @@ svg {
 
 #yearDust {
     left: 296px;
-    top: 40px;
+    top: 100px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -412,7 +412,7 @@ svg {
 
 #worksDust {
     left: 0px;
-    top: 40px;
+    top: 100px;
     position: absolute;
     overflow: visible;
     width: 30px;
@@ -768,7 +768,7 @@ svg {
 .imgs_hori {
     display: inline-block;
     position: relative;
-    width: 100%;
+    width: 100.6%;
     top: 0px;
     left: 0px;
     border-bottom: 0.3px solid #000000;
@@ -910,7 +910,7 @@ h3 {
 
 #yearGlass {
     left: 296px;
-    top: 92px;
+    top: 140px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -926,7 +926,7 @@ h3 {
 
 #yearCactus {
     left: 296px;
-    top: 112px;
+    top: 160px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -942,7 +942,7 @@ h3 {
 
 #yearGemstone {
     left: 296px;
-    top: 132px;
+    top: 180px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -958,7 +958,7 @@ h3 {
 
 #yearThrill {
     left: 296px;
-    top: 152px;
+    top: 200px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -974,7 +974,7 @@ h3 {
 
 #yearConflict {
     left: 296px;
-    top: 172px;
+    top: 220px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -990,7 +990,7 @@ h3 {
 
 #yearEcstasy {
     left: 296px;
-    top: 192px;
+    top: 240px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -1006,7 +1006,7 @@ h3 {
 
 #worksCactus {
     left: 0px;
-    top: 112px;
+    top: 160px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1022,7 +1022,7 @@ h3 {
 
 #worksGlass {
     left: 0px;
-    top: 92px;
+    top: 140px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1038,7 +1038,7 @@ h3 {
 
 #worksGemstone {
     left: 0px;
-    top: 132px;
+    top: 180px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1054,7 +1054,7 @@ h3 {
 
 #worksThrill {
     left: 0px;
-    top: 152px;
+    top: 200px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1070,7 +1070,7 @@ h3 {
 
 #worksConflict {
     left: 0px;
-    top: 172px;
+    top: 220px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1086,7 +1086,7 @@ h3 {
 
 #worksEcstasy {
     left: 0px;
-    top: 192px;
+    top: 240px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1171,6 +1171,38 @@ hr {
     width: 31px;
     height: 15px;
     text-align: right;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#yearDrowning {
+    left: 296px;
+    top: 40px;
+    position: absolute;
+    overflow: visible;
+    width: 31px;
+    height: 15px;
+    text-align: right;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.3px;
+}
+
+#worksDrowning {
+    left: 0px;
+    top: 40px;
+    position: absolute;
+    overflow: visible;
+    width: 180px;
+    height: 15px;
+    text-align: left;
     font-family: 'Nanum Myeongjo', serif;
     font-style: normal;
     font-weight: bold;
