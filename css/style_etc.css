@@ -1,31 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
 
-* {
+*{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-body {
+body{
     overflow-x: hidden;
-    -ms-overflow-style: none;
+     -ms-overflow-style: none;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-#works {
-    display: block;
-    overflow: auto;
-    height: fit-content;
+#works{
+    display:block;
+    overflow:auto;
+    height:fit-content;
 }
 
 
 
+#works span:not(.yet):hover{
+    background-color: rgba(0,255,0);
+}
 
 
-.yet {
+
+.yet{
     color: lightgray;
     text-decoration: line-through;
 }
@@ -34,6 +38,12 @@ a {
     color: black;
     text-decoration: none;
 }
+
+a:hover{
+    background-color: rgba(0,255,0);
+    cursor: pointer;
+}
+
 
 .linevertical1 {
     position: absolute;
@@ -59,8 +69,6 @@ a {
 
 
 
-
-
 svg {
     margin: -15px;
 }
@@ -70,7 +78,7 @@ svg {
     width: 100vw;
     height: 100vh;
     background-color: rgba(255, 255, 255, 1);
-    /*    overflow: hidden;*/
+/*    overflow: hidden;*/
     --web-view-name: Landing Page;
     --web-view-id: Landing_Page;
     --web-scale-on-resize: true;
@@ -84,7 +92,6 @@ svg {
     height: 1080px;
     left: -0.49px;
     top: 0px;
-    z-index: 999;
 }
 
 #Linevertical1 {
@@ -252,7 +259,7 @@ svg {
 
 #yearSuseok {
     left: 286px;
-    top: 260px;
+    top: 160px;
     position: absolute;
     overflow: visible;
     width: 41px;
@@ -268,7 +275,7 @@ svg {
 
 #worksSuseok {
     left: 0px;
-    top: 260px;
+    top: 160px;
     position: absolute;
     overflow: visible;
     width: 43px;
@@ -335,7 +342,7 @@ svg {
     top: 80px;
     position: absolute;
     overflow: visible;
-    width: 70px;
+    width: 180px;
     height: 15px;
     text-align: left;
     font-family: 'Nanum Myeongjo', serif;
@@ -348,7 +355,7 @@ svg {
 
 #yearAfterglow {
     left: 296px;
-    top: 120px;
+    top: 20px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -364,7 +371,7 @@ svg {
 
 #worksAfterglow {
     left: 0px;
-    top: 120px;
+    top: 20px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -380,7 +387,7 @@ svg {
 
 #yearDust {
     left: 296px;
-    top: 100px;
+    top: 0px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -396,7 +403,7 @@ svg {
 
 #worksDust {
     left: 0px;
-    top: 100px;
+    top: 00px;
     position: absolute;
     overflow: visible;
     width: 30px;
@@ -411,13 +418,13 @@ svg {
 }
 
 #Sec01 {
-    z-index: 999;
     position: fixed;
     width: 400px;
     height: 1022px;
     left: 31px;
     top: 29px;
     overflow: visible;
+    z-index: 999;
 }
 
 #footer {
@@ -427,7 +434,7 @@ svg {
     left: 31px;
     bottom: 35px;
     overflow: visible;
-    /*    border: 1px solid #000;*/
+/*    border: 1px solid #000;*/
 }
 
 #footerfindme {
@@ -623,7 +630,7 @@ svg {
 
 #worksbadedu {
     left: 0px;
-    top: 320px;
+    top: 200px;
     position: absolute;
     overflow: visible;
     width: 53px;
@@ -639,7 +646,7 @@ svg {
 
 #yearbadedu {
     left: 296px;
-    top: 320px;
+    top: 200px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -655,7 +662,7 @@ svg {
 
 #yearsejong {
     left: 296px;
-    top: 340px;
+    top: 220px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -671,7 +678,7 @@ svg {
 
 #workssejong {
     left: 0px;
-    top: 340px;
+    top: 220px;
     position: absolute;
     overflow: visible;
     width: 105px;
@@ -687,7 +694,7 @@ svg {
 
 #worksdd {
     left: 0px;
-    top: 360px;
+    top: 240px;
     position: absolute;
     overflow: visible;
     width: 240px;
@@ -703,7 +710,7 @@ svg {
 
 #yeardd {
     left: 296px;
-    top: 360px;
+    top: 240px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -728,20 +735,23 @@ svg {
 
 #Sec03 {
     border-left: 0.3px solid #FF71fa;
+/*    display: flex;*/
+    position: absolute;
+    background-color: rgba(255,0,0,0.01);
     position: absolute;
     width: calc(100vw - 915px);
+    height: fit-content;
     right: 0px;
     top: 35px;
     font-size: 0;
-    overflow: hidden;
 }
 
 #white {
     position: fixed;
     background-color: white;
     display: block;
-    width: 100%;
-    height: 35px;
+    width: 90%;
+    height: 34.5px;
     right: 0;
     z-index: 997;
 }
@@ -752,7 +762,7 @@ svg {
     width: 100%;
     top: 0px;
     left: 0px;
-    /*    border-bottom: 0.3px solid #000000;*/
+/*    border-bottom: 0.3px solid #000000;*/
 }
 
 .imgs_vert {
@@ -761,22 +771,22 @@ svg {
     width: 50%;
     top: 0px;
     left: 0px;
-    /*    border-bottom: 0.3px solid #000000;*/
-    /*    border-right: 0.3px solid #000000;*/
+/*    border-bottom: 0.3px solid #000000;*/
+/*    border-right: 0.3px solid #000000;*/
 }
 
 .circle {
-    margin: 0 auto;
-    width: 4px;
-    height: 0.1px;
-    background-color: #000000;
-    display: none;
-    /*        border-radius: 50%;*/
+        margin: 0 auto;
+        width: 4px;
+        height: 0.1px;
+        background-color: #000000;
+        display: none; 
+/*        border-radius: 50%;*/
 }
 
 #dots {
     position: fixed;
-    /*    border: 1px solid red;*/
+/*    border: 1px solid red;*/
     width: 10px;
     height: 221px;
     left: 495px;
@@ -784,7 +794,7 @@ svg {
 }
 
 .circle-wrap {
-    /*    background-color: rgba(0,255,0,1);*/
+/*    background-color: rgba(0,255,0,1);*/
     margin: 0 auto;
     height: 14px;
     padding-top: 3px;
@@ -792,7 +802,7 @@ svg {
 }
 
 .circle-wrap-blank {
-    /*    background-color: rgba(0,255,0,1);*/
+/*    background-color: rgba(0,255,0,1);*/
     margin: 0 auto;
     height: 14px;
     padding-top: 3px;
@@ -800,7 +810,7 @@ svg {
 }
 
 .circle-wrap-blank2 {
-    /*    background-color: rgba(0,255,0,1);*/
+/*    background-color: rgba(0,255,0,1);*/
     margin: 0 auto;
     height: 14px;
     padding-top: 3px;
@@ -808,12 +818,12 @@ svg {
 }
 
 .circle-current {
-    margin: 0 auto;
-    width: 4px;
-    height: 1px;
-    background-color: #000000;
-    /*        display: none; */
-    /*        border-radius: 50%;*/
+        margin: 0 auto;
+        width: 4px;
+        height: 1px;
+        background-color: #000000;
+/*        display: none; */
+/*        border-radius: 50%;*/
 }
 
 #Sec02-1 {
@@ -824,7 +834,7 @@ svg {
     left: 510px;
     top: 584px;
     overflow: visible;
-    /*    background-color: rgba(255,0,0,0.3);*/
+/*    background-color: rgba(255,0,0,0.3);*/
 }
 
 .iframe {
@@ -859,12 +869,12 @@ h3 {
 }
 
 .imgs_tri {
-    display: inline-block;
+        display: inline-block;
     position: relative;
     width: 33.333%;
     top: 0px;
     left: 0px;
-    /*
+/*
     border-bottom: 0.3px solid #000000;
     border-right: 0.3px solid #000000;
 */
@@ -883,13 +893,17 @@ h3 {
 }
 }
 
-.circle {}
+.circle {
+    
+}
 
-.circle {}
+.circle {
+    
+}
 
 #yearGlass {
     left: 296px;
-    top: 140px;
+    top: 40px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -905,7 +919,7 @@ h3 {
 
 #yearCactus {
     left: 296px;
-    top: 160px;
+    top: 60px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -921,7 +935,7 @@ h3 {
 
 #yearGemstone {
     left: 296px;
-    top: 180px;
+    top: 80px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -937,7 +951,7 @@ h3 {
 
 #yearThrill {
     left: 296px;
-    top: 200px;
+    top: 100px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -953,7 +967,7 @@ h3 {
 
 #yearConflict {
     left: 296px;
-    top: 220px;
+    top: 120px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -969,7 +983,7 @@ h3 {
 
 #yearEcstasy {
     left: 296px;
-    top: 240px;
+    top: 140px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -985,7 +999,7 @@ h3 {
 
 #worksCactus {
     left: 0px;
-    top: 160px;
+    top: 60px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1001,7 +1015,7 @@ h3 {
 
 #worksGlass {
     left: 0px;
-    top: 140px;
+    top: 40px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1017,7 +1031,7 @@ h3 {
 
 #worksGemstone {
     left: 0px;
-    top: 180px;
+    top: 80px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1033,7 +1047,7 @@ h3 {
 
 #worksThrill {
     left: 0px;
-    top: 200px;
+    top: 100px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1049,7 +1063,7 @@ h3 {
 
 #worksConflict {
     left: 0px;
-    top: 220px;
+    top: 120px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1065,7 +1079,7 @@ h3 {
 
 #worksEcstasy {
     left: 0px;
-    top: 240px;
+    top: 140px;
     position: absolute;
     overflow: visible;
     width: 61px;
@@ -1090,7 +1104,9 @@ hr {
     height: 0.3px;
 }
 
-hr {}
+hr {
+    
+}
 
 #divider_commercial {
     left: 0px;
@@ -1126,7 +1142,7 @@ hr {}
 
 #workstable {
     left: 0px;
-    top: 380px;
+    top: 260px;
     position: absolute;
     overflow: visible;
     width: 240px;
@@ -1142,7 +1158,7 @@ hr {}
 
 #yeartable {
     left: 296px;
-    top: 380px;
+    top: 260px;
     position: absolute;
     overflow: visible;
     width: 31px;
@@ -1206,9 +1222,13 @@ hr {}
     letter-spacing: 0.3px;
 }
 
+#worksetc {
+    
+}
+
 #yearetc {
     right: 5px;
-    top: 200px;
+    top: 340px;
     position: absolute;
     overflow: visible;
     width: 180px;
@@ -1221,136 +1241,4 @@ hr {}
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.3px;
     /*    border: 1px solid black;*/
-}
-
-#worksetc {
-    left: 0px;
-    top: 160px;
-    position: absolute;
-    overflow: visible;
-    width: 300px;
-    height: 15px;
-    text-align: left;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 1);
-    letter-spacing: 0.3px;
-}
-
-#worksSP {
-    left: 0px;
-    top: 20px;
-    position: absolute;
-    overflow: visible;
-    width: 82px;
-    height: 15px;
-    text-align: left;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 1);
-    letter-spacing: 0.3px;
-}
-
-#yearSP {
-    left: 298px;
-    top: 20px;
-    position: absolute;
-    overflow: visible;
-    width: 31px;
-    height: 15px;
-    text-align: right;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 1);
-    letter-spacing: 0.3px;
-}
-
-
-
-#worksih {
-    left: 0px;
-    top: 120px;
-    position: absolute;
-    overflow: visible;
-    width: 76px;
-    height: 15px;
-    text-align: left;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 1);
-    letter-spacing: 0.3px;
-}
-
-#yearih {
-    left: 296px;
-    top: 120px;
-    position: absolute;
-    overflow: visible;
-    width: 31px;
-    height: 15px;
-    text-align: right;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 13px;
-    color: rgba(0, 0, 0, 1);
-    letter-spacing: 0.3px;
-}
-
-
-/*갤러리*/
-.grid-container {
-    right: 0;
-    width: calc(100vw - 915px);
-    height: 100%;
-    position: absolute;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    /*    z-index: 999;*/
-}
-
-.container {
-    position: absolute;
-    right: 0px;
-    top: 35px;
-    width: calc(100% - 997px);
-    height: calc(100% - 35px);
-    /*    background-color: rgba(255,0,0,0.3);*/
-    z-index: 999;
-}
-
-.draggable {
-    position: absolute;
-    background-size: contain;
-    cursor: grab;
-    transition: width 0.3s ease-in-out, height 0.3s ease-in-out, border-radius 0.3s ease-in-out;
-    /* 효과를 부드럽게 만들기 위한 CSS transition 추가 */
-}
-
-.draggable:hover {
-    cursor: alias;
-}
-
-.rounded {
-    border-radius: 50%;
-    /* border-radius가 50%로 변경되는 효과 */
-}
-
-#imageDescription {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: aqua;
-}
-
-#works div:hover {
-    background-color: rgb(0,255,0);
 }
