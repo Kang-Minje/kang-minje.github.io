@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>드래그 가능한 이미지들</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .draggable {
+            position: absolute;
+            background-size: contain;
+            cursor: grab;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const container = document.querySelector('.container');
+                const imagePaths = [
+                    '/srcs/img/afterglow/img_02.jpg',
+                    '/srcs/img/afterglow/img_06.jpg',
+                    '/srcs/img/afterglow/img_08.jpg',
+                    '/srcs/img/badedu/img_02.jpg',
+                    '/srcs/img/badedu/img_05.jpg',
+                    '/srcs/img/badedu/img_08.jpg',
+                    '/srcs/img/badedu/img_02.jpg',
+                    '/srcs/img/cactus/img_01.jpg',
+                    '/srcs/img/conflict/img_01.jpg',
+                    '/srcs/img/Drowning/img_00.jpg',
+                    '/srcs/img/dust/img_01.jpg',
+                    '/srcs/img/dust/img_06.jpg',
+                    '/srcs/img/ecstasy/img_02.jpg',
+                    '/srcs/img/flyingbobs/img_01.PNG',
+                    '/srcs/img/flyingbobs/img_09.PNG',
+                    '/srcs/img/flyingbobs/img_11.PNG',
+                    '/srcs/img/gemstone/img_01.jpg',
+                    '/srcs/img/glass/img_02.jpg',
+                    '/srcs/img/portraits/IMG_45.jpg',
+                    '/srcs/img/portraits/IMG_42.jpg',
+                    '/srcs/img/portraits/IMG_37.jpg',
+                    '/srcs/img/portraits/img_33.jpg',
+                    '/srcs/img/portraits/img_27.jpg',
+                    '/srcs/img/portraits/img_29.jpg',
+                    '/srcs/img/portraits/img_26.jpg',
+                    '/srcs/img/portraits/img_11.jpg',
+                    '/srcs/img/sejong/img_13.jpg',
+                    // Add more image paths as needed
+                ];
+
+                const pageLinks = [
+                    '/html/afterglow.html',
+                    '/html/afterglow.html',
+                    '/html/afterglow.html',
+                    '/html/badedu.html',
+                    '/html/badedu.html',
+                    '/html/badedu.html',
+                    '/html/badedu.html',
+                    '/html/cactus.html',
+                    '/html/conflict.html',
+                    '/html/Drowning.html',
+                    '/html/dust.html',
+                    '/html/dust.html',
+                    '/html/ecstasy.html',
+                    '/html/flyingbobs.html',
+                    '/html/flyingbobs.html',
+                    '/html/flyingbobs.html',
+                    '/html/gemstone.html',
+                    '/html/glass.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/portraits.html',
+                    '/html/sejong.html',
+                ];
+
+
+                const draggableElements = [];
+                const scaleRatio = 0.2; // Set the desired scale ratio (20%)
+
+                for (let i = 0; i < imagePaths.length; i++) {
+                    const draggableElement = document.createElement('div');
+                    draggableElement.className = 'draggable';
+
+                    const randomImagePath = imagePaths[i];
+                    draggableElement.style.backgroundImage = `url('${randomImagePath}')`;
+
+                    const img = new Image();
+                    img.src = randomImagePath;
+                    img.onload = function() {
+                        const aspectRatio = img.width / img.height;
+
+                        let newWidth, newHeight;
+
+                        if (aspectRatio >= 1) {
+                            // Landscape or square image
+                            newWidth = 100 * (1 + scaleRatio);
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            // Portrait image
+                            newHeight = 100 * (1 + scaleRatio);
+                            newWidth = newHeight * aspectRatio;
+                        }
+
+                        draggableElement.style.width = `${newWidth}px`;
+                        draggableElement.style.height = `${newHeight}px`;
+
+                        draggableElement.style.left = `${Math.random() * (container.clientWidth - newWidth)}px`;
+                        draggableElement.style.top = `${Math.random() * (container.clientHeight - newHeight)}px`;
+                    };
+
+                    // 클릭 이벤트 리스너 추가
+                    draggableElement.addEventListener('click', function() {
+                        window.location.href = pageLinks[i];
+                    });
+
+                    container.appendChild(draggableElement);
+                    draggableElements.push({
+                        element: draggableElement,
+                        speedX: Math.random() * 2 - 1,
+                        speedY: Math.random() * 2 - 1
+                    });
+                    makeDraggable(draggableElement);
+                }
+
+                function makeDraggable(element) {
+                    let offsetX, offsetY, isDragging = false;
+
+                    element.addEventListener('mousedown', function(e) {
+                        isDragging = true;
+                        offsetX = e.clientX - element.getBoundingClientRect().left;
+                        offsetY = e.clientY - element.getBoundingClientRect().top;
+                        element.style.cursor = 'grabbing';
+                    });
+
+                    document.addEventListener('mousemove', function(e) {
+                        if (!isDragging) return;
+
+                        const x = e.clientX - offsetX;
+                        const y = e.clientY - offsetY;
+
+                        element.style.left = `${x}px`;
+                        element.style.top = `${y}px`;
+                    });
+
+                    document.addEventListener('mouseup', function() {
+                        isDragging = false;
+                        element.style.cursor = 'grab';
+                    });
+                }
+
+                function animate() {
+                    draggableElements.forEach(data => {
+                        const {
+                            element,
+                            speedX,
+                            speedY
+                        } = data;
+                        const currentX = parseFloat(element.style.left);
+                        const currentY = parseFloat(element.style.top);
+                        const elementWidth = parseFloat(element.style.width);
+                        const elementHeight = parseFloat(element.style.height);
+
+                        const newX = currentX + speedX;
+                        const newY = currentY + speedY;
+
+                        if (newX < 0 || newX + elementWidth > container.clientWidth) {
+                            data.speedX *= -1;
+                        }
+
+                        if (newY < 0 || newY + elementHeight > container.clientHeight) {
+                            data.speedY *= -1;
+                        }
+
+                        element.style.left = `${newX}px`;
+                        element.style.top = `${newY}px`;
+                    });
+
+                    requestAnimationFrame(animate);
+                }
+
+                animate();
+            });
+
+        </script>
+
+    </div>
+
+</body>
+
+</html>
