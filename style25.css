@@ -1,0 +1,122 @@
+/* 기본 스타일 */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* 전체를 감싸는 컨테이너 (스크롤 방지 + 세로 정렬) */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 메인 콘텐츠 가운데 정렬 */
+.wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+/* 타이틀 */
+.main-title {
+  margin-bottom: 36px;
+}
+
+.link {
+  font-size: 15pt;
+  color: #000000;
+  text-decoration: none;
+}
+
+p.link {
+  margin: 0;
+}
+
+/* 밑줄은 hover 시에만 */
+.link.underline {
+  text-decoration: none;
+}
+
+.link.underline:hover {
+  text-decoration: underline;
+  text-decoration-color: #000000;
+  text-decoration-thickness: 1pt;
+  text-underline-offset: 2px;
+}
+
+/* 포트폴리오 / CV 정렬 */
+.link-row {
+  display: flex;
+  gap: 66px;
+}
+
+.link-row a:last-child {
+  letter-spacing: 0.5px;
+}
+
+/* 연락처 (PC 기준) */
+footer.contact {
+  font-size: 8pt;
+  color: #444444;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.contact-link {
+  color: #000000;
+  text-decoration: none;
+  font-size: 8pt;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 2px;
+}
+
+.separator {
+  margin: 0 6px;
+  color: #999999;
+}
+
+/* ✅ 반응형: 모바일 화면 대응 */
+@media (max-width: 600px) {
+  .link {
+    font-size: 13pt;
+  }
+
+  .link-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  footer.contact {
+    flex-direction: column;
+    align-items: center;
+    font-size: 7pt;
+    gap: 4px;
+  }
+
+  .contact-link {
+    font-size: 7pt;
+  }
+
+  .separator {
+    display: none;
+  }
+}
