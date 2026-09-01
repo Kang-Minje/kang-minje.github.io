@@ -1,0 +1,1043 @@
+/* 기본 레이아웃 (화이트 테마) */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Default is hidden for spawning mode, but will be overridden */
+    overflow: hidden;
+    background: white;
+    color: black;
+}
+
+body {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Back navigation arrow */
+.back-nav {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+
+.back-nav:hover {
+    opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+    .back-nav {
+        display: none !important;
+    }
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px);
+    /* footer 공간 */
+    overflow: hidden;
+}
+
+/* Index (Scattered) Mode */
+html.grid-mode,
+body.grid-mode {
+    overflow-y: auto !important;
+    height: auto !important;
+}
+
+body.grid-mode #canvas-container {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto !important;
+    min-height: 100vh;
+    padding: 150px 0;
+    overflow: visible !important;
+    box-sizing: border-box;
+
+    /* Background Grid Pattern (Larger 4:3) */
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.1) 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0.5px, transparent 0.5px);
+    background-size: 160px 120px;
+    background-attachment: local;
+}
+
+body.grid-mode #canvas-container img {
+    position: absolute !important;
+    width: var(--w, 140px) !important;
+    height: auto !important;
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.4s ease;
+    z-index: 1;
+    will-change: transform, left, top;
+
+    /* Variables controlled by JS */
+    left: var(--x);
+    top: var(--y);
+    transform: none;
+    /* No more grid-relative translate */
+}
+
+/* When any image is hovered, dim ALL other images inside the container */
+body.grid-mode #canvas-container:has(img:hover) img {
+    opacity: 0.3;
+    transition: opacity 0.6s ease 0.1s;
+    /* Smooth background dimming */
+}
+
+body.grid-mode #canvas-container img:hover {
+    opacity: 1 !important;
+    outline: 1px dotted rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    transition: opacity 0.1s ease 0s;
+    /* Instant highlight */
+}
+
+/* footer */
+footer {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 0 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+    z-index: 999;
+    /* 이미지 위에 */
+}
+
+footer a {
+    color: black;
+    text-decoration: none;
+}
+
+footer .footer-center a {
+    padding: 0px 15px;
+    margin: 0 5px;
+}
+
+.other-links {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+    white-space: nowrap;
+}
+
+.other-links-label {
+    margin-right: 28px;
+}
+
+.other-links-separator {
+    color: black;
+}
+
+.other-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: max-content;
+    padding: 0;
+    margin: 0;
+    color: black;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.other-link-fragile {
+    width: 96.328px;
+}
+
+.other-link-fragile:hover {
+    color: black;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 400;
+    letter-spacing: 0.826px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.other-link-jagook:hover {
+    color: black;
+    background-color: rgb(160, 255, 40);
+    text-decoration: none;
+}
+
+.other-link-fluidpaper {
+    min-width: 4.9em;
+}
+
+.other-link-fluidpaper img {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 1.4px);
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.12s ease;
+}
+
+.other-link-fluidpaper:hover {
+    text-decoration: none;
+}
+
+.other-link-fluidpaper:hover .fluidpaper-text {
+    opacity: 0;
+}
+
+.other-link-fluidpaper:hover img {
+    opacity: 1;
+}
+
+#footer-home {
+    text-decoration: underline;
+    transition: all 0.2s ease;
+}
+
+#footer-home:hover {
+    font-style: italic;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+    font-style: italic;
+}
+
+.footer-link {
+    color: black;
+    text-decoration: underline;
+}
+
+.dropup {
+    position: relative;
+    display: inline-block;
+}
+
+.dropup-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    background-color: white;
+    min-width: 220px;
+    border: 1px solid black;
+    z-index: 1001;
+    transition: opacity 0.2s ease, transform 0.3s ease;
+    transform: translateY(10px);
+    padding: 5px 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Invisible bridge to prevent menu from closing when moving cursor */
+.dropup-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: transparent;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    /* iOS 꾹 누르기 금지 */
+}
+
+.dropup:hover .dropup-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Credit Box (Editorial) */
+.credit-box-container {
+    position: fixed;
+    top: 40px;
+    right: 0;
+    transform: translateX(calc(100% - 70px));
+    /* 70px만 보이도록 우측으로 밀어냄 */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background-color: white;
+    border: 1px solid black;
+    padding: 20px;
+    z-index: 1000;
+    font-size: 12px;
+    line-height: 1.5;
+    min-width: 300px;
+}
+
+/* 우측 빈 공간으로 마우스가 빠져도 닫히지 않도록 투명 영역 추가 */
+.credit-box-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -35px;
+    width: 35px;
+    height: 100%;
+    background: transparent;
+}
+
+@media (hover: hover) {
+    .credit-box-container:hover {
+        transform: translateX(-30px);
+        /* 원래 위치(우측에서 30px 떨어진 곳)로 복귀 */
+    }
+}
+
+.credit-box-container.active {
+    transform: translateX(-30px);
+}
+
+.credit-box-container.hidden {
+    display: none;
+}
+
+.credit-section {
+    margin-bottom: 15px;
+    /* Base transition between related groups */
+}
+
+.credit-section.title-section {
+    margin-bottom: 35px;
+    /* Extra wide gap for project title */
+}
+
+.credit-section.pub-section {
+    margin-bottom: 25px;
+    /* Medium gap for publication info */
+}
+
+.credit-section.pub-section .credit-row {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.credit-section.brand-section {
+    margin-bottom: 25px;
+    /* Medium gap for brand info */
+}
+
+.credit-section:last-child {
+    margin-bottom: 0;
+}
+
+.credit-main-title {
+    color: #000;
+    font-weight: 600;
+}
+
+.credit-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 2px 0;
+}
+
+.credit-row .role {
+    font-weight: normal;
+    color: #666;
+    white-space: nowrap;
+}
+
+.credit-row .name {
+    text-align: right;
+    color: #000;
+}
+
+.credit-row .name a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.credit-row .name a:hover {
+    font-style: italic;
+}
+
+/* Hide on mobile by default */
+@media (max-width: 600px) {
+    #credit-box {
+        display: none !important;
+    }
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.menu-item:hover {
+    text-decoration: underline;
+}
+
+/* 준비 중인 시리즈: 평소엔 다른 항목과 동일하게 보이다가, hover 시에만
+   회색 취소선으로 바뀌어 아직 열람할 수 없음을 알려줌. 클릭도 막음(href 없음). */
+.menu-item.coming-soon {
+    cursor: default;
+}
+
+.menu-item.coming-soon:hover {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.menu-item.coming-soon:hover .year {
+    color: #999;
+}
+
+/* Editorial Menu Items (Custom Underline) */
+.menu-item-editorial {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.editorial-info {
+    display: flex;
+    gap: 50px;
+    /* The gap between Magazine and Title */
+}
+
+.menu-item-editorial:hover {
+    text-decoration: none;
+    /* Disable global underline */
+}
+
+.menu-item-editorial:hover .mag-label,
+.menu-item-editorial:hover .title-label,
+.menu-item-editorial:hover .year {
+    text-decoration: underline;
+}
+
+.menu-item .title,
+.menu-item-editorial .editorial-info {
+    text-align: left;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu-item .year,
+.menu-item-editorial .year {
+    color: #999;
+    font-size: 11px;
+    margin-left: 20px;
+    text-align: right;
+}
+
+.menu-item .arrow {
+    color: #ccc;
+    font-size: 10px;
+    margin-left: 8px;
+}
+
+/* Sub-menu styling */
+.menu-parent {
+    position: relative;
+}
+
+.submenu {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    left: 100%;
+    bottom: -6px;
+    /* Offset to align visually */
+    background-color: white;
+    min-width: 240px;
+    border: 1px solid black;
+    z-index: 1002;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-5px);
+    padding: 5px 0;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Bridge for submenu hover (대각선 마우스 이동을 위한 안전 영역) */
+.submenu::before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    /* 기존 15px에서 40px로 확장하여 대각선 이동 커버 */
+    top: -20px;
+    /* 위쪽 대각선 커버 */
+    bottom: -20px;
+    /* 아래쪽 대각선 커버 */
+    width: 40px;
+    background: transparent;
+}
+
+.menu-parent:hover>.submenu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.submenu .menu-item {
+    padding: 6px 15px;
+}
+
+.submenu-category {
+    font-size: 11px;
+    font-weight: 800;
+    color: black;
+    padding: 8px 15px 4px 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    user-select: none;
+}
+
+.submenu-category:not(:first-child) {
+    margin-top: 35px;
+}
+
+
+.footer-controls button {
+    all: unset;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 6px;
+}
+
+.footer-controls button:hover {
+    text-decoration: underline;
+}
+
+/* 오른쪽 카운터 고정폭 + 등폭숫자 */
+.footer-right {
+    min-width: 12ch;
+    /* "0000 / 0000"가 흔들리지 않는 폭 */
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    /* 숫자 고정폭 */
+    /* 폰트에 따라 더 확실히 하려면: */
+    font-feature-settings:
+        "tnum" 1,
+        "lnum" 1;
+}
+
+/* 왼쪽 */
+.footer-left {
+    flex: 1;
+    margin-right: auto;
+    /* 왼쪽에 붙음 */
+}
+
+/* 가운데 */
+.footer-center {
+    flex: 2;
+    margin: 0 auto;
+    /* 정확히 가운데 정렬 */
+    text-align: center;
+}
+
+/* 오른쪽(컨트롤) */
+.footer-controls {
+    flex: 0.45;
+    margin-left: auto;
+    /* 오른쪽 정렬 */
+}
+
+/* 맨 끝 (필요할 경우) */
+.footer-right {
+    flex: 1;
+    margin-left: 10px;
+    /* footer-controls와 간격 */
+}
+
+/* Fullscreen viewer (footer 위까지만) */
+#fullscreen-container {
+    display: none;
+    /* JS에서 show 클래스 토글 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 40px);
+    /* footer 위까지만 */
+    bottom: 40px;
+    background: white;
+    justify-content: center;
+    align-items: center;
+    z-index: 998;
+    /* footer(999)보다 낮게 -> footer 항상 보임 */
+}
+
+/* 확대 이미지: 진입 시 트랜지션 */
+#fullscreen-img {
+    max-height: 75vh;
+    /* footer 제외 75% */
+    max-width: 90vw;
+    object-fit: contain;
+    transform: scale(0.88);
+    opacity: 0;
+    transition:
+        transform 380ms ease,
+        opacity 380ms ease;
+    z-index: 1000;
+}
+
+#fullscreen-container.show #fullscreen-img {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* FS Nav Controls: footer와 분리된 박스형 버튼 그룹 */
+#fs-controls {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+}
+
+.fs-link {
+    all: unset;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: black;
+    cursor: pointer;
+    /* 박스형 스타일 - 크레딧 박스와 동일한 border */
+    /* border: 1px solid black; */
+    padding: 6px 14px;
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.fs-link:hover {
+    text-decoration: underline;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* .fs-close-wrapper added for index button placement */
+.fs-close-wrapper {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.fs-link-index {
+    all: unset;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 4px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: black;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.fs-link-index:hover {
+    text-decoration: underline;
+}
+
+/* ===== Mobile layout (<=600px) ===== */
+.m-info,
+.m-stage,
+.m-hint {
+    display: none;
+}
+
+/* 기본: PC에서 안 보이게 */
+
+@media (max-width: 600px) {
+    /* PC 전용 UI 감춤 */
+
+    .m-info p.name {
+        font-size: 10pt;
+        line-height: inherit;
+    }
+
+    .m-info .cv-link {
+        display: block;
+        color: #111;
+        text-decoration: none;
+        font-size: 10pt;
+        /* name과 동일한 크기 */
+        line-height: inherit;
+        transition: color 1.5s linear;
+        /* 1.5초 동안 천천히 변화 */
+        user-select: none;
+        -webkit-touch-callout: none;
+        /* 아이폰에서 꾹 눌렀을 때 팝업 방지 */
+        pointer-events: auto;
+        /* 터치 가능하게 설정 */
+    }
+
+    .m-info .cv-link.pressing {
+        color: #aaa;
+        /* 도달할 회색 */
+    }
+
+    #canvas-container,
+    #fullscreen-container,
+    footer {
+        display: none !important;
+    }
+
+    html,
+    body {
+        margin: 0;
+        height: 100dvh;
+        overflow: hidden;
+        background: #fff;
+        color: #111;
+    }
+
+    .m-info,
+    .m-hint,
+    .m-stage {
+        display: block;
+    }
+
+    .m-info {
+        position: fixed;
+        top: calc(env(safe-area-inset-top) + 20px);
+        left: calc(env(safe-area-inset-left) + 20px);
+        right: calc(env(safe-area-inset-right) + 20px);
+        z-index: 999;
+        pointer-events: none;
+        /* PC 본문과 동일한 폰트/크기/두께 */
+        font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+        font-size: 10pt;
+        line-height: inherit;
+        /* PC 본문과 동일한 행간 */
+    }
+
+    .m-info h1,
+    .m-info p {
+        margin: 0 0 10px 0;
+    }
+
+    .m-info .spacer {
+        height: 14px;
+    }
+
+    .m-stage {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        /* 텍스트 아래 */
+        touch-action: manipulation;
+    }
+
+    .m-stage img.rand {
+        position: absolute;
+        width: 80vw;
+        /* 화면의 80% */
+        height: auto;
+        /* 비율 유지 */
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    .m-hint {
+        position: fixed;
+        bottom: calc(env(safe-area-inset-bottom) + 18px);
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        color: #777;
+        z-index: 999;
+        pointer-events: none;
+    }
+
+    /* Fallback for about page on mobile */
+    .about-page footer {
+        display: flex !important;
+        flex-direction: column;
+        height: auto;
+        padding: 30px 20px;
+        gap: 15px;
+        text-align: center;
+        position: relative;
+    }
+
+    .about-page .footer-left,
+    .about-page .footer-center,
+    .about-page .footer-right {
+        text-align: center;
+        margin: 0;
+        width: 100%;
+    }
+
+    .about-content {
+        flex-direction: column;
+        gap: 40px;
+    }
+}
+
+/* ===== About Page Layout ===== */
+.about-page {
+    overflow-y: auto;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    padding: 60px 40px;
+    box-sizing: border-box;
+}
+
+.about-content {
+    display: flex;
+    gap: 80px;
+    max-width: 900px;
+    width: 100%;
+}
+
+.about-container > .other-links {
+    margin-top: 34px;
+    font-size: 14px;
+}
+
+.about-text {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.8;
+    color: black;
+    word-break: keep-all;
+}
+
+.about-text p {
+    margin-top: 0;
+    margin-bottom: 1.5em;
+}
+
+@media (max-width: 900px) {
+    .about-content {
+        gap: 40px;
+    }
+}
+
+/* ===== Index2 Overlay (Fullscreen Series Grid) ===== */
+#fs-index2-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: white;
+    z-index: 1001;
+    /* fullscreen-img(1000)보다 위, fs-controls(1002)보다 아래 */
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+#fs-index2-overlay.show {
+    display: block;
+}
+
+/* 그리드: CSS Grid로 좌상-우하 순서, 상단 정렬 */
+#fs-index2-grid {
+    /* 가운데에 뭉친 느낌: 최대 너비 제한 + 중앙 정렬 */
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 120px;
+    /* 하단 여백 추가 (controls와 겹치지 않게) */
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    gap: 20px 10px;
+}
+
+/* 가로/세로 배치는 JS(layoutIndexEntries)가 각 아이템의 grid-column/grid-row를
+   직접 계산해 inline style로 지정함 (한 행에 가로 사진 1장만, 4칸 기준 1칸은 항상 비워 리듬을 줌) */
+#fs-index2-grid .idx2-item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+#fs-index2-grid .idx2-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* installation view: 그리드 한참 아래, 4칸 전체 폭을 크게 사용 */
+#fs-index2-grid .idx2-installation {
+    grid-column: 1 / -1;
+    margin-top: 96px;
+}
+
+/* statement.pdf 링크: installation view보다 한참 아래, 좌우 중앙 정렬.
+   기본 상태에서도 밑줄이 있고, hover 시 밑줄이 dotted로 바뀜 */
+#fs-index2-grid .idx2-statement-link {
+    grid-column: 1 / -1;
+    display: block;
+    text-align: center;
+    margin-top: 96px;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    color: black;
+    text-decoration: underline;
+    text-decoration-style: solid;
+}
+
+#fs-index2-grid .idx2-statement-link:hover {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+/* 호버 시: border만 1px solid black */
+#fs-index2-grid .idx2-item:hover img {
+    outline: 1px solid black;
+    outline-offset: -1px;
+}
+
+/* 현재 보고 있는 이미지 강조 표시 */
+#fs-index2-grid .idx2-item.active img {
+    /* outline: 1px solid black; */
+    outline-offset: -1px;
+}
+
+/* 이미지 하단 카운터 */
+.idx2-counter {
+    text-align: center;
+    font-size: 11px;
+    color: black;
+    margin-top: auto;
+    /* Push to the bottom to align captions based on tallest image */
+    padding-top: 8px;
+    font-family: -apple-system, system-ui, sans-serif;
+}
+
+/* 반응형 */
+@media (max-width: 900px) {
+    #fs-index2-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    #fs-index2-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 24px 12px 60px;
+    }
+}
+
+/* ===== Photoshoots & Photoshoot Series Grid Layout (Matching user screenshot) ===== */
+body.grid-mode #canvas-container.photoshoots-layout,
+body.grid-mode #canvas-container.photoshoot-series-layout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 24px;
+    padding: 150px 80px 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px);
+    background-image: none !important; /* Plain white background, no grid lines */
+    box-sizing: border-box;
+    align-items: start; /* Top-align items in each row */
+    justify-items: center;
+}
+
+body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item,
+body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    max-width: 240px;
+    text-align: center;
+}
+
+body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item img,
+body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item img {
+    position: static !important; /* Override absolute positioning */
+    width: 100% !important;
+    height: auto !important;
+    outline: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item:hover img,
+body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item:hover img {
+    outline: 1px dotted rgba(0, 0, 0, 0.5);
+    outline-offset: -1px;
+}
+
+body.grid-mode #canvas-container.photoshoots-layout .photoshoot-title,
+body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-counter {
+    margin-top: 12px; /* Close spacing between image and title */
+    font-size: 11px;
+    color: black;
+    font-family: -apple-system, system-ui, sans-serif;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    body.grid-mode #canvas-container.photoshoots-layout,
+    body.grid-mode #canvas-container.photoshoot-series-layout {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px 20px;
+        padding: 120px 40px 80px;
+    }
+}
+
+@media (max-width: 600px) {
+    body.grid-mode #canvas-container.photoshoots-layout,
+    body.grid-mode #canvas-container.photoshoot-series-layout {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 16px;
+        padding: 100px 20px 60px;
+    }
+}
