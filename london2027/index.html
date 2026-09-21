@@ -4,13 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tracker">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAABQElEQVR42u2TsYqDQBCG5x9NllgpESOWIVaRFEGQgEVIb7ASX0B8okBeIZXP4Vv4IropllsOCZyFcBznV+3OzO7O/LNDtLCw8N8wDMMwjL+ZOwAiKsuyLEu9nVMZIkqSREoppUySRBt/xJwSNAwDgK7r2rYloq7rAAzDML9EusnTJcJHNfq+Z2adJjPLL/Tt2qu2Ukq9mKGU6fD3k6vV6vF4PJ9PAHVdN03jOI7jOK/XK01TVYoKDoIgyzIhhBAiz/MoigDcbrfr9apKHz+gTEKIqqqqqmLm+/2e5/lut/M8ryiKy+WiHlCRvu/HcWxZlmVZ5/N5v98DOB6PURSZpvlZJXXycDiEYUhEruvGcaxcp9NpvV6PWrXdbtXa87zNZkNEtm3btv3bE8vMSmgAepRGso66DUD/q5knfGFhYRpvqO9N1wWMie8AAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAFiElEQVR42u3cy2sTXRjH8ZlzZtosFGNMBy+gSHZe6KK2CAVBsFnoxqWuBHfiH+C2W/8GQQLutS0YpW6sKxvEjVYUDEWleIG2xgtNMnPOcXF4B9/cDJMWg/P9rGJmfs5M8uQ5Z6aTOA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABh2ruu6rsvrgP/VhOd5cVm0/BPpJYSIH2ez2Ww223ERUkdK6ThOEASzs7PLy8vr6+vr6+vLy8uzs7NBEMQrIKU9Y3Jycm1tzbRZW1ubnJykf6S3MsbHxzc2NowxzWZTKaW11lorpZrNpjFmY2NjfHyc+khjcUgpl5aWjDFhGLZ3Dvvk0tKSlJLiSF3bmJiYMMZEUWS6sIsmJiZS2zxEaovjzJkzjuMYY7qtZhfZ1SiOdAmCoEdlxPVhT1tS2mJTe+TVarX3JVG7tFqtMhCnblgpFAr1ej2KIq11+4RDax1FUb1eLxQKnLCki726VSqVjDGNRqO9OOyTpVLJ4VJY2riuK4TI5/OVSsWemIRhGEVR/MAYU6lU8vm8EIK/s6SxPhzHyeVy5XK5vXOUy+VcLhevltKXKOWTD6214zgzMzPnz58/efKk4zgvXrwol8uPHj36fQWktH907A3c25H2zvH7/NR1XdskhBDGGKUULwsAAAAAAAAAAAAAAPgrdvDW2fiHLlzXtffo/vF7In8rOMgx2hvT4wfJgv3vZ+LgEOl4G1U/L1/iYMd1dvQrBd1uIUsWTLzFHTzAHXrVjDG+71+6dOnixYvZbPb58+elUmllZaX3XZmJg3bp2NjYlStXzp075/t+n8EBjzGXy504cWJsbExr/eHDh5WVla2tLbuon2AQBI1G4+3bt2/evPnjTiYODlFx2Oret2/f3Nzc9PR0/HwYhtevX79161a3dytx0D4/NTV17969gwcP9h8csDKOHz8+MzMzMjJi/3Mp5ebm5vz8/OfPn7vVR0tQKWVHwNXV1YWFBftlmX622H9wuIrDDoQPHz4sFovNZtOO/VprOxs4e/bs48ePpZTtN2kmC9qSyufzL1++DIIgDEM7lBhj7J2hPbY4SGUcOnTo8uXLYRja98lucXR09Pv373fu3Nna2uo/qLXevXv369ev5+bmOlZV4uCgb+U2z2+l1FqfPn26WCxGUTQyMiKllFL6vq+UMsbcuHGj48A5SNAYc/XqVVsZvu/boOd5vYMDOnXqlOM4Sin7rSc7PazX63v37j127FiP6U57UEr548ePQqFw4MABY0y3vU0cHJbisPtXLBbbq9h+jqempvbs2RPX/uBB29JtsOX96B1MzHaI/fv3R1HUskUhhFLqyJEjHU+UegTt3h4+fLjjrDNxcLiKA/+SbS4O+3FZXFxsr2Lb5CuVSq1Ws2PBtgTtJ8kGW2advYODdMdGo/Hp0yfP81q2qLWWUr57967j57hH0O7t+/fvO7acxMHhKg47Ij59+nRxcdHzPPtDbEqpMAxtk79582bHYxgk6Lru7du3v3z54vu+na8ppaIo6h0c0LNnz+KpUvyrDZlMZnNz89WrV/F4109QKbVr165qtfrx48ce88rEwaG7QvrgwYPp6emjR48KIeyvs0VRdO3atbt37/Y+sUwQFEL8/PnzyZMnFy5cyGaz4j99bjFZ8/j27VutVisUCplMxs5/R0dHa7Xa/Pz8169fuw3/LUEhhOd5mUxmdXX1/v37ttVtb5CLYFwE4/I5l8//gcvn8ZHYaaA9ybQ/ATucwUGOMe4T9kH/fyP8Pdj/fiYOAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/G2/AIpz0KweNztYAAAAAElFTkSuQmCC">
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Tracker%22%2C%22short_name%22%3A%22Tracker%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23ffffff%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAHgklEQVR42u3dz0sUbxzA8Wdmf7mSrma7W8h6UYoKJEKF6BJYkSGE0a2LBVtHQYgI%2FA8ED0EQegs6SocoTK1LRJRklEiiQYh5UEmXXNd2duZ5voentv3qrlqz2h7er9vOzGd35pnPPD%2FGmUchAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALhmUASFmKZpGIYQQiklpaRAsFMej0enzu%2FrzDA8Hg8lQw20o%2BxxHEcIEYvFGhoahBCfP3%2Bem5vLXQUUzB4hRGtr6%2FDwcDKZVEoppZLJ5PDwcGtra3YDoGD2xONx9YvjOI7jZD%2FG43FyCAW7zEKIzs5OpZRt27ZtSyl13kgp9RKlVGdnZ3Zj4Hcf2TCMcDicSCSklLm1Tm5tJKVMJBLhcFhvT7kJIbiSfjZeSqn29vZQKOQ4Tt4KxjRNx3FCoVB7e7tSioaMBPpNKSWE6OjoUEptUbUYhqGU6ujoyIaABPqdQKFQaNuGyTCMUChEApFAeWQymW3TQimVyWQoKxIozxBsdHRUN1JbZI9hGKOjowzEkCeBGhoaNgzgc2UH8%2Fr2NAmEjQMxIURfX59SKp1Ob8ghKWU6nVZK9fX1Ce4lIm%2FvWKdFf3%2B%2FThrbtjOZTCaT0bcQlVL9%2Ff0i359agZ85pDOjp6dnYWEhtwZaWFjo6enJ3QY%2FC40i2JxGSqlIJHL69OnGxkYhxMePH1%2B9erW4uLh1Fxv4X39oJwtBDVSwHtrwRCJ1DwAAAAAAAAAAAAAAAPCT8csex4p%2F%2BhCqm9%2F9V7GlmDperzf70ePx7PyFGDex4v9Pv5umuWePFG5I2T%2FaZ%2F0g297Hlm72ZA%2BmqqoqGAzu%2FNjcxOaGV1dX65eR96ZMs7%2Fr9%2FvLysr%2BLtbr9QaDwezHndQobmJdHe%2BuFqVSqrKysru7%2B8qVKwcPHkwmkyMjI729vdPT06ZpbjFzpctYIYRS6tq1a%2FF4%2FMiRI47jvH79%2Bu7du8%2BfP986tiiHHIvFTp48GY1GTdNMJBITExOTk5M7jK2qqmpubq6rq%2FP5fKlUamZm5t27d5Zlbf08v5vYEk0gfRZramqePHnS0tKSu%2Brbt28XL158%2B%2FZtoXPpJlb8mqvl%2Fv37ekKxXDdu3BgYGNilHNLn6fjx421tbYZh6FfoPR6Pz%2BcbGxt78eKFKDwlg46NRqOXL1%2BurKzULzGaphkIBGZnZx89eqSXFD3WPXNXE%2Bjhw4ctLS2WZWVf9MxkMjU1NY8fPw6Hw4XmUnETq%2BfBvHPnTjwetywrO1WUbduO4%2FT39585c0ZKWfT%2BkD6LtbW1bW1tlmWtr69LKaWUlmWtrq62tLQ0NTVtMXeMUioYDF66dCkYDK6trendtm17dXW1rq7uwoULuxRbognk8XiklKdOnTp%2F%2Frxt236%2FX7%2FhYBiGz%2BfLZDKRSOT69et5p2lyE2sYhpSyqqqqq6tLSun1enU%2FWnfGdSbdvn1790qzqalJCCGlzHa29Auv6%2BvrJ06cCAQCeWsCvfGxY8eqq6vT6XT2bRAdm0ql6uvrDx06lDcP3MSWbgLpfT179myh8lJKnTt3Tpd1EWP12sbGxnA4vLnLrJOpublZT0NW3AJVSvn9%2Fmg0atv25q664zgVFRUHDhzI26vVR1pXV5d3cjR9qcRisaLHlnQTpochW6z1%2BXz%2FJNbr9e7SWGzDKPqP1m47Qty6zXUTW4oJpC%2BLsbGxvFmvq9Px8fG8R%2B4mVtdJU1NTa2trusHasFZKOTMz8%2F37d11XFTd7MplMIpHI%2B82GYfz48WNlZSVvP1of6dLSUqG9klIuLCwUPbZ0E0hKaRjGs2fPZmZmvF5v7pReuqbNznSxuRlyE6tr7K9fvw4ODno8HsuysqWm5141TfPevXu2be9GfS6l%2FPDhQyAQ2PAaq%2BM45eXl09PTyWSy0FUhhJiYmLAsSw8hc7%2BzrKxsaWlpdnY272jcTWxJ10D6mrt69erKyopucXSx6rvJN2%2Fe%2FPTpU97htJvYbAe2u7t7bGwsEAjobrVe6Pf7BwYGHjx4oOdb3Y1DnpqaevPmTWVlpT6XemFFRcXs7OzLly8LnUW92crKysjIiN%2Fv9%2Fl82eozGAymUqmhoaFCO%2BwmtjgDpl36Xn0rYn5%2BfmRkpL6%2BPhaLeb1ewzAmJia6urr0WSx0M8ZNrJZKpQYHByORSH19fVlZmWEY8%2FPzvb29t27d2u070V%2B%2BfLEsa%2F%2F%2B%2FeXl5boWnJycHBoaSqfT2zaCi4uLS0tLNTU1%2B%2Fbt83q9Usq5ubmnT59uOzGIm9jSvROtuyn6TB89ejQajSaTyfHxcX0bZtvLwk1stshqa2sPHz7sOM779%2B9XV1f3bH4Wn88XiUQ8Hs%2Fy8nIymczdpZ3sdjQaDQQCyWRyeXl5D2JLWvbOxF8MCtzEbv4HTXv5x9QtPv5p7M7D3cSWaA20ORX%2BYp6UfxVbrDT6i9%2F9V7EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAKfgPiZxe4eSIZucAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 <meta name="robots" content="noindex, nofollow">
 <title>Tracker</title>
 <style>
   :root{
     color-scheme:light;
     --k:#000;
-    --dim:rgba(0,0,0,.42);
+    --dim:rgba(0,0,0,.58);
+    --box:rgba(0,0,0,.45);
     --ghost:rgba(0,0,0,.20);
     --u:21px;              /* one line of 14px at 1.5 */
   }
@@ -26,7 +35,16 @@
     -webkit-font-smoothing:antialiased;
     padding:calc(var(--u)*2 + env(safe-area-inset-top,0px)) calc(var(--u)*1.5) calc(var(--u)*6 + env(safe-area-inset-bottom,0px));
   }
+  body{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"kern" 1}
+  b,h1,h2,.row .k,nav button[aria-current="true"]{letter-spacing:-.01em}
+  .btn,.add,.notebtn,nav button,.filters button,.item .txt b,.ent .main b,.sh .del{transition:color .14s ease}
   .wrap{max-width:940px;margin:0 auto}
+
+  /* ---------- fixed header: title, week dots and the D-day line stay put ---------- */
+  .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:#fff;padding:calc(var(--u)*.5) 0 calc(var(--u)*.1)}
+  .hdr::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:env(safe-area-inset-top,0px);background:#fff}
+  .hdr::after{content:"";position:absolute;left:0;right:0;top:100%;height:calc(var(--u)*.8);background:linear-gradient(#fff,rgba(255,255,255,0));pointer-events:none}
+  .panel,.readout{scroll-margin-top:calc(var(--hdr-h,110px) + 8px)}
 
   /* ---------- masthead ---------- */
   .mast{display:flex;justify-content:space-between;align-items:baseline;gap:var(--u);flex-wrap:wrap}
@@ -35,7 +53,7 @@
 
   /* ---------- week scale: dots, hit areas fill the row ---------- */
   .scale{
-    margin:calc(var(--u)*1.6) 0 calc(var(--u)*.4);
+    margin:calc(var(--u)*1.4) 0 calc(var(--u)*.35);
     display:flex;
     height:38px;align-items:flex-end
   }
@@ -51,15 +69,17 @@
   }
   .tick.gone::before{background:var(--k)}
   .tick.now::before{background:var(--k);transform:translateY(-21px)}
-  .tick:hover::before,.tick:focus-visible::before{background:var(--k);transform:translateY(-10px)}
-  .tick.now:hover::before,.tick.now:focus-visible::before{transform:translateY(-21px)}
+  .tick:focus-visible::before{background:var(--k);transform:translateY(-10px)}
+  @media (hover:hover){.tick:hover::before{background:var(--k);transform:translateY(-10px)}}
+  .tick.now:focus-visible::before{transform:translateY(-21px)}
+  @media (hover:hover){.tick.now:hover::before{transform:translateY(-21px)}}
   .tick:focus-visible{outline:0}
   .tick{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .scalefoot{display:flex;justify-content:space-between;font-weight:400;color:var(--dim)}
   .scalefoot .cursor{font-weight:400;color:var(--k)}
 
   /* ---------- readout ---------- */
-  .readout{margin-top:calc(var(--u)*2)}
+  .readout{margin-top:calc(var(--u)*1.7)}
   .row{display:flex;align-items:baseline;gap:calc(var(--u)*.8);padding:1px 0}
   .row .k{font-weight:700;flex:0 0 15ch}
   .row .measure{flex:1 1 auto;min-width:70px;height:1px;background:var(--ghost);position:relative;top:-4px}
@@ -67,32 +87,32 @@
   .row .v{font-weight:400;color:var(--dim);flex:0 0 auto;text-align:right;white-space:nowrap}
 
   /* ---------- nav ---------- */
-  nav{margin:calc(var(--u)*2.5) 0 0;display:flex;flex-wrap:wrap;gap:0 calc(var(--u)*1.1)}
+  nav{margin:calc(var(--u)*2) 0 0;display:flex;flex-wrap:wrap;gap:0 calc(var(--u)*1.1)}
   nav button{
     font:inherit;font-weight:400;color:var(--dim);
     background:none;border:0;padding:0;cursor:pointer
   }
-  nav button:hover{color:var(--k)}
+  @media (hover:hover){nav button:hover{color:var(--k)}}
   nav button[aria-current="true"]{font-weight:700;color:var(--k)}
   nav button:focus-visible{outline:1px solid var(--k);outline-offset:3px}
 
   /* ---------- panels ---------- */
-  .panel{display:none;padding-top:calc(var(--u)*2.5)}
+  .panel{display:none;padding-top:calc(var(--u)*2.1)}
   .panel.on{display:block}
   .lede{font-weight:400;color:var(--dim);max-width:58ch}
 
-  .group{margin-top:calc(var(--u)*3)}
-  .panel > .lede + .group{margin-top:calc(var(--u)*2.5)}
+  .group{margin-top:calc(var(--u)*2.6)}
+  .panel > .lede + .group{margin-top:calc(var(--u)*2.1)}
   .group h2{font-size:14px;font-weight:700}
   .group .sub{font-weight:400;color:var(--dim);max-width:58ch}
-  .group h2 + .sub{margin-bottom:calc(var(--u)*.5)}
-  .group h2 + .body,.group .sub + .body{margin-top:calc(var(--u)*.9)}
+  .group h2 + .sub{margin-bottom:calc(var(--u)*.4)}
+  .group h2 + .body,.group .sub + .body{margin-top:calc(var(--u)*.7)}
   .sub:empty,.note:empty{display:none}
 
   /* ---------- items: tight inside, loose between groups ---------- */
-  .item{display:flex;gap:calc(var(--u)*.6);padding:calc(var(--u)*.22) 0;cursor:pointer}
-  .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--ghost);position:relative;top:6px}
-  .item:hover .mark{border-color:var(--k)}
+  .item{display:flex;gap:calc(var(--u)*.6);padding:calc(var(--u)*.17) 0;cursor:pointer}
+  .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--box);position:relative;top:6px}
+  @media (hover:hover){.item:hover .mark{border-color:var(--k)}}
   .item.done .mark{background:var(--k);border-color:var(--k)}
   .item .txt{flex:1 1 auto}
   .item .txt b{font-weight:700}
@@ -102,7 +122,7 @@
   .item:focus-visible{outline:1px solid var(--k);outline-offset:2px}
 
   /* ---------- fields ---------- */
-  .fields{display:flex;flex-wrap:wrap;gap:calc(var(--u)*.6);align-items:baseline;margin-top:calc(var(--u)*.9)}
+  .fields{display:flex;flex-wrap:wrap;gap:calc(var(--u)*.6);align-items:baseline;margin-top:calc(var(--u)*.7)}
   label{font-weight:400;color:var(--dim)}
   input[type=number],input[type=text],input[type=password],select{
     font:inherit;font-weight:400;background:none;color:var(--k);
@@ -121,7 +141,7 @@
   ::placeholder{color:var(--ghost);font-weight:400}
 
   .btn{font:inherit;font-weight:400;background:none;color:var(--dim);border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-  .btn:hover{color:var(--k)}
+  @media (hover:hover){.btn:hover{color:var(--k)}}
   .btn:focus-visible{outline:1px solid var(--k);outline-offset:3px}
 
   /* ---------- money table, ruleless ---------- */
@@ -132,26 +152,27 @@
   .calc .lab{font-weight:400;color:var(--dim)}
   .calc .val{font-weight:700;text-align:right}
 
-  .note{font-weight:400;color:var(--dim);max-width:58ch;margin-top:calc(var(--u)*1.2)}
+  .note{font-weight:400;color:var(--dim);max-width:58ch;margin-top:calc(var(--u)*1)}
   .stamp{font-weight:400;color:var(--dim)}
 
   /* ---------- shoots ---------- */
-  .sh{display:flex;gap:calc(var(--u)*.6);align-items:baseline;padding:calc(var(--u)*.22) 0}
-  .sh .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--ghost);cursor:pointer;position:relative;top:2px}
-  .sh .mark:hover{border-color:var(--k)}
+  .sh{display:flex;gap:calc(var(--u)*.6);align-items:baseline;padding:calc(var(--u)*.17) 0}
+  .sh .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--box);cursor:pointer;position:relative;top:2px}
+  @media (hover:hover){.sh .mark:hover{border-color:var(--k)}}
   .sh.done .mark{background:var(--k);border-color:var(--k)}
   .sh input.nm{flex:1 1 auto;width:auto;min-width:0;font-weight:700;border-bottom-color:transparent}
-  .sh.done input.nm{font-weight:400;color:var(--dim)}
+  .sh.done input.nm{font-weight:400;color:var(--k)}
   .sh input.dt{flex:0 0 16ch;width:16ch;text-align:right;color:var(--dim);border-bottom-color:transparent}
-  .sh input:hover,.sh input:focus{border-bottom-color:var(--ghost)}
+  .sh input:focus{border-bottom-color:var(--ghost)}
+  @media (hover:hover){.sh input:hover{border-bottom-color:var(--ghost)}}
   .sh input:focus{border-bottom-color:var(--k)}
   .sh .del{flex:0 0 auto;font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;cursor:pointer}
-  .sh .del:hover{color:var(--k)}
+  @media (hover:hover){.sh .del:hover{color:var(--k)}}
   .sh .notebtn{flex:0 0 auto;margin:0}
 
   /* ---------- notes: a button that opens a full-screen editor ---------- */
-  .notebtn{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.4);cursor:pointer;text-align:left;text-underline-offset:3px;touch-action:manipulation}
-  .notebtn:hover{color:var(--k)}
+  .notebtn{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.32);cursor:pointer;text-align:left;text-underline-offset:3px;touch-action:manipulation}
+  @media (hover:hover){.notebtn:hover{color:var(--k)}}
   .notebtn.has{color:var(--k)}
   .notebtn.open{text-decoration:underline}
   .notebtn:focus-visible{outline:1px solid var(--k);outline-offset:3px}
@@ -162,26 +183,28 @@
   .sheet-in{flex:1 1 auto;min-height:0;width:100%;max-width:760px;margin:0 auto;display:flex;flex-direction:column}
   .sheet-bar{display:flex;justify-content:space-between;align-items:baseline;gap:var(--u);margin-bottom:calc(var(--u)*.9)}
   .sheet-bar b{font-weight:700;min-width:0;overflow-wrap:anywhere}
-  .sheet-bar .btn{flex:0 0 auto;padding:8px 0 8px 12px;color:var(--k)}
+  .sheet-act{display:flex;gap:calc(var(--u)*1);flex:0 0 auto}
+  .sheet-bar .btn{flex:0 0 auto;padding:8px 0 8px 4px;color:var(--k)}
+  .sheet-bar .btn.quiet{color:var(--dim)}
   .sheet textarea{flex:1 1 auto;min-height:0;margin:0;width:100%;resize:none;border:0;padding:0;line-height:1.6;overflow:auto}
-  .add{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.9);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-  .add:hover{color:var(--k)}
+  .add{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.7);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  @media (hover:hover){.add:hover{color:var(--k)}}
 
-  .q{margin-top:calc(var(--u)*1.4)}
+  .q{margin-top:calc(var(--u)*1.2)}
   .q b{font-weight:700;display:block}
 
   /* ---------- directory ---------- */
-  .filters{display:flex;flex-wrap:wrap;gap:0 calc(var(--u)*.9);margin-top:calc(var(--u)*.9)}
+  .filters{display:flex;flex-wrap:wrap;gap:0 calc(var(--u)*.9);margin-top:calc(var(--u)*.7)}
   .filters button{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;cursor:pointer}
-  .filters button:hover{color:var(--k)}
+  @media (hover:hover){.filters button:hover{color:var(--k)}}
   .filters button[aria-pressed="true"]{font-weight:700;color:var(--k)}
   .filters button:focus-visible{outline:1px solid var(--k);outline-offset:3px}
-  #search{width:100%;max-width:28ch;margin-top:calc(var(--u)*.9)}
+  #search{width:100%;max-width:28ch;margin-top:calc(var(--u)*.7)}
 
-  .dir{margin-top:calc(var(--u)*1.2)}
-  .ent{display:flex;gap:calc(var(--u)*.6);padding:calc(var(--u)*.22) 0;cursor:pointer}
-  .ent .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--ghost);position:relative;top:6px}
-  .ent:hover .mark{border-color:var(--k)}
+  .dir{margin-top:calc(var(--u)*1)}
+  .ent{display:flex;gap:calc(var(--u)*.6);padding:calc(var(--u)*.17) 0;cursor:pointer}
+  .ent .mark{flex:0 0 9px;width:9px;height:9px;border:1px solid var(--box);position:relative;top:6px}
+  @media (hover:hover){.ent:hover .mark{border-color:var(--k)}}
   .ent.done .mark{background:var(--k);border-color:var(--k)}
   .ent .main{flex:1 1 auto;min-width:0}
   .ent .main b{font-weight:700}
@@ -189,7 +212,7 @@
   .ent.done .main b{font-weight:400;color:var(--dim)}
   .ent .side{flex:0 0 auto;font-weight:400;color:var(--dim);text-align:right;white-space:nowrap}
   .ent:focus-visible{outline:1px solid var(--k);outline-offset:2px}
-  .dirhead{font-weight:700;margin-top:calc(var(--u)*2);margin-bottom:calc(var(--u)*.5)}
+  .dirhead{font-weight:700;margin-top:calc(var(--u)*1.7);margin-bottom:calc(var(--u)*.4)}
   .dirhead:first-child{margin-top:0}
   .empty{font-weight:400;color:var(--dim);margin-top:var(--u)}
 
@@ -203,49 +226,113 @@
   .vh{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;opacity:0}
 
   @media (max-width:620px){
-    :root{--u:24px}
-    body{font-size:16px;padding:calc(var(--u)*1.1 + env(safe-area-inset-top,0px)) calc(var(--u)*.7 + env(safe-area-inset-right,0px)) calc(var(--u)*4 + env(safe-area-inset-bottom,0px)) calc(var(--u)*.7 + env(safe-area-inset-left,0px))}
+    :root{--u:23px}
+    body{font-size:16px;line-height:1.4;padding:calc(var(--u)*1 + env(safe-area-inset-top,0px)) calc(var(--u)*.75 + env(safe-area-inset-right,0px)) calc(var(--u)*4 + env(safe-area-inset-bottom,0px)) calc(var(--u)*.75 + env(safe-area-inset-left,0px))}
     .group h2{font-size:16px}
     .lede,.group .sub,.note{max-width:none}
-    .mast{gap:calc(var(--u)*.3)}
+    .mast{gap:0 calc(var(--u)*.5)}
 
     /* week dots: a strip you can swipe, with a 24px-wide, 44px-tall target per week */
-    .scale{height:44px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .scale{height:44px;margin:calc(var(--u)*1) 0 calc(var(--u)*.15);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
     .scale::-webkit-scrollbar{display:none}
     .tick{flex:0 0 24px;height:44px}
 
-    .readout .row{flex-wrap:wrap;gap:0 calc(var(--u)*.6)}
+    .readout{margin-top:calc(var(--u)*1.3)}
+    .readout .row{flex-wrap:wrap;gap:0 calc(var(--u)*.6);padding:calc(var(--u)*.16) 0}
     .row .k{flex:1 1 auto}
     .row .v{order:2}
-    .row .measure{order:3;flex:1 0 100%;top:-2px;margin-top:calc(var(--u)*.15)}
+    .row .measure{order:3;flex:1 0 100%;top:-1px;margin:calc(var(--u)*.1) 0 calc(var(--u)*.05)}
 
-    nav{gap:0 calc(var(--u)*.9)}
-    nav button{padding:calc(var(--u)*.4) 0}
-    .btn,.add{padding:calc(var(--u)*.4) calc(var(--u)*.15)}
-    .filters button{padding:calc(var(--u)*.35) 0}
-    .fields{gap:calc(var(--u)*.3) calc(var(--u)*.7)}
-    input[type=number],input[type=text],input[type=password],select{padding:calc(var(--u)*.25) 0}
+    /* one swipeable line of tabs instead of three wrapped lines */
+    nav{margin:calc(var(--u)*1.4) calc(var(--u)*-.75) 0;padding:0 calc(var(--u)*.75);flex-wrap:nowrap;overflow-x:auto;gap:0 calc(var(--u)*1.1);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    nav::-webkit-scrollbar{display:none}
+    nav button{flex:0 0 auto;white-space:nowrap;padding:calc(var(--u)*.4) 0}
+
+    .panel{padding-top:calc(var(--u)*1.5)}
+    .group{margin-top:calc(var(--u)*2.3)}
+    .panel > .lede + .group{margin-top:calc(var(--u)*1.9)}
+    .group h2 + .body,.group .sub + .body{margin-top:calc(var(--u)*.55)}
+    .fields{gap:calc(var(--u)*.25) calc(var(--u)*.7);margin-top:calc(var(--u)*.55)}
+    .btn,.add{padding:calc(var(--u)*.35) calc(var(--u)*.15)}
+    .add{margin-top:calc(var(--u)*.4)}
+    .filters button{padding:calc(var(--u)*.3) 0}
+    input[type=number],input[type=text],input[type=password],select{padding:calc(var(--u)*.2) 0}
     select{max-width:100%}
     input[style]{max-width:100%}
 
-    .item,.ent{padding:calc(var(--u)*.42) 0}
-    .mark,.ent .mark{flex-basis:12px;width:12px;height:12px;top:calc(var(--u)*.4)}
+    .item,.ent{padding:calc(var(--u)*.3) 0}
+    .mark,.ent .mark{flex-basis:12px;width:12px;height:12px;top:calc(var(--u)*.35)}
+    .dirhead{margin-top:calc(var(--u)*1.5)}
+    .q{margin-top:calc(var(--u)*1)}
 
     .grid{grid-template-columns:7ch 10ch 1fr}
     .calc{grid-template-columns:1fr auto}
 
     .ent{flex-wrap:wrap}
     .ent .main{flex:1 1 calc(100% - 12px - var(--u)*.6)}
-    .ent .side{flex:1 0 100%;text-align:left;white-space:normal;padding-left:calc(12px + var(--u)*.6)}
+    .ent .side{flex:1 0 100%;text-align:left;white-space:normal;padding-left:calc(12px + var(--u)*.6);margin-top:calc(var(--u)*-.05)}
 
-    .sh{flex-wrap:wrap;row-gap:0;align-items:center}
-    .sh .mark{top:0}
-    .sh input.nm{flex:1 1 calc(100% - 12px - var(--u)*.6);padding:calc(var(--u)*.3) 0}
-    .sh input.dt{flex:1 1 0;width:0;min-width:7ch;text-align:left;margin-left:calc(12px + var(--u)*.6);padding:calc(var(--u)*.3) 0}
-    .sh .notebtn,.sh .del{padding:calc(var(--u)*.4) calc(var(--u)*.3)}
+    /* shoots: name and Notes on one line, the date tucked underneath; Delete lives in the editor */
+    .sh{flex-wrap:wrap;column-gap:calc(var(--u)*.6);row-gap:0;align-items:center;padding:calc(var(--u)*.3) 0}
+    .sh .mark{flex:0 0 12px;width:12px;height:12px;top:0;align-self:flex-start;margin-top:calc(var(--u)*.4)}
+    .sh input.nm{order:1;flex:1 1 0;min-width:0;padding:calc(var(--u)*.15) 0}
+    .sh .notebtn{order:2;padding:calc(var(--u)*.3) calc(var(--u)*.1)}
+    .sh .del{display:none}
+    .sh input.dt{order:3;flex:0 0 calc(100% - 12px - var(--u)*.6);width:calc(100% - 12px - var(--u)*.6);min-width:0;text-align:left;margin:calc(var(--u)*-.05) 0 0 calc(12px + var(--u)*.6);padding:0 0 calc(var(--u)*.15)}
   }
+  /* ---------- "?" folds each tab's explanation ---------- */
+  .panel{position:relative}
+  .qmark{position:absolute;right:calc(var(--u)*-.35);top:calc(var(--u)*.05);min-width:44px;min-height:44px;font:inherit;font-weight:400;color:var(--dim);background:none;border:0;cursor:pointer;text-align:right;padding:0 calc(var(--u)*.35) 0 0;touch-action:manipulation}
+  .qmark.on{color:var(--k);font-weight:700}
+  .panel > .lede[hidden] + .group{margin-top:0}
+  .lede{padding-right:calc(var(--u)*1.2)}
+
+  /* ---------- shoot details inside the editor ---------- */
+  .sheet-meta{margin-bottom:calc(var(--u)*.9)}
+  .sheet-meta input{width:100%;font:inherit;font-weight:400;color:var(--k);background:none;border:0;border-bottom:1px solid var(--ghost);border-radius:0;padding:calc(var(--u)*.25) 0}
+  .sheet-meta #sheet-name{font-weight:700}
+  .sheet-meta input:focus{outline:0;border-bottom-color:var(--k)}
+  .sheet-row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--u)}
+  .sheet-row input{flex:1 1 auto}
+  .sheet-row .btn{flex:0 0 auto;color:var(--k)}
+  .sheet-act{margin-left:auto}
+
+  /* ---------- bottom bar + More list: phones only ---------- */
+  #tabbar{display:none}
+  #more-list button{display:block;width:100%;text-align:left;font:inherit;font-weight:400;color:var(--k);background:none;border:0;padding:calc(var(--u)*.5) 0;cursor:pointer}
+  #more-list button[aria-current="true"]{font-weight:700}
+
+  @media (max-width:620px){
+    body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+    #nav{display:none}
+    #tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;justify-content:space-between;
+      padding:0 calc(var(--u)*.2) env(safe-area-inset-bottom,0px);
+      background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(180%) blur(14px);backdrop-filter:saturate(180%) blur(14px)}
+    body.locked #tabbar,body.sheet-open #tabbar{display:none}
+    #tabbar button{flex:1 1 auto;font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:calc(var(--u)*.75) calc(var(--u)*.08) calc(var(--u)*.7);text-align:center;touch-action:manipulation;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+    #tabbar button[aria-current="true"]{color:var(--k);font-weight:700}
+
+    /* header: title and week only; status and Lock live in More */
+    .mast .hd,.mast [data-t="mast_meta"]{display:none}
+    .hdr{padding:calc(var(--u)*.3) 0 calc(var(--u)*.05)}
+    .scale{margin:calc(var(--u)*.4) 0 calc(var(--u)*.05)}
+    .readout{margin-top:calc(var(--u)*.9)}
+    .readout .row{flex-wrap:nowrap;gap:0 calc(var(--u)*.6);padding:calc(var(--u)*.1) 0}
+    .row .k{flex:0 0 14ch;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .row .v{order:0}
+    .row .measure{order:0;flex:1 1 auto;min-width:40px;top:-4px;margin:0}
+    .row .v .x{display:none}
+    .panel{padding-top:calc(var(--u)*1.2)}
+
+    /* shoot rows open the editor */
+    .sh{cursor:pointer}
+    .sh input{pointer-events:none}
+    .sh input.nm,.sh input.dt{-webkit-user-select:none;user-select:none}
+  }
+  @keyframes pin{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:no-preference){
     .tick::before{transition:transform .14s ease,background .14s ease}
+    .panel.on{animation:pin .22s ease both}
   }
 </style>
 </head>
@@ -282,9 +369,10 @@
 
 <div class="wrap">
 
+  <header class="hdr" id="hdr">
   <div class="mast">
     <div><b data-t="mast_title">Tracker</b> <span class="meta" data-t="mast_meta"></span></div>
-    <div class="meta"><span id="mastweek">—</span> · <span id="sync">…</span> · <button class="btn" id="lockbtn" type="button">Lock</button></div>
+    <div class="meta"><span id="mastweek">—</span><span class="hd"> · <span id="sync">…</span> · <button class="btn" id="lockbtn" type="button">Lock</button></span></div>
   </div>
 
   <div class="scale" id="scale"></div>
@@ -293,6 +381,7 @@
     <span class="cursor" id="cursor">—</span>
     <span id="foot-b">—</span>
   </div>
+  </header>
 
   <div class="readout">
     <div class="row"><div class="k" data-t="k_save">Savings</div><div class="measure"><i id="b-save"></i></div><div class="v" id="v-save">—</div></div>
@@ -348,6 +437,9 @@
 
   <section class="panel" id="p-shoot">
     <p class="lede" data-t="shoot_lede">Upcoming and completed shoots, with notes for each.</p>
+    <div class="group">
+      <div class="fields"><label for="shootgoal">Goal</label><input type="number" id="shootgoal" min="1" max="999" inputmode="numeric" style="width:6ch"><label>completed shoots</label></div>
+    </div>
     <div class="group">
       <h2>Upcoming shoots</h2>
       <div class="body" id="sh-todo"></div>
@@ -476,9 +568,24 @@
 
 </div>
 
+<div id="tabbar" role="navigation" aria-label="Sections"></div>
+
+<div class="sheet" id="more" hidden role="dialog" aria-modal="true" aria-label="More">
+  <div class="sheet-in">
+    <div class="sheet-bar"><b>More</b><span class="sheet-act"><button class="btn" type="button" id="more-close">Close</button></span></div>
+    <div id="more-list"></div>
+    <p class="sub" id="more-status" style="margin-top:calc(var(--u)*1.2)"></p>
+    <div class="fields"><button class="btn" type="button" id="more-lock">Lock</button></div>
+  </div>
+</div>
+
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
   <div class="sheet-in">
-    <div class="sheet-bar"><b id="sheet-title">Notes</b><button class="btn" type="button" id="sheet-done">Done</button></div>
+    <div class="sheet-bar"><b id="sheet-title">Notes</b><span class="sheet-act"><button class="btn quiet" type="button" id="sheet-del" hidden>Delete</button><button class="btn" type="button" id="sheet-done">Done</button></span></div>
+    <div class="sheet-meta" id="sheet-meta" hidden>
+      <input type="text" id="sheet-name" placeholder="Shoot name" autocomplete="off" aria-label="Shoot name">
+      <div class="sheet-row"><input type="text" id="sheet-date" placeholder="YYYY.MM.DD" autocomplete="off" aria-label="Date"><button class="btn" type="button" id="sheet-status">Mark done</button></div>
+    </div>
     <textarea id="sheet-text" aria-label="Note text"></textarea>
   </div>
 </div>
@@ -493,7 +600,7 @@
   function el(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
   function pad(n){return String(n).padStart(2,"0");}
   function fmt(n){return Number(n).toLocaleString();}
-  function freshState(){return {checks:{},money:{},notes:{},audit:{},tier3:"",weekstamp:"",shoots:null,data:null};}
+  function freshState(){return {checks:{},money:{},notes:{},audit:{},tier3:"",weekstamp:"",shoots:null,shootGoal:0,data:null};}
 
   var S=null, KEYOBJ=null, SALT=null, SALT64="", vault=null;
   var LS=(function(){try{var k="__t";localStorage.setItem(k,"1");localStorage.removeItem(k);return true;}catch(e){return false;}})();
@@ -525,7 +632,7 @@
   var SC=null;                       /* {repo, path, token} — kept encrypted, never exported */
   var timer=null, pushTimer=null, syncing=false, again=false, remoteSha=null, retries=0, wseq=0;
 
-  function setSync(t){var e=$("sync"); if(e) e.textContent=t;}
+  function setSync(t){var e=$("sync"); if(e) e.textContent=t; var m=$("more-status"); if(m) m.textContent=t;}
   function setMsg(t){var e=$("sync-msg"); if(e) e.textContent=t;}
   function save(){
     S._t=Date.now(); setSync("saving…");
@@ -823,8 +930,20 @@
       b.setAttribute("aria-current",NAV[i][0]===pid?"true":"false");
     });
     $(pid).classList.add("on");
+    var cur=$("nav").querySelector('button[aria-current="true"]');
+    if(cur&&cur.scrollIntoView) cur.scrollIntoView({block:"nearest",inline:"center"});
+    var inMore=MORE_START<NAV.length && NAV.slice(MORE_START).some(function(n){return n[0]===pid;});
+    $("tabbar").querySelectorAll("button[data-go]").forEach(function(b){b.setAttribute("aria-current",b.dataset.go===pid?"true":"false");});
+    var mb=$("tab-more");
+    mb.setAttribute("aria-current",inMore?"true":"false");
+    $("more-list").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-current",b.dataset.go===pid?"true":"false");});
+    if(window.matchMedia("(max-width:620px)").matches) window.scrollTo(0,0);
   }
+  var MORE_START=4;
+  function navLabel(n){return TXT["nav_"+n[0]]||n[1];}
 
+  function fitHdr(){var h=$("hdr"); if(h) document.documentElement.style.setProperty("--hdr-h",h.offsetHeight+"px");}
+  window.addEventListener("resize",fitHdr);
   var scaleCentered=false;
   function scale(){
     var total=Math.max(1,Math.round((DEPART-START)/6048e5)),
@@ -862,6 +981,7 @@
     $("cursor").textContent=base();
     $("foot-a").textContent=START.getFullYear()+"."+pad(START.getMonth()+1);
     $("foot-b").textContent=DEPART.getFullYear()+"."+pad(DEPART.getMonth()+1);
+    fitHdr();
     function base(){return Math.max(0,Math.ceil((DEPART-Date.now())/864e5))+" days left";}
   }
 
@@ -915,16 +1035,21 @@
 
   function meter(){
     var now=latest();
-    if(TARGET) set("save",now/TARGET,fmt(now)+" / "+fmt(TARGET)+(DEPOSIT?" (+"+fmt(DEPOSIT)+")":""));
+    if(TARGET) set("save",now/TARGET,fmt(now)+" / "+fmt(TARGET),DEPOSIT?" (+"+fmt(DEPOSIT)+")":"");
     else set("save",0,"—");
-    var total=S.shoots?S.shoots.length:0,
-        s=S.shoots?S.shoots.filter(function(x){return x.done;}).length:0;
-    set("shoot",total?s/total:0,s+" / "+total);
+    var s=S.shoots?S.shoots.filter(function(x){return x.done;}).length:0,
+        goal=Math.max(shootGoal(),s);
+    set("shoot",goal?s/goal:0,s+" / "+goal);
     var n=countNs("warm",WARM.length)+countNs("book",BOOKS.length), nt=WARM.length+BOOKS.length;
     set("net",nt?n/nt:0,n+" / "+nt);
     var d=countNs("admin",ADMIN.length); set("dep",ADMIN.length?d/ADMIN.length:0,d+" / "+ADMIN.length);
   }
-  function set(k,f,t){$("b-"+k).style.width=Math.max(0,Math.min(1,f||0))*100+"%";$("v-"+k).textContent=t;}
+  function shootGoal(){var g=+S.shootGoal; return g>0?Math.round(g):(+CFG.shootTarget||30);}
+  function set(k,f,t,x){
+    $("b-"+k).style.width=Math.max(0,Math.min(1,f||0))*100+"%";
+    var v=$("v-"+k); v.textContent=t;
+    if(x){var sp=document.createElement("span"); sp.className="x"; sp.textContent=x; v.appendChild(sp);}
+  }
 
   /* ---------- notes: every note opens a full-screen editor ---------- */
   var noteBtns=[], sheetFor=null;
@@ -942,19 +1067,39 @@
     var sh=$("sheet"), vv=window.visualViewport;
     if(vv&&!sh.hidden){sh.style.height=vv.height+"px"; sh.style.top=vv.offsetTop+"px";}
   }
+  var sheetOpts=null;
   function openSheet(btn,o){
     var sh=$("sheet"), ta=$("sheet-text");
-    sheetFor=btn; refreshNotes();
-    $("sheet-title").textContent=o.title||"Notes";
+    sheetFor=btn; sheetOpts=o; refreshNotes();
+    $("sheet-title").textContent=o.meta?"":(o.title||"Notes");
+    var mt=$("sheet-meta"); mt.hidden=!o.meta;
+    if(o.meta){
+      var nmI=$("sheet-name"), dtI=$("sheet-date"), stB=$("sheet-status");
+      nmI.value=o.meta.name()||""; dtI.value=o.meta.date()||"";
+      var paintSt=function(){stB.textContent=o.meta.done()?"Mark upcoming":"Mark done";};
+      paintSt();
+      nmI.oninput=function(){o.meta.setName(nmI.value);save();};
+      dtI.oninput=function(){o.meta.setDate(dtI.value);save();};
+      stB.onclick=function(){o.meta.toggleDone();save();paintSt();};
+    }
     ta.value=o.get()||""; ta.placeholder=o.placeholder||"";
     ta.oninput=function(){o.set(ta.value); save(); paintNote(btn);};
+    var del=$("sheet-del");
+    del.hidden=!o.onDelete;
+    del.onclick=o.onDelete?function(){
+      if(!confirm("Delete this shoot and its notes?")) return;
+      closeSheet(); o.onDelete();
+    }:null;
     sh.hidden=false; document.body.classList.add("sheet-open");
     fitSheet(); ta.focus();
   }
   function closeSheet(){
     var sh=$("sheet"); if(sh.hidden) return;
-    $("sheet-text").oninput=null; sh.hidden=true; document.body.classList.remove("sheet-open");
+    $("sheet-text").oninput=null; $("sheet-del").onclick=null; sh.hidden=true; document.body.classList.remove("sheet-open");
+    var o=sheetOpts; sheetOpts=null;
+    if(o&&o.meta){$("sheet-name").oninput=null;$("sheet-date").oninput=null;$("sheet-status").onclick=null;}
     var b=sheetFor; sheetFor=null; refreshNotes();
+    if(o&&o.onClose) o.onClose();
     if(b&&document.body.contains(b)&&b.focus) b.focus({preventScroll:true});
   }
   function attachNote(btn,o){
@@ -1044,7 +1189,16 @@
         nb.className="notebtn"; nb.type="button"; nb.textContent="Notes";
         attachNote(nb,{title:s.name||"Shoot notes",placeholder:TXT.shoot_ph||"Notes",
           get:function(){return s.note||"";},
-          set:function(v){s.note=v;}});
+          set:function(v){s.note=v;},
+          meta:{name:function(){return s.name;},date:function(){return s.date;},done:function(){return s.done;},
+                setName:function(v){s.name=v;},setDate:function(v){s.date=v;},toggleDone:function(){s.done=!s.done;}},
+          onClose:function(){meter();renderShoots();},
+          onDelete:function(){S.shoots=S.shoots.filter(function(x){return x!==s;});save();meter();renderShoots();}});
+        d.addEventListener("click",function(ev){
+          if(!window.matchMedia("(max-width:620px)").matches) return;
+          if(ev.target.closest(".mark,.notebtn,.del")) return;
+          nb.click();
+        });
 
         var del=document.createElement("button");
         del.className="del"; del.type="button"; del.textContent="Delete";
@@ -1133,7 +1287,7 @@
     try{p=JSON.parse(raw);}catch(e){$("importmsg").textContent="That isn't valid JSON. Check you chose the whole file.";return;}
     if(!p||typeof p!=="object"||p.ct){$("importmsg").textContent="That isn't a data file. Vault and sync files are encrypted and can't be imported here.";return;}
     if(p.data) S.data=p.data;
-    ["checks","money","notes","audit","tier3","weekstamp","shoots"].forEach(function(k){
+    ["checks","money","notes","audit","tier3","weekstamp","shoots","shootGoal"].forEach(function(k){
       if(p[k]!==undefined&&p[k]!==null) S[k]=p[k];
     });
     save();
@@ -1211,10 +1365,42 @@
       b.addEventListener("click",function(){go(n[0]);});
       host.appendChild(b);
     });
+    var tb=$("tabbar");
+    NAV.slice(0,MORE_START).forEach(function(n,i){
+      var b=document.createElement("button"); b.type="button"; b.dataset.go=n[0]; b.textContent=navLabel(n);
+      b.setAttribute("aria-current",i===0?"true":"false");
+      b.addEventListener("click",function(){go(n[0]);});
+      tb.appendChild(b);
+    });
+    var mb=document.createElement("button"); mb.type="button"; mb.id="tab-more"; mb.textContent="More"; mb.setAttribute("aria-current","false");
+    mb.addEventListener("click",openMore); tb.appendChild(mb);
+    var ml=$("more-list");
+    NAV.slice(MORE_START).forEach(function(n){
+      var b=document.createElement("button"); b.type="button"; b.dataset.go=n[0]; b.textContent=navLabel(n);
+      b.addEventListener("click",function(){closeMore();go(n[0]);});
+      ml.appendChild(b);
+    });
   }
+  function openMore(){var m=$("more"); m.hidden=false; document.body.classList.add("sheet-open"); fitMore();}
+  function closeMore(){var m=$("more"); if(m.hidden) return; m.hidden=true; document.body.classList.remove("sheet-open");}
+  function fitMore(){var m=$("more"), vv=window.visualViewport; if(vv&&!m.hidden){m.style.height=vv.height+"px"; m.style.top=vv.offsetTop+"px";}}
+  $("more-close").addEventListener("click",closeMore);
+  $("more-lock").addEventListener("click",lockNow);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape") closeMore();});
 
   /* ---------- init ---------- */
   applyText();
+  document.querySelectorAll(".panel").forEach(function(pn){
+    var lede=pn.querySelector(":scope > .lede"); if(!lede) return;
+    lede.hidden=true;
+    var q=document.createElement("button"); q.type="button"; q.className="qmark"; q.textContent="?";
+    q.setAttribute("aria-label","About this page"); q.setAttribute("aria-expanded","false");
+    q.addEventListener("click",function(){
+      var open=lede.hidden; lede.hidden=!open;
+      q.setAttribute("aria-expanded",open?"true":"false"); q.classList.toggle("on",open);
+    });
+    pn.insertBefore(q,pn.firstChild);
+  });
   seedShoots();
   buildNav(); buildAudit(); scale();
   list($("weekly"),WEEKLY,"weekly");
@@ -1232,6 +1418,9 @@
   bindNote("weeknote","week","This week's notes"); bindNote("tier3note","tier3","Notes");
   bindNote("dirnote","dir","Directory notes");
   bindData();
+  var sg=$("shootgoal"); sg.value=shootGoal();
+  sg.addEventListener("input",function(){var v=Math.round(+sg.value); S.shootGoal=v>0?v:0; save(); meter();});
+  sg.addEventListener("blur",function(){sg.value=shootGoal();});
   var t3=$("tier3"); t3.value=S.tier3||"";
   t3.addEventListener("input",function(){S.tier3=t3.value;save();});
   if(S.weekstamp)$("weekstamp").textContent="Last reset "+S.weekstamp;
