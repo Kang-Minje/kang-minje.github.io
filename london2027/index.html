@@ -177,6 +177,15 @@
   .dirhead:first-child{margin-top:0}
   .empty{font-weight:400;color:var(--dim);margin-top:var(--u)}
 
+  /* ---------- lock screen ---------- */
+  body.locked .wrap{display:none}
+  .lockscreen{display:none;max-width:440px;margin:calc(var(--u)*5) auto 0}
+  body.locked .lockscreen{display:block}
+  .lockscreen form,.lockscreen .blk{margin:0}
+  .lockscreen [hidden]{display:none}
+  .lockscreen h1{font-size:14px;font-weight:700;margin-bottom:calc(var(--u)*.6)}
+  .vh{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;opacity:0}
+
   @media (max-width:620px){
     body{padding:calc(var(--u)*1.2 + env(safe-area-inset-top,0px)) calc(var(--u)*.8) calc(var(--u)*5 + env(safe-area-inset-bottom,0px))}
     .row{flex-wrap:wrap;gap:calc(var(--u)*.3)}
@@ -192,12 +201,42 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div class="lockscreen" id="lock">
+  <form id="unlockform" hidden>
+    <h1>Locked</h1>
+    <input class="vh" type="text" name="username" autocomplete="username" value="tracker" tabindex="-1" aria-hidden="true">
+    <div class="fields"><label for="pw">Password</label><input type="password" id="pw" name="password" autocomplete="current-password" style="width:28ch"></div>
+    <div class="fields"><button class="btn" type="submit" id="unlockbtn">Unlock</button><span class="stamp" id="lockmsg"></span></div>
+    <p class="sub" style="margin-top:calc(var(--u)*1.2)">On an iPhone or Mac, if the password is saved in iCloud Keychain, Face ID or Touch ID fills it in for you.</p>
+    <div class="fields"><button class="btn" type="button" id="resetdevice">Reset this device</button></div>
+  </form>
+
+  <form id="setupform" hidden>
+    <h1>First-time setup</h1>
+    <p class="lede">Choose a password. Your data is encrypted with it before it is saved anywhere, and nothing can be opened without it. It can't be recovered if you forget it, so let your password manager create and save a long one.</p>
+    <input class="vh" type="text" name="username" autocomplete="username" value="tracker" tabindex="-1" aria-hidden="true">
+    <div class="fields"><label for="setupfile">Data file</label><input type="file" id="setupfile" accept=".json,application/json"></div>
+    <div class="fields"><label for="pw1">Password</label><input type="password" id="pw1" name="new-password" autocomplete="new-password" style="width:28ch"></div>
+    <div class="fields"><label for="pw2">Repeat</label><input type="password" id="pw2" name="new-password-2" autocomplete="new-password" style="width:28ch"></div>
+    <div class="fields"><button class="btn" type="submit" id="setupbtn">Create</button><span class="stamp" id="setupmsg"></span></div>
+  </form>
+
+  <div class="blk" id="setupdone" hidden>
+    <h1>Done. One more step.</h1>
+    <p class="lede">Download the vault file and upload it to the same folder as index.html. It is your data, encrypted, and it is what lets your other devices unlock the tracker with the same password.</p>
+    <div class="fields"><button class="btn" type="button" id="setupdl">Download vault.json</button><button class="btn" type="button" id="setupgo">Continue</button></div>
+  </div>
+
+  <p class="lede" id="nocrypto" hidden>This browser can't run the encryption this page needs. Open the page over https in an up-to-date browser.</p>
+</div>
+
 <div class="wrap">
 
   <div class="mast">
     <div><b data-t="mast_title">Tracker</b> <span class="meta" data-t="mast_meta"></span></div>
-    <div class="meta"><span id="mastweek">—</span> · <span id="sync">…</span></div>
+    <div class="meta"><span id="mastweek">—</span> · <span id="sync">…</span> · <button class="btn" id="lockbtn" type="button">Lock</button></div>
   </div>
 
   <div class="scale" id="scale"></div>
@@ -347,11 +386,11 @@
   </section>
 
   <section class="panel" id="p-data">
-    <p class="lede">Everything you enter is saved in this browser first. This page contains no personal content of its own: your lists and settings live in a data file you import once. To keep several devices in step, connect a private GitHub repository below. Without it, each browser keeps its own copy, and clearing site data erases it, so export a backup now and then.</p>
+    <p class="lede">Everything here is encrypted with your password before it is saved on this device or synced anywhere. The page itself holds no personal content. It locks again after a few minutes in the background.</p>
     <div class="group">
       <h2>Sync between devices</h2>
-      <p class="sub">Optional. Keeps a copy of everything in a file in a private GitHub repository, so every device you connect stays up to date. You need a private repo and a fine-grained personal access token limited to that one repo, with Contents set to Read and write. The token is kept in this browser only. Never put it, or the data file, in the public repo.</p>
-      <div class="fields"><label>Repo</label><input type="text" id="sync-repo" placeholder="owner/private-repo" style="width:30ch" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <p class="sub">Optional. Keeps an encrypted copy in a file in a GitHub repository so your devices stay in step. Use a separate repo from your website, ideally private, so saves don't rebuild the site. The token needs Contents: Read and write on that repo only. It is stored encrypted in this browser.</p>
+      <div class="fields"><label>Repo</label><input type="text" id="sync-repo" placeholder="owner/data-repo" style="width:30ch" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
       <div class="fields"><label>File</label><input type="text" id="sync-path" value="tracker-data.json" style="width:30ch" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
       <div class="fields"><label>Token</label><input type="password" id="sync-token" placeholder="github_pat_…" style="width:30ch" autocomplete="off"></div>
       <div class="fields">
@@ -362,8 +401,13 @@
       </div>
     </div>
     <div class="group">
+      <h2>Vault</h2>
+      <p class="sub">The encrypted copy of your lists that other devices use to unlock for the first time. Download it after you change your lists, and upload it next to index.html.</p>
+      <div class="fields"><button class="btn" id="dovault">Download vault.json</button></div>
+    </div>
+    <div class="group">
       <h2>Import</h2>
-      <p class="sub">Choose your data file, or a backup you exported earlier. The page reloads when it's done.</p>
+      <p class="sub">A plain data file or an unencrypted backup. The page reloads when it's done.</p>
       <div class="fields"><input type="file" id="importfile" accept=".json,application/json"></div>
       <textarea id="importbox" placeholder="Or paste the contents here"></textarea>
       <div class="fields">
@@ -372,8 +416,8 @@
       </div>
     </div>
     <div class="group">
-      <h2>Export</h2>
-      <p class="sub">Everything in this browser: your data file plus what you've entered.</p>
+      <h2>Backup</h2>
+      <p class="sub">Not encrypted. Keep the file somewhere private.</p>
       <div class="fields">
         <button class="btn" id="dodownload">Download backup</button>
         <button class="btn" id="doexport">Show as text</button>
@@ -388,20 +432,43 @@
 (function(){
   "use strict";
 
-  var KEY="tracker:v1";
-  var S={checks:{},money:{},notes:{},audit:{},tier3:"",weekstamp:"",shoots:null,data:null};
+  var KEY="tracker:v2", SYNCKEY="tracker:sync2", SESSKEY="tracker:sk", HIDKEY="tracker:hid";
+  var ITER=600000, AUTOLOCK_MS=5*60*1000;
   function $(i){return document.getElementById(i);}
   function el(t,c){var e=document.createElement(t);if(c)e.className=c;return e;}
   function pad(n){return String(n).padStart(2,"0");}
   function fmt(n){return Number(n).toLocaleString();}
+  function freshState(){return {checks:{},money:{},notes:{},audit:{},tier3:"",weekstamp:"",shoots:null,data:null};}
 
-  /* ---------- storage: this browser, optionally mirrored to a private GitHub repo ---------- */
+  var S=null, KEYOBJ=null, SALT=null, SALT64="", vault=null;
   var LS=(function(){try{var k="__t";localStorage.setItem(k,"1");localStorage.removeItem(k);return true;}catch(e){return false;}})();
-  var SYNCKEY="tracker:sync";
-  var SC=null;                       /* {repo, path, token} — this browser only, never exported */
-  try{SC=JSON.parse(localStorage.getItem(SYNCKEY)||"null");}catch(e){SC=null;}
-  if(SC&&!(SC.repo&&SC.token)) SC=null;
-  var timer=null, pushTimer=null, syncing=false, again=false, remoteSha=null, retries=0;
+
+  /* ---------- crypto: PBKDF2-SHA256 -> AES-256-GCM ---------- */
+  var enc=new TextEncoder(), dec=new TextDecoder();
+  function b64e(u8){var bin="";for(var i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(bin);}
+  function b64d(str){var bin=atob(String(str).replace(/\s/g,"")),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;}
+  function deriveRaw(pw,salt,iter){
+    return crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]).then(function(km){
+      return crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:salt,iterations:iter},km,256);
+    });
+  }
+  function toKey(raw){return crypto.subtle.importKey("raw",raw,"AES-GCM",false,["encrypt","decrypt"]);}
+  function seal(obj,extra){
+    var iv=crypto.getRandomValues(new Uint8Array(12));
+    return crypto.subtle.encrypt({name:"AES-GCM",iv:iv},KEYOBJ,enc.encode(JSON.stringify(obj))).then(function(ct){
+      var env={v:1,kdf:"PBKDF2-SHA256",iter:ITER,salt:SALT64,iv:b64e(iv),ct:b64e(new Uint8Array(ct))};
+      if(extra) for(var k in extra) env[k]=extra[k];
+      return env;
+    });
+  }
+  function unseal(env){
+    return crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(env.iv)},KEYOBJ,b64d(env.ct)).then(function(pt){return JSON.parse(dec.decode(pt));});
+  }
+  function readEnv(k){try{return JSON.parse(localStorage.getItem(k||KEY)||"null");}catch(e){return null;}}
+
+  /* ---------- storage: encrypted on this device, optionally mirrored to a GitHub file ---------- */
+  var SC=null;                       /* {repo, path, token} — kept encrypted, never exported */
+  var timer=null, pushTimer=null, syncing=false, again=false, remoteSha=null, retries=0, wseq=0;
 
   function setSync(t){var e=$("sync"); if(e) e.textContent=t;}
   function setMsg(t){var e=$("sync-msg"); if(e) e.textContent=t;}
@@ -411,32 +478,21 @@
     timer=setTimeout(flush,400);
   }
   function writeLocal(){
-    if(LS){try{localStorage.setItem(KEY,JSON.stringify(S));return true;}catch(e){}}
-    return false;
+    var my=++wseq;
+    return seal(S,{t:S._t||0}).then(function(env){
+      if(my<wseq) return true;
+      try{localStorage.setItem(KEY,JSON.stringify(env));return true;}catch(e){return false;}
+    }).catch(function(){return false;});
   }
   function flush(){
-    if(!writeLocal()){setSync("not saved (browser storage is blocked)");return;}
-    if(SC){setSync("saved on this device · syncing…");clearTimeout(pushTimer);pushTimer=setTimeout(syncNow,4000);}
-    else setSync("saved on this device");
+    writeLocal().then(function(ok){
+      if(!ok){setSync("not saved (browser storage is blocked)");return;}
+      if(SC){setSync("saved on this device · syncing…");clearTimeout(pushTimer);pushTimer=setTimeout(syncNow,4000);}
+      else setSync("saved on this device");
+    });
   }
-  (function load(){
-    try{
-      var v=LS?localStorage.getItem(KEY):null;
-      if(v){var p=JSON.parse(v);for(var k in p) if(p[k]!==undefined) S[k]=p[k];}
-    }catch(e){}
-  })();
 
-  /* ---- GitHub contents API (private repo file) ---- */
-  function b64enc(str){
-    var bytes=new TextEncoder().encode(str), bin="";
-    for(var i=0;i<bytes.length;i+=0x8000) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));
-    return btoa(bin);
-  }
-  function b64dec(b){
-    var bin=atob(String(b).replace(/\s/g,"")), bytes=new Uint8Array(bin.length);
-    for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-    return new TextDecoder("utf-8").decode(bytes);
-  }
+  /* ---- GitHub contents API (the file holds only the encrypted envelope) ---- */
   function gh(method,body){
     var path=String(SC.path||"tracker-data.json").split("/").map(encodeURIComponent).join("/");
     var url="https://api.github.com/repos/"+SC.repo+"/contents/"+path+(method==="GET"?"?nocache="+Date.now():"");
@@ -453,15 +509,17 @@
       if(r.status===401||r.status===403) throw {kind:"auth"};
       if(!r.ok) throw {kind:"http",code:r.status};
       return r.json().then(function(j){
-        var st=null; try{st=JSON.parse(b64dec(j.content));}catch(e){}
-        return {exists:true,sha:j.sha,state:st};
+        var env=null; try{env=JSON.parse(dec.decode(b64d(j.content)));}catch(e){}
+        return {exists:true,sha:j.sha,env:env};
       });
     });
   }
-  function pushRemote(){
-    var body={message:"tracker sync",content:b64enc(JSON.stringify(S))};
-    if(remoteSha) body.sha=remoteSha;
-    return gh("PUT",body).then(function(r){
+  function pushState(){
+    return seal(S,{t:S._t||0}).then(function(env){
+      var body={message:"tracker sync",content:b64e(enc.encode(JSON.stringify(env)))};
+      if(remoteSha) body.sha=remoteSha;
+      return gh("PUT",body);
+    }).then(function(r){
       if(r.status===409||r.status===422) throw {kind:"conflict"};
       if(r.status===401||r.status===403) throw {kind:"auth"};
       if(r.status===404) throw {kind:"notfound"};
@@ -469,15 +527,20 @@
       return r.json().then(function(j){remoteSha=j&&j.content&&j.content.sha||null;});
     });
   }
-  function adoptRemote(state){
-    try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
-    setSync("loading synced data…");
-    location.reload();
+  function adoptRemote(env){
+    return unseal(env).then(function(){
+      try{localStorage.setItem(KEY,JSON.stringify(env));}catch(e){}
+      setSync("loading synced data…");
+      location.reload();
+    }).catch(function(){
+      throw {kind:"password"};
+    });
   }
   function syncErr(e){
     var k=e&&e.kind;
     if(k==="auth") return "token rejected — check it in the Data tab";
     if(k==="notfound") return "repo not found, or the token has no access to it";
+    if(k==="password") return "the synced file was made with a different password";
     if(k==="http") return "GitHub error "+e.code;
     return "offline";
   }
@@ -487,12 +550,11 @@
     syncing=true; setSync("syncing…");
     return fetchRemote().then(function(r){
       remoteSha=r.exists?r.sha:null;
-      var rt=(r.exists&&r.state&&+r.state._t)||0, lt=+S._t||0;
-      if(r.exists&&r.state&&rt>lt){adoptRemote(r.state);return;}
+      var rt=(r.exists&&r.env&&+r.env.t)||0, lt=+S._t||0;
+      if(r.exists&&r.env&&rt>lt) return adoptRemote(r.env);
       if(!r.exists||lt>rt){
         if(!S._t) S._t=Date.now();
-        writeLocal();
-        return pushRemote().then(function(){retries=0;setSync("saved · synced");});
+        return writeLocal().then(pushState).then(function(){retries=0;setSync("saved · synced");});
       }
       setSync("saved · synced");
     }).catch(function(e){
@@ -503,7 +565,140 @@
       if(again){again=false;syncNow();}
     });
   }
+  function loadSyncCfg(){
+    var env=readEnv(SYNCKEY);
+    if(!env) return Promise.resolve();
+    return unseal(env).then(function(c){ if(c&&c.repo&&c.token) SC=c; }).catch(function(){});
+  }
 
+  /* ---------- lock screen: unlock / first-time setup ---------- */
+  function show(id){
+    ["unlockform","setupform","setupdone","nocrypto"].forEach(function(x){$(x).hidden=(x!==id);});
+    document.body.classList.add("locked");
+  }
+  function rememberKey(raw){
+    try{sessionStorage.setItem(SESSKEY,JSON.stringify({salt:SALT64,key:b64e(new Uint8Array(raw))}));}catch(e){}
+  }
+  function lockNow(){
+    try{sessionStorage.removeItem(SESSKEY);}catch(e){}
+    location.reload();
+  }
+  function openApp(localEnv){
+    var st=freshState();
+    var p=Promise.resolve();
+    if(localEnv) p=unseal(localEnv).then(function(x){for(var k in x) st[k]=x[k];});
+    return p.then(function(){
+      if(!st.data&&vault) return unseal(vault).then(function(d){st.data=d;});
+    }).then(function(){
+      S=st;
+      return loadSyncCfg();
+    }).then(function(){
+      document.body.classList.remove("locked");
+      startApp();
+    });
+  }
+
+  function boot(){
+    if(!(window.crypto&&window.crypto.subtle)){show("nocrypto");return;}
+    var localEnv=readEnv();
+    fetch("vault.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(v){
+      vault=(v&&v.ct&&v.salt)?v:null;
+      var ref=localEnv||vault;
+      if(!ref){show("setupform");return;}
+      SALT64=ref.salt; SALT=b64d(ref.salt); ITER=+ref.iter||600000;
+      var sk=null; try{sk=JSON.parse(sessionStorage.getItem(SESSKEY)||"null");}catch(e){}
+      if(sk&&sk.salt===SALT64){
+        return toKey(b64d(sk.key)).then(function(k){KEYOBJ=k;return unseal(ref);}).then(function(){return openApp(localEnv);})
+          .catch(function(){KEYOBJ=null;try{sessionStorage.removeItem(SESSKEY);}catch(e){} show("unlockform");});
+      }
+      show("unlockform");
+    });
+  }
+
+  $("unlockform").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var pw=$("pw").value; if(!pw) return;
+    $("lockmsg").textContent="Unlocking…";
+    var localEnv=readEnv(), ref=localEnv||vault, raw0=null;
+    deriveRaw(pw,SALT,ITER).then(function(raw){
+      raw0=raw;
+      return toKey(raw).then(function(k){KEYOBJ=k;return unseal(ref);});
+    }).then(function(){
+      rememberKey(raw0);
+      $("pw").value="";
+      return openApp(localEnv).catch(function(e){ if(window.console) console.error(e); $("lockmsg").textContent="Something went wrong opening the app."; });
+    },function(){
+      KEYOBJ=null; $("lockmsg").textContent="Wrong password.";
+    });
+  });
+  $("resetdevice").addEventListener("click",function(){
+    if(!confirm("This erases what is saved in this browser: your entries and the sync connection. Anything already synced to your repo stays there. Continue?")) return;
+    try{localStorage.removeItem(KEY);localStorage.removeItem(SYNCKEY);sessionStorage.removeItem(SESSKEY);}catch(e){}
+    location.reload();
+  });
+
+  function downloadText(name,text,type){
+    var blob=new Blob([text],{type:type||"application/octet-stream"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+  }
+  function downloadVault(){
+    return seal((S&&S.data)||{}).then(function(env){downloadText("vault.json",JSON.stringify(env),"application/json");});
+  }
+
+  $("setupform").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var pw=$("pw1").value, pw2=$("pw2").value, f=$("setupfile").files&&$("setupfile").files[0];
+    var msg=$("setupmsg");
+    if(pw.length<12){msg.textContent="Use at least 12 characters. A long passphrase or a generated password is best.";return;}
+    if(pw!==pw2){msg.textContent="The two passwords don't match.";return;}
+    msg.textContent="Creating…";
+    function readFile(){
+      if(!f) return Promise.resolve(null);
+      return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result));};r.onerror=rej;r.readAsText(f);});
+    }
+    readFile().then(function(txt){
+      var data=null;
+      if(txt){var p=JSON.parse(txt); data=p.data||p;}
+      SALT=crypto.getRandomValues(new Uint8Array(16)); SALT64=b64e(SALT); ITER=600000;
+      return deriveRaw(pw,SALT,ITER).then(function(raw){
+        return toKey(raw).then(function(k){
+          KEYOBJ=k; rememberKey(raw);
+          S=freshState(); S.data=data;
+          var old=readEnv("tracker:v1")||null;      /* plaintext state from an earlier version, if any */
+          try{var o=JSON.parse(localStorage.getItem("tracker:v1")||"null");
+            if(o&&typeof o==="object"){["checks","money","notes","audit","tier3","weekstamp","shoots"].forEach(function(k2){if(o[k2]!==undefined&&o[k2]!==null)S[k2]=o[k2];}); if(!S.data&&o.data) S.data=o.data; localStorage.removeItem("tracker:v1");}}catch(e){}
+          S._t=Date.now();
+          return writeLocal();
+        });
+      });
+    }).then(function(ok){
+      if(!ok){msg.textContent="Couldn't save in this browser (storage is blocked).";return;}
+      $("pw1").value=""; $("pw2").value="";
+      show("setupdone");
+    }).catch(function(e){
+      if(window.console) console.error(e);
+      msg.textContent="That file couldn't be read as JSON. Choose your data file, or leave it empty.";
+    });
+  });
+  $("setupdl").addEventListener("click",function(){downloadVault();});
+  $("setupgo").addEventListener("click",function(){
+    KEYOBJ&&openApp(readEnv()).catch(function(){location.reload();});
+  });
+
+  $("lockbtn").addEventListener("click",lockNow);
+  document.addEventListener("visibilitychange",function(){
+    if(document.visibilityState==="hidden"){
+      try{sessionStorage.setItem(HIDKEY,String(Date.now()));}catch(e){}
+    }else{
+      var h=0; try{h=+sessionStorage.getItem(HIDKEY)||0;}catch(e){}
+      if(KEYOBJ&&h&&Date.now()-h>AUTOLOCK_MS) lockNow();
+    }
+  });
+
+  function startApp(){
   /* ---------- data + config (empty until a data file is imported) ---------- */
   var D=S.data||{}, CFG=D.cfg||{}, TXT=CFG.text||{};
   var WEEKLY=D.weekly||[], SEED=D.seed||[], WARM=D.warm||[], BOOKS=D.books||[],
@@ -842,18 +1037,21 @@
     });
   }
 
-  /* ---------- import / export ---------- */
+  /* ---------- import / export / vault / sync ---------- */
   function importRaw(raw){
     var p;
     try{p=JSON.parse(raw);}catch(e){$("importmsg").textContent="That isn't valid JSON. Check you chose the whole file.";return;}
-    if(!p||typeof p!=="object"){$("importmsg").textContent="That isn't a data file.";return;}
+    if(!p||typeof p!=="object"||p.ct){$("importmsg").textContent="That isn't a data file. Vault and sync files are encrypted and can't be imported here.";return;}
     if(p.data) S.data=p.data;
     ["checks","money","notes","audit","tier3","weekstamp","shoots"].forEach(function(k){
       if(p[k]!==undefined&&p[k]!==null) S[k]=p[k];
     });
     save();
     $("importmsg").textContent="Imported. Reloading…";
-    setTimeout(function(){location.reload();},800);
+    setTimeout(function(){location.reload();},900);
+  }
+  function storeSC(){
+    return seal(SC).then(function(env){localStorage.setItem(SYNCKEY,JSON.stringify(env));});
   }
   function bindSync(){
     if(SC){
@@ -865,19 +1063,20 @@
       if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){setMsg("Repo should look like owner/name.");return;}
       if(!token&&!(SC&&SC.token)){setMsg("Paste your token first.");return;}
       SC={repo:repo,path:path,token:token||SC.token};
-      try{localStorage.setItem(SYNCKEY,JSON.stringify(SC));}catch(e){setMsg("Browser storage is blocked, so the connection can't be kept.");return;}
-      $("sync-token").value="";
-      setMsg("Connecting…");
-      fetchRemote().then(function(r){
+      storeSC().then(function(){
+        $("sync-token").value="";
+        setMsg("Connecting…");
+        return fetchRemote();
+      }).then(function(r){
         remoteSha=r.exists?r.sha:null;
-        if(r.exists&&r.state){
+        if(r.exists&&r.env){
           var hasLocal=!!S._t;
           if(!hasLocal||confirm("This repo file already has synced data.\n\nOK = load it here (replaces what is in this browser).\nCancel = keep this browser's data and overwrite the repo file.")){
-            adoptRemote(r.state); return;
+            return adoptRemote(r.env);
           }
         }
-        S._t=Date.now(); writeLocal();
-        return pushRemote().then(function(){setMsg("Connected to "+repo+". Synced.");setSync("saved · synced");});
+        S._t=Date.now();
+        return writeLocal().then(pushState).then(function(){setMsg("Connected to "+repo+". Synced.");setSync("saved · synced");});
       }).catch(function(e){setMsg("Couldn't connect: "+syncErr(e));});
     });
     $("sync-now").addEventListener("click",function(){
@@ -890,7 +1089,6 @@
       SC=null; remoteSha=null; setMsg("Disconnected. This browser keeps its own copy."); setSync("saved on this device");
     });
   }
-
   function bindData(){
     bindSync();
     $("importfile").addEventListener("change",function(ev){
@@ -904,18 +1102,14 @@
       if(!raw){$("importmsg").textContent="Nothing pasted.";return;}
       importRaw(raw);
     });
+    $("dovault").addEventListener("click",function(){downloadVault();});
     $("doexport").addEventListener("click",function(){
       $("exportbox").value=JSON.stringify(S,null,1);
       $("exportbox").select();
     });
     $("dodownload").addEventListener("click",function(){
-      var blob=new Blob([JSON.stringify(S,null,1)],{type:"application/json"});
-      var a=document.createElement("a");
-      a.href=URL.createObjectURL(blob);
       var d=new Date();
-      a.download="tracker-backup-"+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+".json";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+      downloadText("tracker-backup-"+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+".json",JSON.stringify(S,null,1),"application/json");
     });
   }
 
@@ -963,11 +1157,16 @@
   setSync(LS?(S._t?"saved on this device":"nothing saved yet"):"not saved (browser storage is blocked)");
   if(SC) syncNow();
   document.addEventListener("visibilitychange",function(){
-    if(!SC) return;
-    if(document.visibilityState==="hidden"){clearTimeout(pushTimer);}
-    syncNow();
+    if(SC&&KEYOBJ){
+      if(document.visibilityState==="hidden") clearTimeout(pushTimer);
+      syncNow();
+    }
   });
+  }   /* end startApp */
+
+  boot();
 })();
+
 </script>
 </body>
 </html>
