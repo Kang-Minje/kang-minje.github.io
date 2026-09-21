@@ -15,7 +15,9 @@
     --u:21px;              /* one line of 14px at 1.5 */
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   html,body{background:#fff;color:var(--k)}
+  body.sheet-open{overflow:hidden}
   body{
     font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size:14px;
@@ -52,6 +54,7 @@
   .tick:hover::before,.tick:focus-visible::before{background:var(--k);transform:translateY(-10px)}
   .tick.now:hover::before,.tick.now:focus-visible::before{transform:translateY(-21px)}
   .tick:focus-visible{outline:0}
+  .tick{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .scalefoot{display:flex;justify-content:space-between;font-weight:400;color:var(--dim)}
   .scalefoot .cursor{font-weight:400;color:var(--k)}
 
@@ -142,12 +145,25 @@
   .sh input.dt{flex:0 0 16ch;width:16ch;text-align:right;color:var(--dim);border-bottom-color:transparent}
   .sh input:hover,.sh input:focus{border-bottom-color:var(--ghost)}
   .sh input:focus{border-bottom-color:var(--k)}
-  .sh .tog,.sh .del{flex:0 0 auto;font:inherit;font-weight:400;color:var(--ghost);background:none;border:0;padding:0;cursor:pointer}
-  .sh .tog:hover,.sh .del:hover{color:var(--k)}
-  .sh .tog[aria-expanded="true"]{color:var(--k);font-weight:700}
-  .shnote{margin:0 0 calc(var(--u)*.9) calc(var(--u)*.9);display:none}
-  .shnote.open{display:block}
-  .shnote textarea{margin-top:calc(var(--u)*.2)}
+  .sh .del{flex:0 0 auto;font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;cursor:pointer}
+  .sh .del:hover{color:var(--k)}
+  .sh .notebtn{flex:0 0 auto;margin:0}
+
+  /* ---------- notes: a button that opens a full-screen editor ---------- */
+  .notebtn{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.4);cursor:pointer;text-align:left;text-underline-offset:3px;touch-action:manipulation}
+  .notebtn:hover{color:var(--k)}
+  .notebtn.has{color:var(--k)}
+  .notebtn.open{text-decoration:underline}
+  .notebtn:focus-visible{outline:1px solid var(--k);outline-offset:3px}
+
+  .sheet{position:fixed;left:0;right:0;top:0;height:100%;z-index:50;background:#fff;display:flex;flex-direction:column;
+    padding:calc(var(--u)*1.1 + env(safe-area-inset-top,0px)) calc(var(--u)*1.2 + env(safe-area-inset-right,0px)) calc(var(--u)*1.1 + env(safe-area-inset-bottom,0px)) calc(var(--u)*1.2 + env(safe-area-inset-left,0px))}
+  .sheet[hidden]{display:none}
+  .sheet-in{flex:1 1 auto;min-height:0;width:100%;max-width:760px;margin:0 auto;display:flex;flex-direction:column}
+  .sheet-bar{display:flex;justify-content:space-between;align-items:baseline;gap:var(--u);margin-bottom:calc(var(--u)*.9)}
+  .sheet-bar b{font-weight:700;min-width:0;overflow-wrap:anywhere}
+  .sheet-bar .btn{flex:0 0 auto;padding:8px 0 8px 12px;color:var(--k)}
+  .sheet textarea{flex:1 1 auto;min-height:0;margin:0;width:100%;resize:none;border:0;padding:0;line-height:1.6;overflow:auto}
   .add{font:inherit;font-weight:400;color:var(--dim);background:none;border:0;padding:0;margin-top:calc(var(--u)*.9);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
   .add:hover{color:var(--k)}
 
@@ -187,14 +203,46 @@
   .vh{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;opacity:0}
 
   @media (max-width:620px){
-    body{padding:calc(var(--u)*1.2 + env(safe-area-inset-top,0px)) calc(var(--u)*.8) calc(var(--u)*5 + env(safe-area-inset-bottom,0px))}
-    .row{flex-wrap:wrap;gap:calc(var(--u)*.3)}
-    .row .k{flex:0 0 100%}
-    .row .measure{order:3}
-    nav{gap:calc(var(--u)*.3) calc(var(--u)*.9)}
-    .grid{grid-template-columns:7ch 11ch 1fr}
-    .ent .side{display:none}
-    .sh input.dt{flex-basis:12ch;width:12ch}
+    :root{--u:24px}
+    body{font-size:16px;padding:calc(var(--u)*1.1 + env(safe-area-inset-top,0px)) calc(var(--u)*.7 + env(safe-area-inset-right,0px)) calc(var(--u)*4 + env(safe-area-inset-bottom,0px)) calc(var(--u)*.7 + env(safe-area-inset-left,0px))}
+    .group h2{font-size:16px}
+    .lede,.group .sub,.note{max-width:none}
+    .mast{gap:calc(var(--u)*.3)}
+
+    /* week dots: a strip you can swipe, with a 24px-wide, 44px-tall target per week */
+    .scale{height:44px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .scale::-webkit-scrollbar{display:none}
+    .tick{flex:0 0 24px;height:44px}
+
+    .readout .row{flex-wrap:wrap;gap:0 calc(var(--u)*.6)}
+    .row .k{flex:1 1 auto}
+    .row .v{order:2}
+    .row .measure{order:3;flex:1 0 100%;top:-2px;margin-top:calc(var(--u)*.15)}
+
+    nav{gap:0 calc(var(--u)*.9)}
+    nav button{padding:calc(var(--u)*.4) 0}
+    .btn,.add{padding:calc(var(--u)*.4) calc(var(--u)*.15)}
+    .filters button{padding:calc(var(--u)*.35) 0}
+    .fields{gap:calc(var(--u)*.3) calc(var(--u)*.7)}
+    input[type=number],input[type=text],input[type=password],select{padding:calc(var(--u)*.25) 0}
+    select{max-width:100%}
+    input[style]{max-width:100%}
+
+    .item,.ent{padding:calc(var(--u)*.42) 0}
+    .mark,.ent .mark{flex-basis:12px;width:12px;height:12px;top:calc(var(--u)*.4)}
+
+    .grid{grid-template-columns:7ch 10ch 1fr}
+    .calc{grid-template-columns:1fr auto}
+
+    .ent{flex-wrap:wrap}
+    .ent .main{flex:1 1 calc(100% - 12px - var(--u)*.6)}
+    .ent .side{flex:1 0 100%;text-align:left;white-space:normal;padding-left:calc(12px + var(--u)*.6)}
+
+    .sh{flex-wrap:wrap;row-gap:0;align-items:center}
+    .sh .mark{top:0}
+    .sh input.nm{flex:1 1 calc(100% - 12px - var(--u)*.6);padding:calc(var(--u)*.3) 0}
+    .sh input.dt{flex:1 1 0;width:0;min-width:7ch;text-align:left;margin-left:calc(12px + var(--u)*.6);padding:calc(var(--u)*.3) 0}
+    .sh .notebtn,.sh .del{padding:calc(var(--u)*.4) calc(var(--u)*.3)}
   }
   @media (prefers-reduced-motion:no-preference){
     .tick::before{transition:transform .14s ease,background .14s ease}
@@ -268,7 +316,7 @@
     <div class="group">
       <h2>This week's notes</h2>
       <p class="sub" data-t="week_sub">Anything worth writing down this week.</p>
-      <textarea id="weeknote" placeholder="—"></textarea>
+      <button class="notebtn" id="weeknote" type="button">Notes</button>
     </div>
   </section>
 
@@ -330,7 +378,7 @@
       <div class="fields">
         <label>Secured</label><input type="number" id="tier3" min="0" max="99" placeholder="0"><label id="t3max">/ —</label>
       </div>
-      <textarea id="tier3note" placeholder="Notes"></textarea>
+      <button class="notebtn" id="tier3note" type="button" data-ph="Notes">Notes</button>
     </div>
   </section>
 
@@ -344,7 +392,7 @@
     </div>
     <div class="group">
       <h2>Notes</h2>
-      <textarea id="dirnote" placeholder="Contact log · replies"></textarea>
+      <button class="notebtn" id="dirnote" type="button" data-ph="Contact log · replies">Notes</button>
     </div>
   </section>
 
@@ -426,6 +474,13 @@
     </div>
   </section>
 
+</div>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet-in">
+    <div class="sheet-bar"><b id="sheet-title">Notes</b><button class="btn" type="button" id="sheet-done">Done</button></div>
+    <textarea id="sheet-text" aria-label="Note text"></textarea>
+  </div>
 </div>
 
 <script>
@@ -723,7 +778,7 @@
       if(TXT[k]!==undefined) e.textContent=TXT[k];
     });
     if(TXT.mast_title) document.title=TXT.mast_title;
-    if(TXT.tier3_ph) $("tier3note").placeholder=TXT.tier3_ph;
+    if(TXT.tier3_ph) $("tier3note").dataset.ph=TXT.tier3_ph;
     if(T3MAX) $("t3max").textContent="/ "+T3MAX;
   }
 
@@ -770,10 +825,11 @@
     $(pid).classList.add("on");
   }
 
+  var scaleCentered=false;
   function scale(){
     var total=Math.max(1,Math.round((DEPART-START)/6048e5)),
         done=Math.max(0,Math.min(total,Math.round((Date.now()-START)/6048e5))),
-        host=$("scale");
+        host=$("scale"), sl=host.scrollLeft;
     host.innerHTML="";
     for(var i=0;i<total;i++){
       (function(i){
@@ -795,6 +851,11 @@
         });
         host.appendChild(t);
       })(i);
+    }
+    var nowEl=host.querySelector(".tick.now");
+    if(host.scrollWidth>host.clientWidth){
+      if(!scaleCentered&&nowEl){host.scrollLeft=nowEl.offsetLeft-host.clientWidth/2+nowEl.offsetWidth/2;scaleCentered=true;}
+      else host.scrollLeft=sl;
     }
     host.onmouseleave=function(){$("cursor").textContent=base();};
     $("mastweek").textContent="week "+(done+1)+" / "+total;
@@ -865,10 +926,53 @@
   }
   function set(k,f,t){$("b-"+k).style.width=Math.max(0,Math.min(1,f||0))*100+"%";$("v-"+k).textContent=t;}
 
-  function bindText(id,key){
-    var e=$(id); if(!e)return;
-    e.value=S.notes[key]||"";
-    e.addEventListener("input",function(){S.notes[key]=e.value;save();});
+  /* ---------- notes: every note opens a full-screen editor ---------- */
+  var noteBtns=[], sheetFor=null;
+  function hasText(b){var v=b._get?b._get():""; return !!(v&&String(v).trim().length);}
+  function paintNote(b){
+    b.classList.toggle("has",hasText(b));
+    b.classList.toggle("open",sheetFor===b);
+    b.setAttribute("aria-expanded",sheetFor===b?"true":"false");
+  }
+  function refreshNotes(){
+    noteBtns=noteBtns.filter(function(b){return document.body.contains(b);});
+    noteBtns.forEach(paintNote);
+  }
+  function fitSheet(){
+    var sh=$("sheet"), vv=window.visualViewport;
+    if(vv&&!sh.hidden){sh.style.height=vv.height+"px"; sh.style.top=vv.offsetTop+"px";}
+  }
+  function openSheet(btn,o){
+    var sh=$("sheet"), ta=$("sheet-text");
+    sheetFor=btn; refreshNotes();
+    $("sheet-title").textContent=o.title||"Notes";
+    ta.value=o.get()||""; ta.placeholder=o.placeholder||"";
+    ta.oninput=function(){o.set(ta.value); save(); paintNote(btn);};
+    sh.hidden=false; document.body.classList.add("sheet-open");
+    fitSheet(); ta.focus();
+  }
+  function closeSheet(){
+    var sh=$("sheet"); if(sh.hidden) return;
+    $("sheet-text").oninput=null; sh.hidden=true; document.body.classList.remove("sheet-open");
+    var b=sheetFor; sheetFor=null; refreshNotes();
+    if(b&&document.body.contains(b)&&b.focus) b.focus({preventScroll:true});
+  }
+  function attachNote(btn,o){
+    btn._get=o.get; noteBtns.push(btn);
+    btn.addEventListener("click",function(){openSheet(btn,o);});
+    paintNote(btn);
+  }
+  function bindNote(id,key,title){
+    var b=$(id); if(!b) return;
+    attachNote(b,{title:title,placeholder:b.dataset.ph||"",
+      get:function(){return S.notes[key]||"";},
+      set:function(v){S.notes[key]=v;}});
+  }
+  $("sheet-done").addEventListener("click",closeSheet);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape") closeSheet();});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize",fitSheet);
+    window.visualViewport.addEventListener("scroll",fitSheet);
   }
 
   function buildAudit(){
@@ -883,23 +987,20 @@
     }
     AUDITQ.forEach(function(q){
       var g=el("div","q"), b=el("b"); b.textContent=q[1];
-      var ta=document.createElement("textarea"); ta.dataset.q=q[0]; ta.placeholder="—";
-      ta.addEventListener("input",function(){
-        var m=sel.value; S.audit[m]=S.audit[m]||{}; S.audit[m][q[0]]=ta.value; save();
-        $("auditstamp").textContent="Saved";
-      });
-      g.appendChild(b); g.appendChild(ta); host.appendChild(g);
+      var nb=document.createElement("button"); nb.type="button"; nb.className="notebtn"; nb.textContent="Answer";
+      attachNote(nb,{title:q[1],placeholder:"—",
+        get:function(){var a=S.audit[sel.value]||{};return a[q[0]]||"";},
+        set:function(v){var m=sel.value; S.audit[m]=S.audit[m]||{}; S.audit[m][q[0]]=v; $("auditstamp").textContent="Saved";}});
+      g.appendChild(b); g.appendChild(nb); host.appendChild(g);
     });
     function fill(){
-      var a=S.audit[sel.value]||{};
-      host.querySelectorAll("textarea").forEach(function(t){t.value=a[t.dataset.q]||"";});
+      refreshNotes();
       $("auditstamp").textContent="";
     }
     sel.addEventListener("change",fill); fill();
   }
 
   /* ---------- shoots ---------- */
-  var openNote={};
   function seedShoots(){
     if(!Array.isArray(S.shoots)) S.shoots=[];
     var have={};
@@ -939,9 +1040,11 @@
         dt.type="text"; dt.className="dt"; dt.value=s.date; dt.placeholder="YYYY.MM.DD";
         dt.addEventListener("input",function(){s.date=dt.value;save();});
 
-        var tog=document.createElement("button");
-        tog.className="tog"; tog.type="button";
-        tog.textContent="Notes"; tog.setAttribute("aria-expanded",openNote[s.id]?"true":"false");
+        var nb=document.createElement("button");
+        nb.className="notebtn"; nb.type="button"; nb.textContent="Notes";
+        attachNote(nb,{title:s.name||"Shoot notes",placeholder:TXT.shoot_ph||"Notes",
+          get:function(){return s.note||"";},
+          set:function(v){s.note=v;}});
 
         var del=document.createElement("button");
         del.className="del"; del.type="button"; del.textContent="Delete";
@@ -951,22 +1054,9 @@
           save(); meter(); renderShoots();
         });
 
-        d.appendChild(m); d.appendChild(nm); d.appendChild(dt); d.appendChild(tog); d.appendChild(del);
+        d.appendChild(m); d.appendChild(nm); d.appendChild(dt); d.appendChild(nb); d.appendChild(del);
         host.appendChild(d);
 
-        var wrap=el("div","shnote"+(openNote[s.id]?" open":""));
-        var ta=document.createElement("textarea");
-        ta.value=s.note||"";
-        ta.placeholder=TXT.shoot_ph||"Notes";
-        ta.addEventListener("input",function(){s.note=ta.value;save();});
-        wrap.appendChild(ta); host.appendChild(wrap);
-
-        tog.addEventListener("click",function(){
-          openNote[s.id]=!openNote[s.id];
-          wrap.classList.toggle("open",!!openNote[s.id]);
-          tog.setAttribute("aria-expanded",openNote[s.id]?"true":"false");
-          if(openNote[s.id])ta.focus();
-        });
       });
     });
   }
@@ -1139,15 +1229,15 @@
   $("add-done").addEventListener("click",function(){addShoot(true);});
   moneyGrid(); moneyCalc(); meter();
   buildFilters(); renderDir();
-  bindText("weeknote","week"); bindText("tier3note","tier3");
-  bindText("dirnote","dir");
+  bindNote("weeknote","week","This week's notes"); bindNote("tier3note","tier3","Notes");
+  bindNote("dirnote","dir","Directory notes");
   bindData();
   var t3=$("tier3"); t3.value=S.tier3||"";
   t3.addEventListener("input",function(){S.tier3=t3.value;save();});
   if(S.weekstamp)$("weekstamp").textContent="Last reset "+S.weekstamp;
   $("resetweek").addEventListener("click",function(){
     WEEKLY.forEach(function(_,i){S.checks["weekly:"+i]=false;});
-    S.notes.week=""; $("weeknote").value="";
+    S.notes.week=""; refreshNotes();
     var d=new Date();
     S.weekstamp=d.getFullYear()+"."+pad(d.getMonth()+1)+"."+pad(d.getDate());
     $("weekstamp").textContent="Last reset "+S.weekstamp;
