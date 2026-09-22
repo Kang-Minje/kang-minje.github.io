@@ -760,9 +760,7 @@
     });
   }
 
-  var SKIP_LOCK_FOR_PREVIEW=true; /* TEMP: 확인용으로 비밀번호 화면을 건너뜀. 되돌리려면 이 줄과 아래 boot() 안의 if(SKIP_LOCK_FOR_PREVIEW){...} 블록을 지우면 됨 */
   function boot(){
-    if(SKIP_LOCK_FOR_PREVIEW){ S=freshState(); document.body.classList.remove("locked"); startApp(); return; }
     if(!(window.crypto&&window.crypto.subtle)){show("nocrypto");return;}
     var localEnv=readEnv();
     fetch("vault.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(v){
