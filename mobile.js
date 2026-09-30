@@ -105,7 +105,7 @@
             <p class="name">Kang Minje</p>
             <div class="spacer"></div>
             <p>Photographer</p>
-            <p>matter<br>flesh<br>breath</p>
+            <p>trace<br>hollow<br>faint breath</p>
             <div class="spacer"></div>
             <p>Seoul, Korea</p>
             <div class="spacer"></div>
