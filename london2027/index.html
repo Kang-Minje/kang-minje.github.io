@@ -153,6 +153,7 @@
   .calc .val{font-weight:700;text-align:right}
 
   .note{font-weight:400;color:var(--dim);max-width:58ch;margin-top:calc(var(--u)*1)}
+  .plantext p{white-space:pre-wrap;max-width:62ch;margin:0 0 calc(var(--u)*.8)}
   .stamp{font-weight:400;color:var(--dim)}
 
   /* ---------- shoots ---------- */
@@ -525,6 +526,11 @@
     </div>
   </section>
 
+  <section class="panel" id="p-plan">
+    <p class="lede" data-t="plan_lede">Statement, pitch and plans.</p>
+    <div id="plan"></div>
+  </section>
+
   <section class="panel" id="p-data">
     <p class="lede">Everything here is encrypted with your password before it is saved on this device or synced anywhere. The page itself holds no personal content. It locks again after a few minutes in the background.</p>
     <div class="group">
@@ -865,7 +871,7 @@
   var D=S.data||{}, CFG=D.cfg||{}, TXT=CFG.text||{};
   var WEEKLY=D.weekly||[], SEED=D.seed||[], WARM=D.warm||[], BOOKS=D.books||[],
       APPLY=D.apply||[], VERIFY=D.verify||[], ADMIN=D.admin||[], FIRST30=D.first30||[],
-      AUDITQ=D.auditq||[], DIR=D.dir||[];
+      AUDITQ=D.auditq||[], DIR=D.dir||[], PLAN=D.plan||[];
   var GROUPS=CFG.dirGroups||[["all","All"]], GNAME=CFG.dirNames||{};
   var filter="all";
 
@@ -877,7 +883,7 @@
       FX=+CFG.fx||1900, COST=+CFG.costGBP||0, DEP_M=CFG.depositMonth||"", T3MAX=+CFG.tier3Target||0;
 
   var NAV=[["p-week","This week"],["p-money","Savings"],["p-shoot","Shoots"],
-           ["p-net","Network"],["p-dir","Directory"],["p-apply","Apply"],["p-dep","Checklist"],["p-audit","Monthly check"],["p-data","Data"]];
+           ["p-net","Network"],["p-dir","Directory"],["p-apply","Apply"],["p-dep","Checklist"],["p-audit","Monthly check"],["p-plan","Plan"],["p-data","Data"]];
 
   function applyText(){
     document.querySelectorAll("[data-t]").forEach(function(e){
@@ -1149,9 +1155,9 @@
   function seedShoots(){
     if(!Array.isArray(S.shoots)) S.shoots=[];
     var have={};
-    S.shoots.forEach(function(s){have[s.name]=true;});
+    S.shoots.forEach(function(s){have[s.name]=true; if(s.id) have["#"+s.id]=true;});
     SEED.forEach(function(s,i){
-      if(have[s[0]]) return;
+      if(have[s[0]]||have["#seed"+i]) return;
       S.shoots.push({id:"seed"+i,name:s[0],date:s[1],done:!!s[2],note:s[3]||""});
     });
   }
@@ -1244,6 +1250,17 @@
     if(!DIR.length) $("search").style.display="none";
   }
 
+  function renderPlan(){
+    var host=$("plan"); host.innerHTML="";
+    if(!PLAN.length){var e0=el("div","empty"); e0.textContent="Empty. Import your data file in the Data tab."; host.appendChild(e0); return;}
+    PLAN.forEach(function(r){
+      var g=el("div","group"), h=el("h2"); h.textContent=r[0]; g.appendChild(h);
+      if(r[1]){var sb=el("p","sub"); sb.textContent=r[1]; g.appendChild(sb);}
+      var b=el("div","body plantext");
+      String(r[2]||"").split(/\n\n+/).forEach(function(par){var pp=document.createElement("p"); pp.textContent=par; b.appendChild(pp);});
+      g.appendChild(b); host.appendChild(g);
+    });
+  }
   function renderDir(){
     var host=$("dir"), q=$("search").value.trim().toLowerCase();
     host.innerHTML="";
@@ -1415,7 +1432,7 @@
   $("add-todo").addEventListener("click",function(){addShoot(false);});
   $("add-done").addEventListener("click",function(){addShoot(true);});
   moneyGrid(); moneyCalc(); meter();
-  buildFilters(); renderDir();
+  buildFilters(); renderDir(); renderPlan();
   bindNote("weeknote","week","This week's notes"); bindNote("tier3note","tier3","Notes");
   bindNote("dirnote","dir","Directory notes");
   bindData();
