@@ -638,9 +638,11 @@ document.body.classList.add('spawn-cursor');
 setTimeout(() => document.body.classList.remove('spawn-cursor'), 200);
 
 /* ===== 보안: 우클릭 및 드래그 금지 (이미지 보호) ===== */
+/* TEMP: 우클릭 임시 허용 — 정리 끝나면 주석 해제
 document.addEventListener("contextmenu", (e) => {
     e.preventDefault();
 }, false);
+*/
 
 document.addEventListener("dragstart", (e) => {
     if (e.target.nodeName === "IMG") {
