@@ -1018,13 +1018,16 @@ function makeBackArrow() {
 
 /* ===== About 키워드 hover 이미지 =====
    About 본문의 키워드(.d-word[data-img])에 올리면 화면 중앙에 해당 사진을 띄움.
-   data-full이 있는 키워드는 브라우저 전체 크기로. 글자는 항상 사진 위. */
+   data-full이 있는 키워드(가로 사진)는 브라우저 전체 크기로. 글자는 항상 사진 위.
+   애니메이션 없이 바로 교체, 사진은 다음 사진이 뜨거나 About이 닫힐 때까지 유지. */
 (function () {
     const box = document.getElementById("word-image");
     const about = document.querySelector(".d-about");
     if (!box || !about) return;
     const img = box.querySelector("img");
     let preloaded = false;
+    let shownKey = null;
+    let token = 0;
 
     const srcFor = (key) => {
         const m = key.match(/^(.+)-(\d+)$/);
@@ -1039,13 +1042,36 @@ function makeBackArrow() {
             .forEach((key) => { new Image().src = srcFor(key); });
     }
 
+    // 다음 사진이 준비(디코딩)된 뒤에 바꿔 끼움 → 사진 사이에 흰 화면이 끼지 않음.
+    // 커서를 떼도 사진은 남아 있고, 다음 키워드에서 바로 교체됨.
     function show(word) {
-        img.src = srcFor(word.dataset.img);
-        box.classList.toggle("full", word.hasAttribute("data-full"));
-        box.classList.add("show");
+        const key = word.dataset.img;
+        if (key === shownKey) return;
+        const t = ++token;
+        const next = new Image();
+        next.src = srcFor(key);
+        const apply = () => {
+            if (t !== token) return; // 그 사이 다른 키워드로 옮겨갔으면 무시
+            img.src = next.src;
+            // 브라우저 전체 크기는 가로 사진만 (세로는 너무 잘림)
+            box.classList.toggle("full", word.hasAttribute("data-full") && next.naturalWidth > next.naturalHeight);
+            box.classList.add("show");
+            shownKey = key;
+        };
+        // 로드 → 디코딩까지 기다린 뒤 교체 (디코딩이 지연되는 환경 대비 최대 150ms만 대기)
+        const loaded = next.complete ? Promise.resolve() : new Promise((r) => { next.onload = next.onerror = r; });
+        loaded
+            .then(() => Promise.race([
+                next.decode ? next.decode().catch(() => {}) : null,
+                new Promise((r) => setTimeout(r, 150))
+            ]))
+            .then(apply);
     }
 
+    // About 텍스트가 닫힐 때만 사진을 내림
     function hide() {
+        token++;
+        shownKey = null;
         box.classList.remove("show");
     }
 
@@ -1054,10 +1080,6 @@ function makeBackArrow() {
         if (e.pointerType === "touch") return;
         const word = e.target.closest(".d-word");
         if (word) show(word);
-    });
-    about.addEventListener("pointerout", (e) => {
-        const word = e.target.closest(".d-word");
-        if (word && !word.contains(e.relatedTarget)) hide();
     });
     // About 패널이 닫히면(또는 Works가 열려 가려지면) 사진도 함께 닫음
     const aboutItem = about.closest(".d-nav-item");

@@ -1359,7 +1359,8 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     }
 }
 
-/* ===== About 키워드 hover 이미지 (script.js) ===== */
+/* ===== About 키워드 hover 이미지 (script.js) =====
+   애니메이션 없이 바로 교체. 다음 사진이 뜰 때까지 이전 사진 유지 */
 #word-image {
     position: fixed;
     inset: 0;
@@ -1369,12 +1370,11 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     z-index: 999;
     /* 커서 이미지·풀스크린(998) 위, 텍스트(1100) 아래 → 글자는 항상 사진 위 */
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s ease;
+    visibility: hidden;
 }
 
 #word-image.show {
-    opacity: 1;
+    visibility: visible;
 }
 
 #word-image img {
@@ -1385,7 +1385,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     object-fit: contain;
 }
 
-/* 간간히: 브라우저 전체 크기 */
+/* 간간히: 브라우저 전체 크기 (가로 사진만) */
 #word-image.full img {
     width: 100vw;
     height: 100vh;
