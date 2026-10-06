@@ -116,89 +116,105 @@
     </div>
   </div>
 
-  <footer>
-    <div class="footer-left">
-      <div class="dropup">
-        <a href="#" id="footer-home">Kang Minje</a>
-        <div class="dropup-content">
-          <a href="?page=all" class="menu-item">
-            <span class="title">Index</span>
-          </a>
+  <!-- 좌측 상단 정보 (모바일 m-info와 동일 레이아웃) — 항상 최상위 레이어 -->
+  <div class="d-info">
+    <p class="name"><a href="./" id="footer-home">Kang Minje</a></p>
+    <div class="spacer"></div>
+    <p>Photographer</p>
+    <p>flesh<br>hollow<br>breath</p>
+    <div class="spacer"></div>
+    <p>Seoul, Korea</p>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <a href="CV+Portfolio/KangMinje_CVandPortfolio.zip" download="KangMinje_CVandPortfolio.zip" class="d-link">→ portfolio / cv</a>
+    <div class="spacer"></div>
+    <p><a href="mailto:info@kangminje.com?subject=Inquiry%20%E2%80%94%20KangMinje%20Studio" class="d-link">info@kangminje.com</a><br>+82 10 9323 9432</p>
+  </div>
 
-          <div class="menu-parent">
-            <a href="#" class="menu-item">
-              <span class="title">Series</span>
-              <span class="arrow">›</span>
-            </a>
-            <div class="submenu">
-              <div class="submenu-category">photography</div>
-              <a href="?page=moving_sphere" class="menu-item">
-                <span class="title">Moving Sphere</span>
-                <span class="year">2025</span>
-              </a>
-              <a class="menu-item coming-soon">
-                <span class="title">blue spring</span>
-                <span class="year">2026</span>
-              </a>
-              <a href="?page=20" class="menu-item">
-                <span class="title">20</span>
-                <span class="year">2026</span>
-              </a>
-              <a href="?page=lips" class="menu-item">
-                <span class="title">lips</span>
-                <span class="year">2021-2026</span>
-              </a>
-              <a href="?page=photoshoots" class="menu-item">
-                <span class="title">photoshoots</span>
-              </a>
-              <div class="submenu-category">other media</div>
-              <a class="menu-item coming-soon">
-                <span class="title">dots</span>
-                <span class="year">2026</span>
-              </a>
-              <a class="menu-item coming-soon">
-                <span class="title">haircut</span>
-                <span class="year">2026</span>
-              </a>
-            </div>
+  <!-- 우측 오버레이 메뉴: Works / About — 상단은 좌상단 텍스트, 좌측은 Threshold와 정렬 -->
+  <nav class="d-nav">
+    <div class="d-nav-item d-nav-works">
+      <a href="#" class="d-nav-trigger" onclick="return false;">Works</a>
+      <div class="d-panel">
+        <div class="d-works">
+          <div class="d-group">
+            <a href="?page=all" class="d-row"><span>(index)</span></a>
           </div>
-
-          <div class="menu-parent">
-            <a href="#" class="menu-item">
-              <span class="title">Editorial</span>
-              <span class="arrow">›</span>
-            </a>
-            <div class="submenu">
-              <a href="?page=editorial_lemile" class="menu-item-editorial">
-                <div class="editorial-info">
-                  <span class="mag-label">Le Mile</span>
-                  <span class="title-label">When Four Players Collapse Into One Sound</span>
-                </div>
-                <span class="year">2026</span>
-              </a>
-              <a href="?page=heigs" class="menu-item-editorial">
-                <div class="editorial-info">
-                  <span class="mag-label">Le Mile</span>
-                  <span class="title-label">Beurre Was Here Before You Noticed</span>
-                </div>
-                <span class="year">2025</span>
-              </a>
-            </div>
+          <div class="d-group">
+            <a href="?page=moving_sphere" class="d-row"><span>Moving Sphere</span><span>2025 -</span></a>
+            <a href="?page=sundimming" class="d-row"><span>SunDimming</span><span>2025 -</span></a>
+            <a href="?page=lips" class="d-row"><span>Lips</span><span>2021 - 2026</span></a>
+            <a href="?page=faces" class="d-row"><span>Faces</span><span>2021 -</span></a>
+            <a href="?page=dots" class="d-row"><span>Dots</span><span>2025 -</span></a>
+            <a class="d-row coming-soon"><span>Dent</span><span>2025 -</span></a>
+          </div>
+          <div class="d-group">
+            <a href="?page=aria" class="d-row"><span>Aria</span><span>2025</span></a>
+            <a class="d-row coming-soon"><span>Rose</span><span>2024</span></a>
+            <a href="?page=hwanhee_2024" class="d-row"><span>Hwanhee</span><span>2024</span></a>
+            <a href="?page=hwanhee_2026" class="d-row"><span>Hwanhee</span><span>2026</span></a>
+            <a href="?page=xinseha" class="d-row"><span>Seha</span><span>2023</span></a>
+            <a href="?page=parkdongsun" class="d-row"><span>Dongsun</span><span>2026</span></a>
+            <a href="?page=ann" class="d-row"><span>Ann</span><span>2026</span></a>
+            <a href="?page=ines" class="d-row"><span>Ines</span><span>2026</span></a>
+            <a href="?page=chowoohyun" class="d-row"><span>Woohyun</span><span>2026</span></a>
+            <a class="d-row coming-soon"><span>Milo&amp;Zaya</span><span>2026</span></a>
+            <a class="d-row coming-soon"><span>Sihun</span><span>2026</span></a>
+            <a class="d-row coming-soon"><span>Leo</span><span>2026</span></a>
+          </div>
+          <div class="d-group d-group-wide">
+            <a href="?page=ripple_effects_2" class="d-row"><span>Ripple Effects 2</span><span>2026</span><span>Just Music</span></a>
+            <a href="?page=editorial_lemile" class="d-row"><span>When Four Players Collapse Into One Sound</span><span>2026</span><span>Le Mile</span></a>
+            <a href="?page=heigs" class="d-row"><span>Beurre Was Here Before You Noticed</span><span>2025</span><span>Le Mile</span></a>
+          </div>
+          <div class="d-group d-group-wide">
+            <a class="d-row coming-soon"><span>HAIRCUTS; VARIOUS FORMS</span><span>2026</span><span>fluidpaper</span></a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="footer-center">
-      <a href="?page=walk">walk</a>
-      <!-- <a href="?page=weight">weight</a> -->
-      <a href="?page=ra4">ra4</a>
-      <a href="?page=24">24</a>
-      <a href="?page=faces">faces</a>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href="about.html">about</a>
+    <div class="d-nav-item d-nav-about">
+      <a href="#" class="d-nav-trigger" onclick="return false;">About</a>
+      <div class="d-panel">
+        <div class="d-about">
+          <p>(EN)</p>
+          <p>Kang Minje moves the traces of suppressed emotion into matter.
+            The emotion he works with is the hollowness of a youth
+            pressed down within the system.
+            It recalls han, the Korean sentiment of an earlier age.</p>
+          <p>Instead of slick digital data, he treats the photograph as an object
+            with mass and flesh, folding the print and intervening by hand
+            in extreme push development and printing.</p>
+          <p class="d-about-last">Because he believes the fact that it was there still carries weight,
+            he calls himself a photographer in the AI imaging era.
+            His work asks again after the place of the body,
+            lost in technological acceleration.</p>
+          <p>(KR)</p>
+          <p>강민제는 억눌린 감정의 자국을 물질로 옮긴다.
+            그가 다루는 정서는 제도 안에서 눌려 생긴 젊음의 공허다.
+            오래전 한국의 한이라는 정서와 닮아 있다.</p>
+          <p>매끄러운 디지털 데이터 대신, 그는 사진을 무게와 피부를 지닌 사물로 다루며
+            인화지를 접고 극단적인 증감 현상과 인화 과정에 직접 개입한다.</p>
+          <p>무언가 실제로 그 자리에 있었다는 사실의 무게를 믿기에,
+            그는 AI 이미징 시대에도 스스로를 사진가로 칭한다.
+            그의 작업은 기술적 가속 속에서 상실된 몸의 자리를 다시 묻는다.</p>
+          <div class="d-other-webs">
+            <p>(other webs)</p>
+            <a class="other-link other-link-fragile" href="https://kangminje.com/fragilecalendar">fragilecalendar</a><br>
+            <a class="other-link other-link-jagook" href="https://kangminje.com/jagooknetwork">jagooknetwork</a><br>
+            <a class="other-link other-link-fluidpaper" href="https://fluidpaper.com">
+              <span class="fluidpaper-text">fluidpaper</span>
+              <img src="logo_fluidpaper.png" alt="fluidpaper" aria-hidden="true">
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+  </nav>
 
+  <footer>
     <div class="footer-controls">
       Threshold:
       <button id="decrease-threshold">-</button>
@@ -254,6 +270,7 @@
   <script src="image-titles.js"></script>
   <script src="script.js"></script>
   <script src="mobile.js"></script>
+  <script src="contrast.js"></script>
 </body>
 
 </html>

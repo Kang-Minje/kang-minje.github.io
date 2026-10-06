@@ -44,8 +44,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 60px);
-    /* footer 공간 */
+    height: 100%;
+    /* footer는 투명 오버레이이므로 전체 높이 사용 */
     overflow: hidden;
 }
 
@@ -115,12 +115,17 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: transparent;
     padding: 0 20px;
     font-size: 14px;
     box-sizing: border-box;
-    z-index: 999;
-    /* 이미지 위에 */
+    z-index: 1100;
+    /* 이미지 위에 (텍스트는 항상 최상위) */
+    pointer-events: none;
+}
+
+footer > * {
+    pointer-events: auto;
 }
 
 footer a {
@@ -592,9 +597,8 @@ img {
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 40px);
-    /* footer 위까지만 */
-    bottom: 40px;
+    height: 100%;
+    /* 푸터가 투명해졌으므로 화면 전체를 덮어 뒤 이미지가 비치지 않게 함 */
     background: white;
     justify-content: center;
     align-items: center;
@@ -1039,5 +1043,256 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
         grid-template-columns: repeat(2, 1fr);
         gap: 20px 16px;
         padding: 100px 20px 60px;
+    }
+}
+
+
+/* ===== Desktop: 좌상단 정보 + 우측 Works/About 오버레이 ===== */
+:root {
+    --d-top: 48px;
+    /* 좌상단 텍스트 / Works·About 상한선 */
+    --d-left: 64px;
+    /* 좌상단 텍스트 좌측 여백 */
+    --d-line: 16px;
+    /* 10pt 기준 한 줄 높이 */
+    --d-col: min(66.8vw, calc(100vw - 800px));
+    /* Works = Threshold 좌측 정렬선 */
+    --d-c2: 336px;
+    /* 연도 / About 컬럼 */
+    --d-c3: 509px;
+    /* 매체(Le Mile 등) 컬럼 */
+}
+
+/* ===== 글자색 자동 전환 (contrast.js) =====
+   텍스트는 단어 단위 .lw 로 쪼개지고, 단어 아래 배경이 어두우면 .on-dark 가 붙음.
+   --ink: 글자색(흰 배경=검정 / 어두운 배경=흰색), --ink-a: 투명도(회색 상태 = --gray-a).
+   밑줄/취소선도 단어마다 currentColor로 그려서 색이 함께 바뀜. */
+.d-info,
+.d-nav,
+footer {
+    --ink: 17 17 17;
+}
+
+.lw {
+    color: rgb(var(--ink) / var(--ink-a, 1));
+}
+
+.lw.on-dark {
+    --ink: 255 255 255;
+}
+
+/* 회색 상태(비활성 메뉴, 준비 중 항목): 흰 배경에선 옅은 회색, 어두운 배경에선 흰색에 가깝게 */
+.lw {
+    --gray-a: 0.28;
+}
+
+.lw.on-dark {
+    --gray-a: 0.75;
+}
+
+.d-info,
+.d-nav {
+    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 10pt;
+    line-height: var(--d-line);
+    color: #111;
+    z-index: 1100;
+    /* 커서 이미지(2), 크레딧 박스(1000), 풀스크린(998)보다 항상 위 */
+    pointer-events: none;
+}
+
+.d-info a,
+.d-nav a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 좌상단 정보 — 모바일 .m-info와 동일한 간격 구조 */
+.d-info {
+    position: fixed;
+    top: var(--d-top);
+    left: var(--d-left);
+}
+
+.d-info p {
+    margin: 0 0 10px 0;
+}
+
+.d-info .spacer {
+    height: 14px;
+}
+
+.d-info a {
+    pointer-events: auto;
+}
+
+.d-info .d-link {
+    display: inline-block;
+}
+
+/* hover 밑줄: 1px solid, 단어별 색 */
+.d-info a:hover .lw,
+.d-nav a[href]:not(.other-link):hover .lw,
+.d-nav .other-link-fragile:hover .lw,
+.d-nav-item:hover > .d-nav-trigger .lw,
+.d-nav-item.open > .d-nav-trigger .lw,
+footer .footer-controls button:hover .lw,
+footer .footer-link .lw {
+    text-decoration: underline 1px solid currentColor;
+    text-underline-offset: 2px;
+}
+
+/* 기존 푸터용 #footer-home 스타일(상시 밑줄/hover 이탤릭) 무효화 */
+.d-info #footer-home {
+    text-decoration: none;
+    font-style: normal;
+}
+
+/* 우측 오버레이 메뉴 */
+.d-nav {
+    position: fixed;
+    top: var(--d-top);
+    left: var(--d-col);
+    right: 20px;
+    height: var(--d-line);
+}
+
+.d-nav-trigger {
+    position: absolute;
+    top: 0;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.d-nav-works > .d-nav-trigger {
+    left: 0;
+}
+
+.d-nav-about > .d-nav-trigger {
+    left: var(--d-c2);
+}
+
+/* 한쪽에 hover 시 다른 쪽은 회색 */
+.d-nav:has(.d-nav-works:hover, .d-nav-works.open) .d-nav-about > .d-nav-trigger .lw,
+.d-nav:has(.d-nav-about:hover, .d-nav-about.open) .d-nav-works > .d-nav-trigger .lw,
+.d-row.coming-soon:hover .lw {
+    --ink-a: var(--gray-a);
+}
+
+/* 패널: 트리거 바로 아래부터 시작, padding이 hover 브리지 역할 */
+.d-panel {
+    position: absolute;
+    top: var(--d-line);
+    left: 0;
+    right: 0;
+    padding-top: calc(80px - var(--d-line));
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.15s ease, visibility 0s linear 0.15s;
+}
+
+.d-nav-item:hover > .d-panel,
+.d-nav-item.open > .d-panel {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.15s ease, visibility 0s;
+}
+
+.d-nav-about > .d-panel {
+    left: var(--d-c2);
+}
+
+/* Works 리스트 */
+.d-group + .d-group {
+    margin-top: var(--d-line);
+}
+
+.d-group + .d-group-wide {
+    margin-top: calc(var(--d-line) * 2);
+}
+
+.d-row {
+    display: grid;
+    grid-template-columns: var(--d-c2) calc(var(--d-c3) - var(--d-c2)) auto;
+    white-space: nowrap;
+}
+
+.d-row.coming-soon {
+    cursor: default;
+}
+
+.d-row.coming-soon:hover .lw {
+    text-decoration: line-through currentColor;
+}
+
+/* About 텍스트 */
+.d-about {
+    max-width: 420px;
+    word-break: keep-all;
+}
+
+.d-about p {
+    margin: 0 0 var(--d-line) 0;
+}
+
+.d-about p.d-about-last {
+    margin-bottom: calc(var(--d-line) * 3);
+}
+
+/* 푸터: Threshold는 Works와 좌측 정렬, 카운터는 우측 */
+footer .footer-controls {
+    position: absolute;
+    left: var(--d-col);
+}
+
+footer .footer-right {
+    position: absolute;
+    right: 20px;
+}
+
+footer .footer-controls button:hover,
+footer .footer-link {
+    text-decoration: none;
+}
+
+/* About 하단 other webs — About 텍스트 그리드와 동일한 줄 간격 */
+.d-other-webs {
+    margin-top: calc(var(--d-line) * 3);
+}
+
+.d-other-webs p {
+    margin-bottom: var(--d-line);
+}
+
+.d-nav .other-link {
+    display: inline-flex;
+    width: auto;
+    min-width: 0;
+    line-height: var(--d-line);
+}
+
+.d-nav .other-link-fragile:hover {
+    text-decoration: none;
+}
+
+/* jagooknetwork hover: 연두 배경 위에서는 항상 검정 */
+.d-nav .other-link-jagook:hover .lw {
+    --ink: 17 17 17;
+}
+
+.d-nav .other-link-fluidpaper {
+    min-width: 4.9em;
+}
+
+/* 어두운 배경 위에서는 fluidpaper 로고도 흰색으로 */
+.d-nav .other-link-fluidpaper:has(.on-dark) img {
+    filter: invert(1);
+}
+
+@media (max-width: 600px) {
+    .d-info,
+    .d-nav {
+        display: none !important;
     }
 }

@@ -126,6 +126,8 @@ const PHOTOSHOOT_TITLES = {
     "sundimming": "SunDimming",
     "fluid_state": "fluid state",
     "hwanhee": "Hwanhee",
+    "hwanhee_2024": "Hwanhee 2024",
+    "hwanhee_2026": "Hwanhee 2026",
     "xinseha": "Xin Seha",
     "parkdongsun": "Park Dongsun",
     "ann": "Ann",
@@ -625,7 +627,7 @@ fsClose.addEventListener("click", () => {
     closeFullscreen();
 });
 
-/* ===== 좌측 하단 'Kang Minje' → 랜딩페이지 이동 ===== */
+/* ===== 좌측 상단 'Kang Minje' → 첫 페이지 이동 ===== */
 const footerHome = document.getElementById("footer-home");
 if (footerHome) {
     footerHome.addEventListener("click", (e) => {
@@ -892,4 +894,19 @@ creditBoxes.forEach(box => {
             box.classList.toggle("active");
         }
     });
+});
+
+/* ===== Desktop 우측 메뉴(Works / About): 터치 기기에서는 탭으로 열고 닫기 ===== */
+const dNavItems = document.querySelectorAll(".d-nav-item");
+dNavItems.forEach(item => {
+    item.querySelector(".d-nav-trigger").addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!isTouchDevice) return;
+        const wasOpen = item.classList.contains("open");
+        dNavItems.forEach(other => other.classList.remove("open"));
+        if (!wasOpen) item.classList.add("open");
+    });
+});
+document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest(".d-nav")) dNavItems.forEach(item => item.classList.remove("open"));
 });
