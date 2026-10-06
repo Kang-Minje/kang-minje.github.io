@@ -896,17 +896,92 @@ creditBoxes.forEach(box => {
     });
 });
 
-/* ===== Desktop 우측 메뉴(Works / About): 터치 기기에서는 탭으로 열고 닫기 ===== */
-const dNavItems = document.querySelectorAll(".d-nav-item");
-dNavItems.forEach(item => {
-    item.querySelector(".d-nav-trigger").addEventListener("click", (e) => {
-        e.preventDefault();
-        if (!isTouchDevice) return;
-        const wasOpen = item.classList.contains("open");
-        dNavItems.forEach(other => other.classList.remove("open"));
-        if (!wasOpen) item.classList.add("open");
+/* ===== Desktop 우측 메뉴(Works / About) 컨트롤러 =====
+   CSS :hover 대신 상태를 하나만 두어 두 패널이 동시에 열리지 않게 함.
+   - 닫힌 상태에서 트리거에 올리면 즉시 열림
+   - 다른 메뉴가 열려 있을 때는 트리거 위에 잠깐(SWITCH_DELAY) 머물거나 트리거 아래로 내려가야 전환
+     → 옆으로 스치기만 해서는 바뀌지 않음
+   - 전환 시 이전 패널은 페이드 없이 즉시 숨김
+   - 메뉴 영역(트리거+패널)을 벗어나도 CLOSE_DELAY 동안은 유지 → 다시 들어오면 그대로
+   - 터치: 트리거 탭으로 열고 닫기, 바깥 탭으로 닫기 */
+(function () {
+    const nav = document.querySelector(".d-nav");
+    if (!nav) return;
+    const items = [...nav.querySelectorAll(".d-nav-item")];
+    const CLOSE_DELAY = 400;
+    const SWITCH_DELAY = 120;
+    let active = null;
+    let closeTimer = null;
+    let switchTimer = null;
+    let pendingItem = null;
+    let lastPointerType = "mouse";
+
+    function setActive(item) {
+        clearTimeout(closeTimer);
+        clearTimeout(switchTimer);
+        pendingItem = null;
+        if (item === active) return;
+        if (active) {
+            const prev = active.querySelector(".d-panel");
+            // 전환이면 즉시 숨김, 완전히 닫는 경우엔 페이드
+            if (item) prev.classList.add("instant");
+            active.classList.remove("open");
+            if (item) {
+                void prev.offsetWidth;
+                prev.classList.remove("instant");
+            }
+        }
+        active = item;
+        if (item) item.classList.add("open");
+    }
+
+    items.forEach((item) => {
+        const trigger = item.querySelector(".d-nav-trigger");
+
+        trigger.addEventListener("pointerenter", (e) => {
+            if (e.pointerType !== "mouse") return;
+            if (active === item) {
+                clearTimeout(closeTimer);
+            } else if (!active) {
+                setActive(item);
+            } else if (active !== item) {
+                clearTimeout(switchTimer);
+                pendingItem = item;
+                switchTimer = setTimeout(() => setActive(item), SWITCH_DELAY);
+            }
+        });
+        trigger.addEventListener("pointerleave", (e) => {
+            // 전환 대기 중 트리거 아래(자기 패널 쪽)로 빠져나가면 의도가 분명하므로 바로 전환
+            if (pendingItem === item && e.clientY >= trigger.getBoundingClientRect().bottom - 1) {
+                setActive(item);
+            } else {
+                clearTimeout(switchTimer);
+                pendingItem = null;
+            }
+        });
+
+        item.addEventListener("pointerenter", (e) => {
+            if (e.pointerType !== "mouse" || item !== active) return;
+            clearTimeout(closeTimer);
+        });
+        item.addEventListener("pointerleave", (e) => {
+            if (e.pointerType !== "mouse" || item !== active) return;
+            clearTimeout(closeTimer);
+            closeTimer = setTimeout(() => setActive(null), CLOSE_DELAY);
+        });
+
+        trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (lastPointerType === "mouse") setActive(item);
+            else setActive(active === item ? null : item);
+        });
     });
-});
-document.addEventListener("pointerdown", (e) => {
-    if (!e.target.closest(".d-nav")) dNavItems.forEach(item => item.classList.remove("open"));
-});
+
+    document.addEventListener("pointerdown", (e) => {
+        lastPointerType = e.pointerType || "mouse";
+        if (!e.target.closest(".d-nav")) setActive(null);
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setActive(null);
+    });
+})();

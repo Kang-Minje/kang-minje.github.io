@@ -1134,7 +1134,7 @@ footer {
 .d-info a:hover .lw,
 .d-nav a[href]:not(.other-link):hover .lw,
 .d-nav .other-link-fragile:hover .lw,
-.d-nav-item:hover > .d-nav-trigger .lw,
+.d-nav-trigger:hover .lw,
 .d-nav-item.open > .d-nav-trigger .lw,
 footer .footer-controls button:hover .lw,
 footer .footer-link .lw {
@@ -1172,9 +1172,9 @@ footer .footer-link .lw {
     left: var(--d-c2);
 }
 
-/* 한쪽에 hover 시 다른 쪽은 회색 */
-.d-nav:has(.d-nav-works:hover, .d-nav-works.open) .d-nav-about > .d-nav-trigger .lw,
-.d-nav:has(.d-nav-about:hover, .d-nav-about.open) .d-nav-works > .d-nav-trigger .lw,
+/* 한쪽이 열리면 다른 쪽은 회색 (열림/닫힘은 script.js의 메뉴 컨트롤러가 .open으로 관리) */
+.d-nav:has(.d-nav-works.open) .d-nav-about > .d-nav-trigger .lw,
+.d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger .lw,
 .d-row.coming-soon:hover .lw {
     --ink-a: var(--gray-a);
 }
@@ -1191,12 +1191,27 @@ footer .footer-link .lw {
     transition: opacity 0.15s ease, visibility 0s linear 0.15s;
 }
 
-.d-nav-item:hover > .d-panel,
 .d-nav-item.open > .d-panel {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
     transition: opacity 0.15s ease, visibility 0s;
+}
+
+/* 메뉴 전환 시 이전 패널은 페이드 없이 즉시 숨김 (겹침 방지) */
+.d-panel.instant {
+    transition: none;
+}
+
+/* 패널 주변 여유 영역: 살짝 벗어나도 메뉴가 닫히지 않도록 hit 영역 확장 */
+.d-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -24px;
+    right: -20px;
+    bottom: -48px;
+    z-index: -1;
 }
 
 .d-nav-about > .d-panel {
