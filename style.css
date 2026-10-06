@@ -25,12 +25,15 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    padding-right: 4px;
+    /* 이동 거리만큼 hit 영역 확보 (떨림 방지) */
+    transition: transform 0.2s ease;
 }
 
 
+/* 메뉴에 없는 페이지용 화살표도 같은 반응 */
 .back-nav:hover {
-    opacity: 0.5;
+    transform: translateX(-4px);
 }
 
 @media (max-width: 600px) {
@@ -1137,8 +1140,7 @@ footer .footer-link {
 
 /* 한쪽이 열리면 다른 쪽은 회색 (열림/닫힘은 script.js의 메뉴 컨트롤러가 .open으로 관리) */
 .d-nav:has(.d-nav-works.open) .d-nav-about > .d-nav-trigger,
-.d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger,
-.d-row.coming-soon:hover > span {
+.d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger {
     color: #bbb;
 }
 
@@ -1189,9 +1191,17 @@ footer .footer-link {
 .d-back {
     position: absolute;
     right: 100%;
-    margin-right: 0.6em;
+    margin-right: calc(0.6em - 4px);
+    padding-right: 4px;
+    /* 이동 거리만큼 hit 영역을 오른쪽으로 넓혀, 화살표 오른쪽 끝에서 hover가 풀렸다 잡혔다 떨리지 않게 */
     pointer-events: auto;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+/* 페이지 이탈 화살표: hover 시 왼쪽으로 살짝 이동 */
+.d-back:hover {
+    transform: translateX(-4px);
 }
 
 /* 메뉴 전환 시 이전 패널은 페이드 없이 즉시 숨김 (겹침 방지) */
@@ -1227,14 +1237,6 @@ footer .footer-link {
     display: grid;
     grid-template-columns: var(--d-c2) calc(var(--d-c3) - var(--d-c2)) auto;
     white-space: nowrap;
-}
-
-.d-row.coming-soon {
-    cursor: default;
-}
-
-.d-row.coming-soon:hover > span {
-    text-decoration: line-through;
 }
 
 /* About 텍스트 */
@@ -1314,17 +1316,106 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     cursor: pointer;
 }
 
-/* hover 시 뒤 사진이 어두우면 흰색 (hover-contrast.js가 .hover-dark 부여) */
+/* 서브메뉴 hover 시 뒤 사진이 어두우면 흰색 (hover-contrast.js가 .hover-dark 부여) */
 .hover-dark,
 .hover-dark * {
     color: #fff !important;
     text-decoration-color: #fff !important;
 }
 
-.d-nav .d-row.coming-soon.hover-dark > span {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
 .d-nav .other-link-fluidpaper.hover-dark img {
     filter: invert(1);
+}
+
+/* ===== About 페이지 (?page=about): 이미지 없이 About 텍스트 고정 ===== */
+.d-nav-item.has-current:not(.open) > .d-panel {
+    visibility: visible;
+    opacity: 1;
+    transition: none;
+}
+
+/* Works가 열리면 About 텍스트는 잠시 숨김 (현재 페이지 표시와 같은 규칙) */
+.d-nav:has(.d-nav-works.open) .d-nav-about > .d-panel {
+    visibility: hidden;
+}
+
+.d-nav-about.has-current > .d-nav-trigger {
+    text-decoration: underline 1px solid black;
+    text-underline-offset: 2px;
+}
+
+@media (min-width: 601px) {
+    /* 이미지와 관련된 요소는 숨김 */
+    html.about-mode #canvas-container,
+    html.about-mode footer {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* About 클릭 시 전환 효과: 이미지·푸터가 서서히 사라진 뒤 이동 */
+    html.about-entering #canvas-container,
+    html.about-entering footer {
+        transition: opacity 0.5s ease;
+    }
+}
+
+/* ===== About 키워드 hover 이미지 (script.js) ===== */
+#word-image {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    /* 커서 이미지·풀스크린(998) 위, 텍스트(1100) 아래 → 글자는 항상 사진 위 */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+#word-image.show {
+    opacity: 1;
+}
+
+#word-image img {
+    max-width: 600px;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* 간간히: 브라우저 전체 크기 */
+#word-image.full img {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+}
+
+.d-word {
+    cursor: default;
+}
+
+.d-word:hover {
+    text-decoration: underline 1px solid black;
+    text-underline-offset: 2px;
+}
+
+/* About 텍스트 드래그(선택) 시 붉은 배경 */
+.d-about ::selection {
+    background: #ff0000;
+    color: #111;
+}
+
+/* About 페이지에서는 About 텍스트를 선택(드래그)할 수 있도록 */
+.d-nav-about.has-current:not(.open) > .d-panel {
+    pointer-events: auto;
+}
+
+@media (max-width: 600px) {
+    #word-image {
+        display: none;
+    }
 }

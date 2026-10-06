@@ -13,6 +13,10 @@
   <link rel="canonical" href="https://kangminje.com" />
 
   <link rel="stylesheet" href="style.css" />
+  <!-- About 페이지는 첫 화면부터 이미지·푸터 숨김 (깜빡임 방지) -->
+  <script>
+    if (new URLSearchParams(location.search).get("page") === "about") document.documentElement.classList.add("about-mode");
+  </script>
 
   <!-- SEO & Social Media Metadata (OpenGraph) -->
   <meta name="description" content="Kang Minje is a photographer working with the traces of suppressed emotion. He treats the photograph as an object with mass and flesh — folded prints, extreme push development, hand intervention in the darkroom." />
@@ -147,11 +151,9 @@
             <a href="?page=lips" class="d-row"><span>Lips</span><span>2021 - 2026</span></a>
             <a href="?page=faces" class="d-row"><span>Faces</span><span>2021 -</span></a>
             <a href="?page=dots" class="d-row"><span>Dots</span><span>2025 -</span></a>
-            <a class="d-row coming-soon"><span>Dent</span><span>2025 -</span></a>
           </div>
           <div class="d-group">
             <a href="?page=aria" class="d-row"><span>Aria</span><span>2025</span></a>
-            <a class="d-row coming-soon"><span>Rose</span><span>2024</span></a>
             <a href="?page=hwanhee_2024" class="d-row"><span>Hwanhee</span><span>2024</span></a>
             <a href="?page=hwanhee_2026" class="d-row"><span>Hwanhee</span><span>2026</span></a>
             <a href="?page=xinseha" class="d-row"><span>Seha</span><span>2023</span></a>
@@ -159,47 +161,42 @@
             <a href="?page=ann" class="d-row"><span>Ann</span><span>2026</span></a>
             <a href="?page=ines" class="d-row"><span>Ines</span><span>2026</span></a>
             <a href="?page=chowoohyun" class="d-row"><span>Woohyun</span><span>2026</span></a>
-            <a class="d-row coming-soon"><span>Milo&amp;Zaya</span><span>2026</span></a>
-            <a class="d-row coming-soon"><span>Sihun</span><span>2026</span></a>
-            <a class="d-row coming-soon"><span>Leo</span><span>2026</span></a>
           </div>
           <div class="d-group d-group-wide">
             <a href="?page=ripple_effects_2" class="d-row"><span>Ripple Effects 2</span><span>2026</span><span>Just Music</span></a>
             <a href="?page=editorial_lemile" class="d-row"><span>When Four Players Collapse Into One Sound</span><span>2026</span><span>Le Mile</span></a>
             <a href="?page=heigs" class="d-row"><span>Beurre Was Here Before You Noticed</span><span>2025</span><span>Le Mile</span></a>
           </div>
-          <div class="d-group d-group-wide">
-            <a class="d-row coming-soon"><span>HAIRCUTS; VARIOUS FORMS</span><span>2026</span><span>fluidpaper</span></a>
-          </div>
         </div>
       </div>
     </div>
 
     <div class="d-nav-item d-nav-about">
-      <a href="#" class="d-nav-trigger" onclick="return false;">About</a>
+      <a href="?page=about" class="d-nav-trigger">About</a>
       <div class="d-panel">
         <div class="d-about">
+          <!-- 키워드 hover → 화면 중앙에 이미지 (data-img), data-full은 브라우저 전체 크기 -->
           <p>(EN)</p>
-          <p>Kang Minje moves the traces of suppressed emotion into matter.
-            The emotion he works with is the hollowness of a youth
-            pressed down within the system.
-            It recalls han, the Korean sentiment of an earlier age.</p>
-          <p>Instead of slick digital data, he treats the photograph as an object
-            with mass and flesh, folding the print and intervening by hand
-            in extreme push development and printing.</p>
-          <p class="d-about-last">Because he believes the fact that it was there still carries weight,
-            he calls himself a photographer in the AI imaging era.
-            His work asks again after the place of the body,
+          <p>Kang Minje moves the <span class="d-word" data-img="walk-19">traces</span> of suppressed <span class="d-word" data-img="faces-01">emotion</span> into <span class="d-word" data-img="ra4-11">matter</span>.
+            The <span class="d-word" data-img="24-28">emotion</span> he works with is the <span class="d-word" data-img="faces-112">hollowness</span> of a <span class="d-word" data-img="faces-69">youth</span>
+            <span class="d-word" data-img="faces-110">pressed down</span> within the system.
+            It recalls <span class="d-word" data-img="24-12" data-full>han</span>, the Korean sentiment of an earlier age.</p>
+          <p>Instead of <span class="d-word" data-img="ra4-37">slick digital data</span>, he treats the <span class="d-word" data-img="faces-05">photograph</span> as an <span class="d-word" data-img="ra4-41">object</span>
+            with <span class="d-word" data-img="walk-11">mass</span> and <span class="d-word" data-img="faces-32" data-full>flesh</span>, <span class="d-word" data-img="ra4-09">folding</span> the print and intervening by <span class="d-word" data-img="ra4-12">hand</span>
+            in extreme push development and <span class="d-word" data-img="faces-16">printing</span>.</p>
+          <p class="d-about-last">Because he believes the fact that <span class="d-word" data-img="walk-31" data-full>it was there</span> still carries <span class="d-word" data-img="walk-37">weight</span>,
+            he calls himself a <span class="d-word" data-img="ra4-45">photographer</span> in the <span class="d-word" data-img="24-30">AI imaging era</span>.
+            His work asks again after the place of the <span class="d-word" data-img="faces-116" data-full>body</span>,
             lost in technological acceleration.</p>
           <p>(KR)</p>
-          <p>강민제는 억눌린 감정의 자국을 물질로 옮긴다.
-            그가 다루는 정서는 제도 안에서 눌려 생긴 젊음의 공허다.
-            오래전 한국의 한이라는 정서와 닮아 있다.</p>
-          <p>매끄러운 디지털 데이터 대신, 그는 사진을 무게와 피부를 지닌 사물로 다루며
-            인화지를 접고 극단적인 증감 현상과 인화 과정에 직접 개입한다.</p>
-          <p>무언가 실제로 그 자리에 있었다는 사실의 무게를 믿기에,
-            그는 AI 이미징 시대에도 스스로를 사진가로 칭한다.
-            그의 작업은 기술적 가속 속에서 상실된 몸의 자리를 다시 묻는다.</p>
+          <p>강민제는 억눌린 <span class="d-word" data-img="faces-01">감정</span>의 <span class="d-word" data-img="walk-19">자국</span>을 <span class="d-word" data-img="ra4-11">물질</span>로 옮긴다.
+            그가 다루는 <span class="d-word" data-img="24-28">정서</span>는 제도 안에서 <span class="d-word" data-img="faces-110">눌려</span> 생긴 <span class="d-word" data-img="faces-69">젊음</span>의 <span class="d-word" data-img="faces-112">공허</span>다.
+            오래전 한국의 <span class="d-word" data-img="24-12" data-full>한</span>이라는 정서와 닮아 있다.</p>
+          <p><span class="d-word" data-img="ra4-37">매끄러운 디지털 데이터</span> 대신, 그는 <span class="d-word" data-img="faces-05">사진</span>을 <span class="d-word" data-img="walk-11">무게</span>와 <span class="d-word" data-img="faces-32" data-full>피부</span>를 지닌 <span class="d-word" data-img="ra4-41">사물</span>로 다루며
+            인화지를 <span class="d-word" data-img="ra4-09">접고</span> 극단적인 증감 현상과 <span class="d-word" data-img="faces-16">인화 과정</span>에 <span class="d-word" data-img="ra4-12">직접</span> 개입한다.</p>
+          <p>무언가 <span class="d-word" data-img="walk-31" data-full>실제로 그 자리에 있었다</span>는 사실의 <span class="d-word" data-img="walk-37">무게</span>를 믿기에,
+            그는 <span class="d-word" data-img="24-30">AI 이미징 시대</span>에도 스스로를 <span class="d-word" data-img="ra4-45">사진가</span>로 칭한다.
+            그의 작업은 기술적 가속 속에서 상실된 <span class="d-word" data-img="faces-116" data-full>몸</span>의 자리를 다시 묻는다.</p>
           <div class="d-other-webs">
             <p>(other webs)</p>
             <a class="other-link other-link-fragile" href="https://kangminje.com/fragilecalendar">fragilecalendar</a><br>
@@ -224,6 +221,9 @@
 
     <div class="footer-right" id="image-counter">0000 / 0000</div>
   </footer>
+
+  <!-- About 키워드 hover 이미지 (화면 중앙 / 브라우저 전체) -->
+  <div id="word-image" aria-hidden="true"><img alt="" /></div>
 
   <!-- 전체 화면 뷰어 -->
   <div id="fullscreen-container">
@@ -261,7 +261,7 @@
         <li><a href="?page=blue_spring">blue spring</a></li>
         <li><a href="?page=editorial_lemile">Le Mile Editorial</a></li>
         <li><a href="?page=heigs">HEIGS Editorial</a></li>
-        <li><a href="about.html">about</a></li>
+        <li><a href="?page=about">about</a></li>
       </ul>
     </nav>
   </div>

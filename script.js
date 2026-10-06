@@ -284,6 +284,16 @@ function initByQuery() {
     // Reset container classes and height
     container.className = "";
     container.style.minHeight = "";
+
+    // About 페이지: 이미지 없이 About 텍스트 고정 (html.about-mode는 <head>에서 미리 설정)
+    if (page === "about") {
+        document.documentElement.classList.add("about-mode");
+        images = [];
+        resetCanvas();
+        const backNav = document.getElementById("back-nav");
+        if (backNav) backNav.style.display = "none";
+        return;
+    }
     
     // Editorial 상단 우측 크레딧 박스 제어
     creditBoxLeMile.classList.add("hidden");
@@ -488,9 +498,11 @@ if (isTouchDevice) {
 }
 
 /* ===== Mouse move spawn (disabled in fullscreen) ===== */
+const isAboutMode = () => document.documentElement.classList.contains("about-mode");
+
 document.addEventListener("mousemove", (e) => {
     if (isTouchDevice) return; // 태블릿 등 터치 디바이스에서는 커서 이동 스폰 비활성화
-    if (fullscreenActive || document.body.classList.contains("grid-mode")) return;
+    if (fullscreenActive || document.body.classList.contains("grid-mode") || isAboutMode()) return;
 
     const dx = e.clientX - lastX;
     const dy = e.clientY - lastY;
@@ -506,7 +518,7 @@ document.addEventListener("mousemove", (e) => {
 /* ===== Touch spawn for tablets ===== */
 container.addEventListener("pointerdown", (e) => {
     if (!isTouchDevice) return;
-    if (fullscreenActive || document.body.classList.contains("grid-mode")) return;
+    if (fullscreenActive || document.body.classList.contains("grid-mode") || isAboutMode()) return;
     
     // 이미지를 터치한 경우 전체화면 진입해야 하므로 스폰 무시
     if (e.target.tagName === "IMG") return;
@@ -965,12 +977,7 @@ function findCurrentWorksRow() {
         .find((a) => new URLSearchParams(a.getAttribute("href").replace(/^\?/, "")).get("page") === page) || null;
 }
 
-(function markCurrentWorksRow() {
-    const row = findCurrentWorksRow();
-    if (!row) return;
-    row.classList.add("current");
-    row.closest(".d-nav-item").classList.add("has-current");
-
+function makeBackArrow() {
     const back = document.createElement("span");
     back.className = "d-back";
     back.textContent = "←";
@@ -979,13 +986,89 @@ function findCurrentWorksRow() {
     back.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+        // 페이지 안에서 사진을 크게 보고 있으면 먼저 그 페이지로 돌아옴 (예: 인덱스 → 사진 → ← → 인덱스)
+        if (fullscreenActive) {
+            closeFullscreen();
+            return;
+        }
         if (document.referrer && new URL(document.referrer).origin === location.origin) {
             history.back();
         } else {
             location.href = location.pathname;
         }
     });
-    row.prepend(back);
+    return back;
+}
+
+(function markCurrentPage() {
+    // About 페이지: About 트리거 왼쪽에 ←, About 텍스트는 커서가 벗어나도 계속 표시
+    if (getPage() === "about" && new URLSearchParams(location.search).has("page")) {
+        const about = document.querySelector(".d-nav-about");
+        if (!about) return;
+        about.classList.add("has-current");
+        about.querySelector(".d-nav-trigger").prepend(makeBackArrow());
+        return;
+    }
+    const row = findCurrentWorksRow();
+    if (!row) return;
+    row.classList.add("current");
+    row.closest(".d-nav-item").classList.add("has-current");
+    row.prepend(makeBackArrow());
+})();
+
+/* ===== About 키워드 hover 이미지 =====
+   About 본문의 키워드(.d-word[data-img])에 올리면 화면 중앙에 해당 사진을 띄움.
+   data-full이 있는 키워드는 브라우저 전체 크기로. 글자는 항상 사진 위. */
+(function () {
+    const box = document.getElementById("word-image");
+    const about = document.querySelector(".d-about");
+    if (!box || !about) return;
+    const img = box.querySelector("img");
+    let preloaded = false;
+
+    const srcFor = (key) => {
+        const m = key.match(/^(.+)-(\d+)$/);
+        return m ? assetSrc(resolveImagePath(m[1], Number(m[2]))) : "";
+    };
+
+    // 처음 About 텍스트에 다가갈 때 키워드 사진을 미리 받아둠 (hover 즉시 표시)
+    function preload() {
+        if (preloaded) return;
+        preloaded = true;
+        new Set([...about.querySelectorAll(".d-word")].map((w) => w.dataset.img))
+            .forEach((key) => { new Image().src = srcFor(key); });
+    }
+
+    function show(word) {
+        img.src = srcFor(word.dataset.img);
+        box.classList.toggle("full", word.hasAttribute("data-full"));
+        box.classList.add("show");
+    }
+
+    function hide() {
+        box.classList.remove("show");
+    }
+
+    about.addEventListener("pointerenter", preload);
+    about.addEventListener("pointerover", (e) => {
+        if (e.pointerType === "touch") return;
+        const word = e.target.closest(".d-word");
+        if (word) show(word);
+    });
+    about.addEventListener("pointerout", (e) => {
+        const word = e.target.closest(".d-word");
+        if (word && !word.contains(e.relatedTarget)) hide();
+    });
+    // About 패널이 닫히면(또는 Works가 열려 가려지면) 사진도 함께 닫음
+    const aboutItem = about.closest(".d-nav-item");
+    const worksItem = document.querySelector(".d-nav-works");
+    const panelShown = () =>
+        aboutItem.classList.contains("open") ||
+        (aboutItem.classList.contains("has-current") && !worksItem.classList.contains("open"));
+    new MutationObserver(() => {
+        if (!panelShown()) hide();
+    }).observe(document.querySelector(".d-nav"), { subtree: true, attributes: true, attributeFilter: ["class"] });
+    if (isAboutMode()) preload();
 })();
 
 /* ===== Desktop 우측 메뉴(Works / About) 컨트롤러 =====
@@ -995,7 +1078,9 @@ function findCurrentWorksRow() {
      → 옆으로 스치기만 해서는 바뀌지 않음
    - 전환 시 이전 패널은 페이드 없이 즉시 숨김
    - 메뉴 영역(트리거+패널)을 벗어나도 CLOSE_DELAY 동안은 유지 → 다시 들어오면 그대로
-   - 마우스·펜은 hover, 터치는 트리거 탭으로 열고 닫기, 바깥 탭으로 닫기 */
+   - 마우스·펜은 hover, 터치는 트리거 탭으로 열고 닫기, 바깥 탭으로 닫기
+   - About은 클릭하면 About 페이지(?page=about)로 이동: 이미지가 서서히 사라진 뒤 이동
+     (터치는 열린 상태에서 한 번 더 탭) */
 (function () {
     const nav = document.querySelector(".d-nav");
     if (!nav) return;
@@ -1068,6 +1153,17 @@ function findCurrentWorksRow() {
         });
 
         trigger.addEventListener("click", (e) => {
+            // 실제 링크가 있는 트리거(About → ?page=about)는 클릭 시 이동.
+            // 터치에서는 첫 탭은 메뉴 열기, 열린 상태에서 다시 탭하면 이동
+            const hasPage = trigger.getAttribute("href") !== "#";
+            if (hasPage && (lastPointerType !== "touch" || active === item)) {
+                e.preventDefault();
+                if (isAboutMode()) return; // 이미 About 페이지
+                // 전환: 이미지 페이드아웃 후 이동
+                document.documentElement.classList.add("about-mode", "about-entering");
+                setTimeout(() => { location.href = trigger.getAttribute("href"); }, 500);
+                return;
+            }
             e.preventDefault();
             if (lastPointerType !== "touch") setActive(item);
             else setActive(active === item ? null : item);

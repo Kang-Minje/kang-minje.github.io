@@ -1,10 +1,13 @@
-// hover-contrast.js — PC에서 링크/메뉴에 hover했을 때, 그 글자 뒤 사진이 어두우면 흰색으로 표시.
-// 평소 글자는 항상 검정. hover 중인 요소 하나만 판단함.
+// hover-contrast.js — PC에서 서브메뉴 항목(Works 목록, other webs)에 hover했을 때,
+// 그 글자 뒤 사진이 어두우면 흰색으로 표시. 평소 글자는 항상 검정. hover 중인 항목 하나만 판단함.
 (function () {
-    const TARGETS = ".d-info a, .d-nav-trigger, .d-nav a.d-row, .d-nav .other-link:not(.other-link-jagook), footer button, footer .footer-link";
+    const TARGETS = ".d-nav a.d-row, .d-nav .other-link:not(.other-link-jagook)";
     const MAP_SIZE = 64;     // 이미지 밝기(APCA Y) 지도 해상도
     const SAMPLE_STEP = 8;   // 가로 샘플 간격(px)
     const SAMPLES_Y = 2;
+    // 검정이 기본, 흰색은 예외: 검정 글자의 대비가 APCA 최소 가독선(Lc 45 — 어떤 크기의 글자도
+    // 이 아래로는 읽기 어려운 선) 밑으로 떨어지고, 흰색이 더 잘 읽힐 때만 흰색. (회색 배경 기준 밝기 약 144)
+    const MIN_READABLE_LC = 45;
 
     const mq = window.matchMedia("(max-width: 600px)");
     const lumaMaps = new Map(); // src -> Float32Array | "pending"
@@ -107,25 +110,30 @@
         return 1; // 아무것도 없으면 흰 배경
     }
 
-    /* ===== hover 중인 요소 판단: 글자가 실제로 있는 영역만 샘플링 ===== */
+    /* ===== hover 중인 항목 판단: 제목 글자가 실제로 있는 영역만 샘플링, 다수결 =====
+       한 줄의 일부가 사진 사이 흰 틈에 걸쳐도 줄 대부분이 어두우면 흰색으로.
+       (가장 불리한 지점 기준으로 하면 흰 틈 하나 때문에 항상 검정이 되어버림) */
     function isDarkBehind(el) {
         const layers = buildLayers();
         if (!layers.length) return false;
+        // Works 행은 제목(첫 칸) 기준으로 판단하고, 색은 행 전체(연도·매체 포함)에 적용
+        const basis = el.matches(".d-row") ? el.querySelector(":scope > span:not(.d-back)") || el : el;
         const range = document.createRange();
-        range.selectNodeContents(el);
-        let minBlack = Infinity, minWhite = Infinity;
+        range.selectNodeContents(basis);
+        let whiteVotes = 0, total = 0;
         [...range.getClientRects()].forEach((r) => {
             if (r.width < 1 || r.height < 1) return;
             const nx = Math.max(3, Math.ceil(r.width / SAMPLE_STEP));
             for (let sx = 0; sx < nx; sx++) {
                 for (let sy = 0; sy < SAMPLES_Y; sy++) {
                     const bg = lumaAt(r.left + ((sx + 0.5) / nx) * r.width, r.top + ((sy + 0.5) / SAMPLES_Y) * r.height, layers);
-                    minBlack = Math.min(minBlack, apcaLc(Y_BLACK, bg));
-                    minWhite = Math.min(minWhite, apcaLc(Y_WHITE, bg));
+                    const black = apcaLc(Y_BLACK, bg);
+                    if (black < MIN_READABLE_LC && apcaLc(Y_WHITE, bg) > black) whiteVotes++;
+                    total++;
                 }
             }
         });
-        return minWhite > minBlack;
+        return total > 0 && whiteVotes / total > 0.5;
     }
 
     function evaluate() {
