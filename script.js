@@ -185,41 +185,97 @@ function renderPhotoshootsGrid() {
     updateCounter(-1);
 }
 
+/* ===== 시리즈 페이지 그리드: 큰 사진 + Moving Sphere 인덱스처럼 흐트러진 배치 =====
+   세로 사진 1칸(SERIES_COL_W), 가로 사진은 2칸(세로 너비*2 + 사이 간격).
+   행마다 빈 칸 위치가 바뀌어 리듬이 생김 (2칸일 때는 일부 행에 사진 1장만). */
+const SERIES_COL_W = 542; // 기존 썸네일(약 217px)의 250%
+const SERIES_GAP = 24;
+const SERIES_SIDE = 64;   // 좌우 최소 여백 (좌상단 텍스트 여백과 동일)
+
+function getSeriesColumnCount() {
+    const fit = Math.floor((window.innerWidth - SERIES_SIDE * 2 + SERIES_GAP) / (SERIES_COL_W + SERIES_GAP));
+    return Math.max(2, fit);
+}
+
+function seriesRowCapacity(cols) {
+    // 3칸 이상: 매 행 1칸 비움 / 2칸: 약 40% 행은 사진 1장만
+    return (row) => (cols >= 3 ? cols - 1 : (seededRandom(row * 7.3) < 0.4 ? 1 : 2));
+}
+
+let seriesEntries = [];
+
+function layoutSeriesGrid() {
+    const cols = getSeriesColumnCount();
+    container.style.setProperty("--series-cols", cols);
+    layoutIndexEntries(seriesEntries, cols, seriesRowCapacity(cols));
+}
+
 function renderPhotoshootSeriesGrid(pageKey) {
     container.innerHTML = "";
     container.className = "photoshoot-series-layout";
-    
+    container.style.setProperty("--series-col-w", `${SERIES_COL_W}px`);
+    container.style.setProperty("--series-gap", `${SERIES_GAP}px`);
+
     const taggedImages = getImagesByTag(pageKey);
     images = taggedImages; // Set active images array for fullscreen mode
-    
+    seriesEntries = [];
+
+    let relayoutQueued = false;
+    const scheduleRelayout = () => {
+        if (relayoutQueued) return;
+        relayoutQueued = true;
+        requestAnimationFrame(() => {
+            relayoutQueued = false;
+            layoutSeriesGrid();
+        });
+    };
+
     const fragment = document.createDocumentFragment();
-    
+
     taggedImages.forEach((src, i) => {
         const item = document.createElement("div");
         item.className = "photoshoot-series-item";
-        
+
         const img = document.createElement("img");
         img.src = assetSrc(src);
-        img.loading = "lazy";
         img.decoding = "async";
-        
+
         const counter = document.createElement("div");
         counter.className = "photoshoot-series-counter";
         counter.textContent = `${i + 1}/${taggedImages.length}`;
-        
+
         item.appendChild(img);
         item.appendChild(counter);
-        
+
         item.addEventListener("click", () => {
             openFullscreen(i);
         });
-        
+
+        // 가로/세로 판별 후 배치 (로드가 늦으면 재배치)
+        const entry = { el: item, wide: false };
+        if (img.complete && img.naturalWidth) {
+            entry.wide = img.naturalWidth > img.naturalHeight;
+        } else {
+            img.addEventListener("load", () => {
+                const nowWide = img.naturalWidth > img.naturalHeight;
+                if (nowWide !== entry.wide) {
+                    entry.wide = nowWide;
+                    scheduleRelayout();
+                }
+            });
+        }
+        seriesEntries.push(entry);
         fragment.appendChild(item);
     });
-    
+
     container.appendChild(fragment);
+    layoutSeriesGrid();
     updateCounter(-1);
 }
+
+window.addEventListener("resize", () => {
+    if (container.classList.contains("photoshoot-series-layout")) layoutSeriesGrid();
+});
 
 /* ===== Init by query ===== */
 function initByQuery() {
@@ -268,10 +324,11 @@ function initByQuery() {
     }
 
     // Back navigation arrow (walk, ra4, 24, faces 제외)
+    // Works 메뉴에 있는 페이지는 메뉴의 현재 페이지 표시(←)가 대신하므로 숨김
     const backNav = document.getElementById("back-nav");
     if (backNav) {
         const hiddenPages = ["walk", "ra4", "24", "faces", "photoshoots"];
-        if (hiddenPages.includes(page)) {
+        if (hiddenPages.includes(page) || findCurrentWorksRow()) {
             backNav.style.display = "none";
         } else {
             backNav.style.display = "";
@@ -691,14 +748,16 @@ function seededRandom(seed) {
 // - 4칸 기준 그리드에서는 리듬을 위해 한 행에 3칸만 채우고 1칸은 항상 비워둠
 //   (가로 1장 + 세로 1장, 또는 세로 3장의 조합만 허용).
 // - 비는 칸의 위치는 매번 우측 고정이 아니라, 행마다 맨앞/사이/맨뒤 중 랜덤하게 바뀜.
-function layoutIndexEntries(entries, cols) {
-    const rowCapacity = cols >= 4 ? cols - 1 : cols;
-    const useRhythm = cols >= 4;
+// capacityForRow(row)를 넘기면 행마다 채울 칸 수를 직접 정하고 항상 리듬(빈 칸 이동)을 적용
+// (시리즈 페이지의 큰 그리드에서 사용). 생략 시 기존 인덱스2 동작 그대로.
+function layoutIndexEntries(entries, cols, capacityForRow) {
+    const useRhythm = capacityForRow ? true : cols >= 4;
     let row = 1;
     let idx = 0;
     let prevInsertion = null;
 
     while (idx < entries.length) {
+        const rowCapacity = capacityForRow ? capacityForRow(row) : (cols >= 4 ? cols - 1 : cols);
         // 1) 이 행에 들어갈 아이템들을 그리디하게 결정 (기존과 동일한 제약: 캡시티/가로 1장 규칙)
         const rowEntries = [];
         let used = 0;
@@ -896,6 +955,39 @@ creditBoxes.forEach(box => {
     });
 });
 
+/* ===== Works 메뉴: 현재 페이지 표시 =====
+   현재 페이지에 해당하는 Works 행만 제자리에 남기고(밑줄), 왼쪽에 ← (뒤로가기)를 둠.
+   메뉴를 열면 나머지 행이 다시 보임. */
+function findCurrentWorksRow() {
+    if (!new URLSearchParams(location.search).has("page")) return null;
+    const page = getPage();
+    return [...document.querySelectorAll(".d-works .d-row[href]")]
+        .find((a) => new URLSearchParams(a.getAttribute("href").replace(/^\?/, "")).get("page") === page) || null;
+}
+
+(function markCurrentWorksRow() {
+    const row = findCurrentWorksRow();
+    if (!row) return;
+    row.classList.add("current");
+    row.closest(".d-nav-item").classList.add("has-current");
+
+    const back = document.createElement("span");
+    back.className = "d-back";
+    back.textContent = "←";
+    back.setAttribute("role", "link");
+    back.setAttribute("aria-label", "back");
+    back.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (document.referrer && new URL(document.referrer).origin === location.origin) {
+            history.back();
+        } else {
+            location.href = location.pathname;
+        }
+    });
+    row.prepend(back);
+})();
+
 /* ===== Desktop 우측 메뉴(Works / About) 컨트롤러 =====
    CSS :hover 대신 상태를 하나만 두어 두 패널이 동시에 열리지 않게 함.
    - 닫힌 상태에서 트리거에 올리면 즉시 열림
@@ -903,7 +995,7 @@ creditBoxes.forEach(box => {
      → 옆으로 스치기만 해서는 바뀌지 않음
    - 전환 시 이전 패널은 페이드 없이 즉시 숨김
    - 메뉴 영역(트리거+패널)을 벗어나도 CLOSE_DELAY 동안은 유지 → 다시 들어오면 그대로
-   - 터치: 트리거 탭으로 열고 닫기, 바깥 탭으로 닫기 */
+   - 마우스·펜은 hover, 터치는 트리거 탭으로 열고 닫기, 바깥 탭으로 닫기 */
 (function () {
     const nav = document.querySelector(".d-nav");
     if (!nav) return;
@@ -915,6 +1007,8 @@ creditBoxes.forEach(box => {
     let switchTimer = null;
     let pendingItem = null;
     let lastPointerType = "mouse";
+    // 마우스뿐 아니라 펜(와콤·사이드카 등)도 hover로 취급. 터치만 탭 방식
+    const isHoverPointer = (e) => e.pointerType !== "touch";
 
     function setActive(item) {
         clearTimeout(closeTimer);
@@ -938,18 +1032,21 @@ creditBoxes.forEach(box => {
     items.forEach((item) => {
         const trigger = item.querySelector(".d-nav-trigger");
 
-        trigger.addEventListener("pointerenter", (e) => {
-            if (e.pointerType !== "mouse") return;
+        // 트리거 진입: pointerenter + pointermove(이미 트리거 위에 커서가 있던 경우 대비)
+        const onTriggerHover = (e) => {
+            if (!isHoverPointer(e)) return;
             if (active === item) {
                 clearTimeout(closeTimer);
             } else if (!active) {
                 setActive(item);
-            } else if (active !== item) {
+            } else if (pendingItem !== item) {
                 clearTimeout(switchTimer);
                 pendingItem = item;
                 switchTimer = setTimeout(() => setActive(item), SWITCH_DELAY);
             }
-        });
+        };
+        trigger.addEventListener("pointerenter", onTriggerHover);
+        trigger.addEventListener("pointermove", onTriggerHover);
         trigger.addEventListener("pointerleave", (e) => {
             // 전환 대기 중 트리거 아래(자기 패널 쪽)로 빠져나가면 의도가 분명하므로 바로 전환
             if (pendingItem === item && e.clientY >= trigger.getBoundingClientRect().bottom - 1) {
@@ -961,18 +1058,18 @@ creditBoxes.forEach(box => {
         });
 
         item.addEventListener("pointerenter", (e) => {
-            if (e.pointerType !== "mouse" || item !== active) return;
+            if (!isHoverPointer(e) || item !== active) return;
             clearTimeout(closeTimer);
         });
         item.addEventListener("pointerleave", (e) => {
-            if (e.pointerType !== "mouse" || item !== active) return;
+            if (!isHoverPointer(e) || item !== active) return;
             clearTimeout(closeTimer);
             closeTimer = setTimeout(() => setActive(null), CLOSE_DELAY);
         });
 
         trigger.addEventListener("click", (e) => {
             e.preventDefault();
-            if (lastPointerType === "mouse") setActive(item);
+            if (lastPointerType !== "touch") setActive(item);
             else setActive(active === item ? null : item);
         });
     });
@@ -983,5 +1080,9 @@ creditBoxes.forEach(box => {
     });
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") setActive(null);
+    });
+    // 뒤로가기(bfcache)로 돌아왔을 때 이전에 열려 있던 상태가 남지 않도록 초기화
+    window.addEventListener("pageshow", (e) => {
+        if (e.persisted) setActive(null);
     });
 })();

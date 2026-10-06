@@ -66,12 +66,6 @@ body.grid-mode #canvas-container {
     overflow: visible !important;
     box-sizing: border-box;
 
-    /* Background Grid Pattern (Larger 4:3) */
-    background-image:
-        linear-gradient(to right, rgba(0, 0, 0, 0.1) 0.5px, transparent 0.5px),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0.5px, transparent 0.5px);
-    background-size: 160px 120px;
-    background-attachment: local;
 }
 
 body.grid-mode #canvas-container img {
@@ -978,8 +972,7 @@ img {
 }
 
 /* ===== Photoshoots & Photoshoot Series Grid Layout (Matching user screenshot) ===== */
-body.grid-mode #canvas-container.photoshoots-layout,
-body.grid-mode #canvas-container.photoshoot-series-layout {
+body.grid-mode #canvas-container.photoshoots-layout {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 40px 24px;
@@ -993,8 +986,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout {
     justify-items: center;
 }
 
-body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item,
-body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item {
+body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1029,8 +1021,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
 }
 
 @media (max-width: 900px) {
-    body.grid-mode #canvas-container.photoshoots-layout,
-    body.grid-mode #canvas-container.photoshoot-series-layout {
+    body.grid-mode #canvas-container.photoshoots-layout {
         grid-template-columns: repeat(3, 1fr);
         gap: 30px 20px;
         padding: 120px 40px 80px;
@@ -1038,8 +1029,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
 }
 
 @media (max-width: 600px) {
-    body.grid-mode #canvas-container.photoshoots-layout,
-    body.grid-mode #canvas-container.photoshoot-series-layout {
+    body.grid-mode #canvas-container.photoshoots-layout {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px 16px;
         padding: 100px 20px 60px;
@@ -1061,33 +1051,6 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
     /* 연도 / About 컬럼 */
     --d-c3: 509px;
     /* 매체(Le Mile 등) 컬럼 */
-}
-
-/* ===== 글자색 자동 전환 (contrast.js) =====
-   텍스트는 단어 단위 .lw 로 쪼개지고, 단어 아래 배경이 어두우면 .on-dark 가 붙음.
-   --ink: 글자색(흰 배경=검정 / 어두운 배경=흰색), --ink-a: 투명도(회색 상태 = --gray-a).
-   밑줄/취소선도 단어마다 currentColor로 그려서 색이 함께 바뀜. */
-.d-info,
-.d-nav,
-footer {
-    --ink: 17 17 17;
-}
-
-.lw {
-    color: rgb(var(--ink) / var(--ink-a, 1));
-}
-
-.lw.on-dark {
-    --ink: 255 255 255;
-}
-
-/* 회색 상태(비활성 메뉴, 준비 중 항목): 흰 배경에선 옅은 회색, 어두운 배경에선 흰색에 가깝게 */
-.lw {
-    --gray-a: 0.28;
-}
-
-.lw.on-dark {
-    --gray-a: 0.75;
 }
 
 .d-info,
@@ -1130,15 +1093,15 @@ footer {
     display: inline-block;
 }
 
-/* hover 밑줄: 1px solid, 단어별 색 */
-.d-info a:hover .lw,
-.d-nav a[href]:not(.other-link):hover .lw,
-.d-nav .other-link-fragile:hover .lw,
-.d-nav-trigger:hover .lw,
-.d-nav-item.open > .d-nav-trigger .lw,
-footer .footer-controls button:hover .lw,
-footer .footer-link .lw {
-    text-decoration: underline 1px solid currentColor;
+/* hover 밑줄: 1px solid black */
+.d-info a:hover,
+.d-nav-trigger:hover,
+.d-nav-item.open > .d-nav-trigger,
+.d-nav a.d-row[href]:hover > span:not(.d-back),
+.d-nav .other-link-fragile:hover,
+footer .footer-controls button:hover,
+footer .footer-link {
+    text-decoration: underline 1px solid black;
     text-underline-offset: 2px;
 }
 
@@ -1173,10 +1136,10 @@ footer .footer-link .lw {
 }
 
 /* 한쪽이 열리면 다른 쪽은 회색 (열림/닫힘은 script.js의 메뉴 컨트롤러가 .open으로 관리) */
-.d-nav:has(.d-nav-works.open) .d-nav-about > .d-nav-trigger .lw,
-.d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger .lw,
-.d-row.coming-soon:hover .lw {
-    --ink-a: var(--gray-a);
+.d-nav:has(.d-nav-works.open) .d-nav-about > .d-nav-trigger,
+.d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger,
+.d-row.coming-soon:hover > span {
+    color: #bbb;
 }
 
 /* 패널: 트리거 바로 아래부터 시작, padding이 hover 브리지 역할 */
@@ -1196,6 +1159,39 @@ footer .footer-link .lw {
     opacity: 1;
     pointer-events: auto;
     transition: opacity 0.15s ease, visibility 0s;
+}
+
+/* 현재 페이지 표시: Works가 닫혀 있어도 현재 페이지 행만 제자리에 남김 */
+.d-nav-works.has-current:not(.open) > .d-panel {
+    visibility: visible;
+    opacity: 1;
+    transition: none;
+}
+
+.d-nav-works.has-current:not(.open) .d-row:not(.current) {
+    visibility: hidden;
+}
+
+/* About이 열리면 현재 페이지 표시는 잠시 숨김 (About 텍스트와 겹치지 않게) */
+.d-nav:has(.d-nav-about.open) .d-nav-works > .d-panel {
+    visibility: hidden;
+}
+
+.d-row.current {
+    position: relative;
+}
+
+.d-nav .d-row.current > span:not(.d-back) {
+    text-decoration: underline 1px solid black;
+    text-underline-offset: 2px;
+}
+
+.d-back {
+    position: absolute;
+    right: 100%;
+    margin-right: 0.6em;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 /* 메뉴 전환 시 이전 패널은 페이드 없이 즉시 숨김 (겹침 방지) */
@@ -1237,8 +1233,8 @@ footer .footer-link .lw {
     cursor: default;
 }
 
-.d-row.coming-soon:hover .lw {
-    text-decoration: line-through currentColor;
+.d-row.coming-soon:hover > span {
+    text-decoration: line-through;
 }
 
 /* About 텍스트 */
@@ -1287,22 +1283,8 @@ footer .footer-link {
     line-height: var(--d-line);
 }
 
-.d-nav .other-link-fragile:hover {
-    text-decoration: none;
-}
-
-/* jagooknetwork hover: 연두 배경 위에서는 항상 검정 */
-.d-nav .other-link-jagook:hover .lw {
-    --ink: 17 17 17;
-}
-
 .d-nav .other-link-fluidpaper {
     min-width: 4.9em;
-}
-
-/* 어두운 배경 위에서는 fluidpaper 로고도 흰색으로 */
-.d-nav .other-link-fluidpaper:has(.on-dark) img {
-    filter: invert(1);
 }
 
 @media (max-width: 600px) {
@@ -1310,4 +1292,39 @@ footer .footer-link {
     .d-nav {
         display: none !important;
     }
+}
+
+/* ===== 시리즈 페이지 그리드 (큰 사진, 흐트러진 배치 — script.js layoutSeriesGrid) =====
+   세로 사진 1칸, 가로 사진 2칸(세로 너비*2 + 간격). 칸 위치는 JS가 grid-column/row로 지정 */
+body.grid-mode #canvas-container.photoshoot-series-layout {
+    display: grid;
+    grid-template-columns: repeat(var(--series-cols, 2), var(--series-col-w, 542px));
+    column-gap: var(--series-gap, 24px);
+    row-gap: 40px;
+    justify-content: center;
+    align-items: start;
+    padding: 150px 0 100px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+/* hover 시 뒤 사진이 어두우면 흰색 (hover-contrast.js가 .hover-dark 부여) */
+.hover-dark,
+.hover-dark * {
+    color: #fff !important;
+    text-decoration-color: #fff !important;
+}
+
+.d-nav .d-row.coming-soon.hover-dark > span {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.d-nav .other-link-fluidpaper.hover-dark img {
+    filter: invert(1);
 }
