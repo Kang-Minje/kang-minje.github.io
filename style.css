@@ -1237,6 +1237,12 @@ footer .footer-link {
     margin-bottom: calc(var(--d-line) * 3);
 }
 
+/* 인덱스(home): Threshold·카운터 숨김 (전체화면에서 제목 표시는 유지) */
+html.home-mode footer .footer-controls,
+html.home-mode body:not(:has(#fullscreen-container.show)) #image-counter {
+    visibility: hidden;
+}
+
 /* 푸터: Threshold는 Works와 좌측 정렬, 카운터는 우측 */
 footer .footer-controls {
     position: absolute;

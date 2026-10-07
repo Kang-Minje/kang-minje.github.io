@@ -327,6 +327,7 @@ window.addEventListener("resize", () => {
 /* ===== Init by query ===== */
 function initByQuery() {
     const page = getPage();
+    document.documentElement.classList.toggle("home-mode", page === "home");
     
     // Reset container classes and height
     container.className = "";

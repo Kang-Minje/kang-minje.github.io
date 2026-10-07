@@ -13,9 +13,10 @@
   <link rel="canonical" href="https://kangminje.com" />
 
   <link rel="stylesheet" href="style.css" />
-  <!-- About 페이지는 첫 화면부터 이미지·푸터 숨김 (깜빡임 방지) -->
+  <!-- About 페이지는 첫 화면부터 이미지·푸터 숨김, 인덱스는 Threshold·카운터 숨김 (깜빡임 방지) -->
   <script>
     if (new URLSearchParams(location.search).get("page") === "about") document.documentElement.classList.add("about-mode");
+    if (!new URLSearchParams(location.search).get("page")) document.documentElement.classList.add("home-mode");
   </script>
 
   <!-- SEO & Social Media Metadata (OpenGraph) -->
