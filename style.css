@@ -87,19 +87,8 @@ body.grid-mode #canvas-container img {
     /* No more grid-relative translate */
 }
 
-/* When any image is hovered, dim ALL other images inside the container */
-body.grid-mode #canvas-container:has(img:hover) img {
-    opacity: 0.3;
-    transition: opacity 0.6s ease 0.1s;
-    /* Smooth background dimming */
-}
-
 body.grid-mode #canvas-container img:hover {
-    opacity: 1 !important;
-    outline: 1px dotted rgba(0, 0, 0, 0.2);
     z-index: 10;
-    transition: opacity 0.1s ease 0s;
-    /* Instant highlight */
 }
 
 /* footer */
@@ -1007,12 +996,6 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     height: auto !important;
     outline: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-body.grid-mode #canvas-container.photoshoots-layout .photoshoot-item:hover img,
-body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-item:hover img {
-    outline: 1px dotted rgba(0, 0, 0, 0.5);
-    outline-offset: -1px;
 }
 
 body.grid-mode #canvas-container.photoshoots-layout .photoshoot-title,
