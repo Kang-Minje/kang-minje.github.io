@@ -1261,7 +1261,8 @@ footer .footer-controls {
 
 footer .footer-right {
     position: absolute;
-    right: 20px;
+    right: var(--d-left);
+    /* 좌상단 이름 블록의 좌측 여백과 같은 우측 여백 */
 }
 
 footer .footer-controls button:hover,
@@ -1417,5 +1418,41 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
 @media (max-width: 600px) {
     #word-image {
         display: none;
+    }
+}
+
+/* ===== 프로젝트 PDF 버튼: 우측 상단, 이름 블록과 같은 상단선·좌우 여백 =====
+   시리즈 그리드 페이지, 또는 사진을 크게 본 뒤 (index)를 열었을 때만 표시 */
+.d-pdf {
+    display: none;
+    position: fixed;
+    top: var(--d-top);
+    right: var(--d-left);
+    z-index: 1100;
+    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 10pt;
+    line-height: var(--d-line);
+    color: #111;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+body.pdf-available .d-pdf {
+    display: block;
+}
+
+.d-pdf:hover {
+    text-decoration: underline 1px solid black;
+    text-underline-offset: 2px;
+}
+
+/* 인덱스 오버레이가 열리면 에디토리얼 크레딧 탭은 숨김 (우측 상단 PDF 버튼과 겹치지 않게) */
+body:has(#fs-index2-overlay.show) .credit-box-container {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .d-pdf {
+        display: none !important;
     }
 }

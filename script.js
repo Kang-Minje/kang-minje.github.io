@@ -514,6 +514,7 @@ function openFullscreenFromList(list, index) {
 }
 
 initByQuery();
+updatePdfButton();
 
 const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
@@ -760,11 +761,22 @@ function openIndex2() {
     renderIndex2();
     index2Overlay.classList.add("show");
     if (fsControls) fsControls.style.display = "none";
+    updatePdfButton();
 }
 
 function closeIndex2() {
     index2Overlay.classList.remove("show");
     if (fsControls) fsControls.style.display = "";
+    updatePdfButton();
+}
+
+/* ===== 프로젝트 PDF 버튼 표시 조건 =====
+   Works 메뉴에 있는 프로젝트 페이지에서, 프로젝트 인덱스(시리즈 그리드 또는 (index) 오버레이)를 보고 있을 때 */
+function updatePdfButton() {
+    const row = findCurrentWorksRow();
+    const isProject = !!row && getPage() !== "all";
+    const onIndex = container.classList.contains("photoshoot-series-layout") || index2Overlay.classList.contains("show");
+    document.body.classList.toggle("pdf-available", isProject && onIndex);
 }
 
 // 브레이크포인트별 그리드 컬럼 수 (style.css의 #fs-index2-grid 미디어쿼리와 반드시 일치해야 함)
