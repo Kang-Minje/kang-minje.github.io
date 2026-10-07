@@ -826,6 +826,14 @@ function layoutIndexEntries(entries, cols, capacityForRow) {
     let prevInsertion = null;
 
     while (idx < entries.length) {
+        // solo 항목(시리즈 영상)은 다른 사진과 같은 행에 두지 않고 혼자 한 행, 가운데
+        if (entries[idx].solo) {
+            entries[idx].el.style.gridColumn = "1 / -1";
+            entries[idx].el.style.gridRow = String(row);
+            row += 1;
+            idx += 1;
+            continue;
+        }
         const rowCapacity = capacityForRow ? capacityForRow(row) : (cols >= 4 ? cols - 1 : cols);
         // 1) 이 행에 들어갈 아이템들을 그리디하게 결정 (기존과 동일한 제약: 캡시티/가로 1장 규칙)
         const rowEntries = [];
@@ -833,6 +841,7 @@ function layoutIndexEntries(entries, cols, capacityForRow) {
         let rowHasWide = false;
         while (idx < entries.length) {
             const e = entries[idx];
+            if (e.solo) break;
             const span = e.wide ? Math.min(2, cols) : 1;
             const wideConflict = e.wide && rowHasWide;
             if (used > 0 && (used + span > rowCapacity || wideConflict)) break;

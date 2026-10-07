@@ -6,10 +6,12 @@
 //    - 썸네일(이미 재생 중인 그 영상)이 첫 번째 타일 자리로 커짐 (GPU transform만 사용)
 //    - 검정 바탕 위에 화면 높이 영상을 왼쪽부터 가로로 반복해 화면을 채움 (fluidpaper 타일)
 // 3) 기본 음소거, 소리는 첫 번째 타일만 (unmute / mute). 모든 글자는 흰색
-// 4) 위로 스크롤하거나 Esc → 원래 페이지로
+// 4) 썸네일에 마우스를 올려도 바로 전환 (스크롤 끝이 아니어도)
+// 5) 위로 스크롤하거나 Esc → 원래 페이지로
 (function () {
     const SERIES_VIDEOS = {
-        sihun: { src: "video/sihun.mp4", poster: "video/sihun-poster.jpg", aspect: 2040 / 1440 },
+        // thumbFrom: 그리드 썸네일은 이 시점부터 반복 재생 (Sihun은 앞 2.3초가 검정)
+        sihun: { src: "video/sihun.mp4", poster: "video/sihun-poster.jpg", aspect: 2040 / 1440, thumbFrom: 2.5 },
         leo: { src: "video/leo.mp4", poster: "video/leo-poster.jpg", aspect: 1080 / 1440 }
     };
     const EASE = "cubic-bezier(0.25, 0.46, 0.45, 0.94)"; // ease-out-quad
@@ -31,9 +33,24 @@
     Object.assign(thumb, { src: video.src, poster: video.poster, muted: true, loop: true, playsInline: true, preload: "auto" });
     thumb.defaultMuted = true;
     thumb.setAttribute("aria-label", "video");
-    item.append(thumb);
+    item.append(thumb); // 영상에는 캡션 없음
+    // 사진과 높이가 다르므로 항상 혼자 한 행, 가운데 (세로 영상은 사진 한 칸 너비, 가로 영상은 두 칸 너비)
+    item.style.justifySelf = "center";
+    item.style.width = video.aspect > 1
+        ? "calc(var(--series-col-w) * 2 + var(--series-gap))"
+        : "var(--series-col-w)";
     container.appendChild(item);
-    seriesEntries.push({ el: item, wide: video.aspect > 1 });
+    seriesEntries.push({ el: item, wide: video.aspect > 1, solo: true });
+
+    // 썸네일은 검정 도입부를 건너뛰고 thumbFrom부터 반복
+    const thumbFrom = video.thumbFrom || 0;
+    const skipIntro = () => { if (thumbFrom && thumb.readyState >= 1 && thumb.currentTime < thumbFrom) thumb.currentTime = thumbFrom; };
+    if (thumbFrom) {
+        thumb.loop = false;
+        ["loadedmetadata", "loadeddata", "play"].forEach((ev) => thumb.addEventListener(ev, skipIntro));
+        thumb.addEventListener("ended", () => { thumb.currentTime = thumbFrom; thumb.play().catch(() => {}); });
+        skipIntro();
+    }
     layoutSeriesGrid();
 
     // 그리드 아래 여백: 맨 끝에서 썸네일이 화면 정중앙에 오도록 (그리드 자체 아래 여백은 없앰)
@@ -127,19 +144,19 @@
         if (active) return;
         active = true;
         const amount = hideOthers();
+        // 사진이 사라지는 동안 타일을 미리 맞는 장면으로 옮겨두고 멈춰둠 (커질 때 디코딩 부담이 없게)
+        buildTiles();
+        const lead = (amount + STAGGER_PAUSE + GROW_MS) / 1000;
+        const startAt = thumb.duration ? (thumb.currentTime + lead) % thumb.duration : 0;
+        tiles.forEach((el) => {
+            el.pause();
+            try { el.currentTime = startAt; } catch (e) {}
+        });
         later(grow, amount + STAGGER_PAUSE);
     }
 
-    // 2단계: 재생 중인 썸네일 자체가 첫 번째 타일 자리로 커짐 (transform만 → 부드럽게, 다시 로드 없음)
+    // 2단계: 재생 중인 썸네일 자체가 첫 번째 타일 자리로 커짐 (transform만 → 부드럽게, 이 동안 다른 영상은 멈춤)
     function grow() {
-        buildTiles();
-        // 타일은 보이지 않는 상태로 미리 재생 시작 → 커지기가 끝날 때 썸네일과 같은 장면에서 이어짐
-        const startAt = (thumb.currentTime + GROW_MS / 1000) % (thumb.duration || Infinity);
-        tiles.forEach((el) => {
-            try { el.currentTime = startAt; } catch (e) {}
-            el.play().catch(() => {});
-        });
-
         const from = thumb.getBoundingClientRect();
         const scale = innerHeight / from.height;
         item.classList.add("growing");
@@ -150,8 +167,10 @@
         document.body.classList.add("video-active"); // 검정 바탕 + 흰 글자
         stage.classList.add("show");
 
+        // 다 커진 뒤에 타일 재생 시작 → 바로 타일로 교체
         later(() => {
-            stage.classList.add("tiles-in"); // 타일 등장 (이미 재생 중)
+            tiles.forEach((el) => el.play().catch(() => {}));
+            stage.classList.add("tiles-in");
             thumb.style.visibility = "hidden";
         }, GROW_MS);
     }
@@ -183,6 +202,16 @@
         pushTimer = setTimeout(() => { push = 0; }, 600);
         if (push >= PUSH) { push = 0; enteredAt = scrollY; enter(); }
     }
+    // 썸네일에 마우스를 올려도 (스크롤 끝이 아니어도) 바로 전환. 스크롤하다 스치는 경우는 제외하려고 잠깐(HOVER_MS) 머물면 시작
+    const HOVER_MS = 200;
+    let hoverTimer = null;
+    thumb.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "touch" || active) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => { enteredAt = scrollY; enter(); }, HOVER_MS);
+    });
+    thumb.addEventListener("pointerleave", () => clearTimeout(hoverTimer));
+
     window.addEventListener("wheel", (e) => {
         if (active) { if (e.deltaY < -20) exit(); return; }
         if (e.deltaY > 0) addPush(e.deltaY);

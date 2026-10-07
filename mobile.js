@@ -120,8 +120,10 @@
             cvLink.classList.add("pressing");
             pressTimer = setTimeout(() => {
                 const link = document.createElement('a');
+                link.className = 'cv-link'; // 탭 차단(suppressGhostClick)에 걸려 다운로드가 취소되지 않도록
                 link.href = 'CV+Portfolio/KangMinje_CVandPortfolio.zip';
                 link.download = 'KangMinje_CVandPortfolio.zip';
+                if (window.logDownload) window.logDownload({ type: "portfolio-cv", file: link.download });
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
