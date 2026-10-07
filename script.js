@@ -37,11 +37,27 @@ const SERIES_CONFIG = {
     }
 };
 
+/* ===== 첫 페이지(주소에 ?page 없음) 사진 =====
+   LANDING_FRONT는 항상 맨 앞(그 안에서는 랜덤 순서), 나머지 LANDING_REST는 그 뒤에 랜덤 순서 */
+const LANDING_FRONT = [
+    "faces-01", "faces-36", "faces-91", "faces-96", "faces-112", "faces-117", "faces-121",
+    "ra4-04", "ra4-06", "ra4-13", "walk-03", "walk-35"
+];
+const LANDING_REST = [
+    "24-15", "24-23", "24-30",
+    "faces-05", "faces-11", "faces-13", "faces-14", "faces-25", "faces-31", "faces-32", "faces-57",
+    "faces-67", "faces-80", "faces-101", "faces-105", "faces-109", "faces-113", "faces-122", "faces-123",
+    "faces-124", "faces-126", "faces-127", "faces-130", "faces-133", "faces-135", "faces-136", "faces-138",
+    "faces-139",
+    "ra4-03", "ra4-15", "ra4-33",
+    "walk-11", "walk-12", "walk-13", "walk-30", "walk-31", "walk-36"
+];
+
 /* ===== Helpers ===== */
 const pad2 = (n) => String(n).padStart(2, "0");
 const pad4 = (n) => String(n).padStart(4, "0");
 const qs = new URLSearchParams(location.search);
-const getPage = () => qs.get("page") || "walk";
+const getPage = () => qs.get("page") || "home";
 const assetSrc = (src) => (src.startsWith("img/") && src.endsWith(".avif")) ? src.replace(/^img\//, "img/web/") : src;
 window.assetSrc = assetSrc;
 
@@ -73,6 +89,12 @@ function resolveImagePath(key, index) {
 
 /* ===== Build images by page (Series or Tag) ===== */
 function buildImagesFor(pageKey) {
+    if (pageKey === "home") {
+        return [...LANDING_FRONT, ...LANDING_REST].map((name) => {
+            const m = name.match(/^(.+)-(\d+)$/);
+            return resolveImagePath(m[1], Number(m[2]));
+        });
+    }
     // 1. 우선 태그(세부 시리즈)인지 확인
     const taggedImages = getImagesByTag(pageKey);
     if (taggedImages.length > 0) {
@@ -104,12 +126,17 @@ function buildAllImages() {
     return arr;
 }
 
-function initSpawningOrder() {
-    shuffledIndices = Array.from({ length: images.length }, (_, i) => i);
-    for (let i = shuffledIndices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledIndices[i], shuffledIndices[j]] = [shuffledIndices[j], shuffledIndices[i]];
-    }
+// frontCount > 0이면 앞쪽 frontCount장을 먼저(그 안에서 랜덤), 나머지를 그 뒤에(랜덤) 배치
+function initSpawningOrder(frontCount = 0) {
+    const shuffle = (arr) => {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    };
+    const all = Array.from({ length: images.length }, (_, i) => i);
+    shuffledIndices = [...shuffle(all.slice(0, frontCount)), ...shuffle(all.slice(frontCount))];
 }
 
 /* ===== Reset & UI ===== */
@@ -323,7 +350,7 @@ function initByQuery() {
         document.body.classList.remove("grid-mode");
         document.documentElement.classList.remove("grid-mode");
         images = (page === "all") ? buildAllImages() : buildImagesFor(page);
-        initSpawningOrder();
+        initSpawningOrder(page === "home" ? LANDING_FRONT.length : 0);
         resetCanvas();
         
         // 태블릿인 경우 처음에 빈 페이지가 아니라 1번 이미지 스폰
@@ -337,7 +364,7 @@ function initByQuery() {
     // Works 메뉴에 있는 페이지는 메뉴의 현재 페이지 표시(←)가 대신하므로 숨김
     const backNav = document.getElementById("back-nav");
     if (backNav) {
-        const hiddenPages = ["walk", "ra4", "24", "faces", "photoshoots"];
+        const hiddenPages = ["home", "walk", "ra4", "24", "faces", "photoshoots"];
         if (hiddenPages.includes(page) || findCurrentWorksRow()) {
             backNav.style.display = "none";
         } else {
@@ -346,7 +373,7 @@ function initByQuery() {
             if (Object.keys(PHOTOSHOOT_TITLES).includes(page)) {
                 backNav.href = "?page=photoshoots";
             } else {
-                backNav.href = "?page=walk";
+                backNav.href = location.pathname;
             }
 
             // 바로 이전 페이지로 가기 (history.back() 선호)

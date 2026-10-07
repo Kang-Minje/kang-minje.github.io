@@ -9,35 +9,31 @@
     let stage, info, hint;
     let currentImg = null;
 
-    // img 폴더 시리즈 자동 생성 (이름 기반으로 매핑 변경)
-    const counts = {
-        walk: 37,
-        ra4: 47,
-        "24": 35,
-        faces: 120,
-        dots: 7
+    // 첫 페이지 사진 (script.js의 LANDING_FRONT / LANDING_REST와 동일)
+    // 앞쪽 묶음을 먼저(그 안에서 랜덤), 나머지를 그 뒤에(랜덤) 보여주고 다 보면 처음부터 다시
+    const toPath = (name) => {
+        const m = name.match(/^(.+)-(\d+)$/);
+        const padIndex = String(Number(m[2])).padStart(2, "0");
+        const msPath = `img/movingsphere/${m[1]}-${padIndex}.avif`;
+        return (typeof IMAGE_DATA !== "undefined" && IMAGE_DATA[msPath]) ? msPath : `img/${m[1]}-${padIndex}.avif`;
     };
-    const IMAGES = [];
-    for (const [name, count] of Object.entries(counts)) {
-        for (let i = 1; i <= count; i++) {
-            if (name === "faces" && i === 104) continue;
-            
-            let path;
-            if (name === "dots") {
-                path = `img/dots-${i}.avif`;
-            } else {
-                const padIndex = String(i).padStart(2, "0");
-                const msPath = `img/movingsphere/${name}-${padIndex}.avif`;
-                if (typeof IMAGE_DATA !== "undefined" && IMAGE_DATA[msPath]) {
-                    path = msPath;
-                } else {
-                    path = `img/${name}-${padIndex}.avif`;
-                }
-            }
-            IMAGES.push(path);
+    const shuffle = (arr) => {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-    }
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        return arr;
+    };
+    const IMAGES = [...LANDING_FRONT, ...LANDING_REST].map(toPath);
+    let order = [];
+    let orderPos = 0;
+    const next = () => {
+        if (orderPos >= order.length) {
+            order = [...shuffle(IMAGES.slice(0, LANDING_FRONT.length)), ...shuffle(IMAGES.slice(LANDING_FRONT.length))];
+            orderPos = 0;
+        }
+        return order[orderPos++];
+    };
     const toAssetSrc = (src) => (typeof window.assetSrc === "function") ? window.assetSrc(src) : src;
 
     function placeInsideViewport(el) {
@@ -66,7 +62,7 @@
                 currentImg = img;
             });
         };
-        img.src = toAssetSrc(pick(IMAGES));
+        img.src = toAssetSrc(next());
     }
 
     let tapLocked = false;
