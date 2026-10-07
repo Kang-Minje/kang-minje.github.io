@@ -1550,3 +1550,71 @@ body.video-active .series-video-sound {
     text-decoration: underline 1px solid #fff;
     text-underline-offset: 2px;
 }
+
+/* ===== 다운로드 전 이메일 입력 (email-gate.js) =====
+   링크/버튼 자리에서 그대로 열리는 한 줄: 밑줄 입력칸 + ↓. 글자 크기·색은 주변을 따름 */
+.email-gate {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6em;
+    font: inherit;
+    color: inherit;
+    pointer-events: auto;
+}
+
+.email-gate input {
+    all: unset;
+    width: 18ch;
+    font: inherit;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
+    line-height: inherit;
+}
+
+.email-gate input::placeholder {
+    color: currentColor;
+    opacity: 0.4;
+}
+
+.email-gate button {
+    all: unset;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+}
+
+.email-gate button:hover {
+    text-decoration: underline 1px solid currentColor;
+    text-underline-offset: 2px;
+}
+
+/* 형식이 틀리면 밑줄만 흐리게 깜빡 */
+.email-gate.invalid input {
+    border-bottom-style: dotted;
+}
+
+/* PDF 버튼 자리 (우측 상단 고정) */
+.email-gate.d-pdf-gate {
+    position: fixed;
+    top: var(--d-top);
+    right: var(--d-left);
+    z-index: 1100;
+    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 10pt;
+    line-height: var(--d-line);
+    color: #111;
+}
+
+body.video-active .email-gate.d-pdf-gate {
+    color: #fff;
+}
+
+/* 모바일 좌상단 정보 안에서도 입력 가능하게 */
+.m-info .email-gate {
+    pointer-events: auto;
+    font-size: 10pt;
+}
+
+.m-info .email-gate input {
+    font-size: 16px; /* iOS 입력 시 화면 확대 방지 */
+}

@@ -1,6 +1,6 @@
 // log.js — 다운로드 로그 (익명). 다운로드가 일어날 때마다 구글 시트에 한 줄씩 기록.
-// 기록 항목: 시간(시트에서 기록), 종류(pdf / portfolio-cv), 프로젝트, 파일명, 장수, 페이지 주소, 브라우저 언어, 들어온 경로
-// 이름·이메일·IP 같은 개인 정보는 보내지 않음.
+// 기록 항목: 시간(시트에서 기록), 종류(pdf / portfolio-cv), 이메일(다운로드 전에 입력받음, email-gate.js),
+// 프로젝트, 파일명, 장수, 페이지 주소, 브라우저 언어, 들어온 경로
 //
 // LOG_ENDPOINT: 구글 시트의 Apps Script를 "웹 앱"으로 배포하면 나오는 주소 (https://script.google.com/macros/s/…/exec)
 // 비어 있으면 아무것도 보내지 않음.
@@ -11,6 +11,7 @@
         if (!LOG_ENDPOINT) return;
         const data = {
             type: entry.type || "",
+            email: entry.email || "",
             project: entry.project || "",
             file: entry.file || "",
             pages: entry.pages || "",
@@ -30,10 +31,5 @@
         } catch (e) {}
     };
 
-    // 포트폴리오 / CV zip 다운로드 (PC 좌상단 링크)
-    document.addEventListener("click", (e) => {
-        const a = e.target.closest(".d-info a[download]");
-        if (!a || !/CVandPortfolio\.zip$/i.test(a.getAttribute("href") || "")) return;
-        window.logDownload({ type: "portfolio-cv", file: a.getAttribute("download") || "KangMinje_CVandPortfolio.zip" });
-    });
+    // 포트폴리오 / CV zip 다운로드 기록은 email-gate.js(PC)와 mobile.js(모바일)에서 이메일과 함께 보냄
 })();

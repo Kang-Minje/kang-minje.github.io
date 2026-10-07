@@ -141,7 +141,7 @@
         });
     }
 
-    async function makePdf() {
+    async function makePdf(email) {
         if (busy) return;
         busy = true;
         const label = button.textContent;
@@ -187,7 +187,7 @@
             const name = `KangMinje_${info.title}${year ? "_" + year : ""}`
                 .replace(/[^A-Za-z0-9가-힣_-]+/g, "_").replace(/_+/g, "_").replace(/_$/, "");
             if (window.logDownload) {
-                window.logDownload({ type: "pdf", project: `${info.title}${year ? " " + year : ""}`, file: `${name}.pdf`, pages: pdf.getPageCount() });
+                window.logDownload({ type: "pdf", email, project: `${info.title}${year ? " " + year : ""}`, file: `${name}.pdf`, pages: pdf.getPageCount() });
             }
             const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
             const a = document.createElement("a");
@@ -206,8 +206,12 @@
         }
     }
 
-    button.addEventListener("click", (e) => {
+    // 이메일을 받은 뒤 PDF 생성 (email-gate.js)
+    button.addEventListener("click", async (e) => {
         e.preventDefault();
-        makePdf();
+        if (busy) return;
+        const email = window.requestEmail ? await window.requestEmail(button, { className: "d-pdf-gate" }) : "";
+        if (email === null) return;
+        makePdf(email);
     });
 })();
