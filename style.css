@@ -1457,3 +1457,96 @@ body:has(#fs-index2-overlay.show) .credit-box-container {
         display: none !important;
     }
 }
+
+/* ===== 시리즈 영상 (series-video.js, fluidpaper 방식) ===== */
+body.grid-mode #canvas-container.photoshoot-series-layout .series-video-item video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #000;
+}
+
+/* 그리드 아래 여백: 맨 끝에서 영상 썸네일이 화면 가운데 오도록 JS가 높이 계산 */
+.series-video-runway {
+    height: 0;
+}
+
+/* 전체화면 무대 (fluidpaper와 동일): 검정 바탕, 화면 높이의 영상을 왼쪽부터 가로로 반복 */
+.series-video-stage {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    /* 사진·풀스크린 뷰어 위, 글자(1100) 아래 */
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow: hidden;
+    background: #000;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.series-video-stage.show {
+    visibility: visible;
+}
+
+.series-video-stage video {
+    flex: 0 0 auto;
+    display: block;
+    height: 100vh;
+    object-fit: cover;
+    opacity: 0;
+}
+
+.series-video-stage.tiles-in video {
+    opacity: 1;
+}
+
+/* 커지는 동안 썸네일은 검정 무대 위에 */
+body.grid-mode #canvas-container .series-video-item.growing {
+    position: relative;
+    z-index: 1060;
+}
+
+body.grid-mode #canvas-container .series-video-item.growing video {
+    will-change: transform;
+}
+
+/* 영상 재생 중: 모든 글자 흰색, 사진용 푸터(Threshold·카운터)는 숨기고 그 자리에 sound on/off */
+body.video-active .d-info,
+body.video-active .d-nav,
+body.video-active .d-pdf,
+body.video-active .back-nav {
+    color: #fff;
+}
+
+body.video-active .d-info *,
+body.video-active .d-nav *,
+body.video-active .d-pdf {
+    text-decoration-color: #fff !important;
+}
+
+body.video-active footer {
+    visibility: hidden;
+}
+
+.series-video-sound {
+    all: unset;
+    display: none;
+    position: fixed;
+    right: var(--d-left);
+    bottom: 22px;
+    z-index: 1100;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+
+body.video-active .series-video-sound {
+    display: block;
+}
+
+.series-video-sound:hover {
+    text-decoration: underline 1px solid #fff;
+    text-underline-offset: 2px;
+}

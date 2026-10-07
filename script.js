@@ -33,7 +33,7 @@ const SERIES_CONFIG = {
     },
     faces: {
         key: "faces",
-        count: 142
+        count: 185
     }
 };
 
@@ -51,6 +51,17 @@ const LANDING_REST = [
     "faces-139",
     "ra4-03", "ra4-15", "ra4-33",
     "walk-11", "walk-12", "walk-13", "walk-30", "walk-31", "walk-36"
+];
+
+/* ===== Faces 페이지 사진 (선별, 이 순서대로). 전체 인덱스(?page=all)에는 여전히 faces 전체가 들어감 ===== */
+const FACES_SELECTION = [
+    "faces-01", "faces-03", "faces-04", "faces-05", "faces-06", "faces-08", "faces-11", "faces-14", "faces-16",
+    "faces-19", "faces-21", "faces-27", "faces-28", "faces-29", "faces-31", "faces-32", "faces-34", "faces-36",
+    "faces-38", "faces-39", "faces-57", "faces-59", "faces-60", "faces-61", "faces-63", "faces-66", "faces-67",
+    "faces-79", "faces-80", "faces-81", "faces-83", "faces-90", "faces-96", "faces-97", "faces-101", "faces-103",
+    "faces-105", "faces-106", "faces-107", "faces-108", "faces-109", "faces-110", "faces-112", "faces-113",
+    "faces-116", "faces-117", "faces-119", "faces-121", "faces-122", "faces-123", "faces-124", "faces-126",
+    "faces-127", "faces-128", "faces-130", "faces-132", "faces-133", "faces-138", "faces-140"
 ];
 
 /* ===== Helpers ===== */
@@ -89,6 +100,12 @@ function resolveImagePath(key, index) {
 
 /* ===== Build images by page (Series or Tag) ===== */
 function buildImagesFor(pageKey) {
+    if (pageKey === "faces") {
+        return FACES_SELECTION.map((name) => {
+            const m = name.match(/^(.+)-(\d+)$/);
+            return resolveImagePath(m[1], Number(m[2]));
+        });
+    }
     if (pageKey === "home") {
         return [...LANDING_FRONT, ...LANDING_REST].map((name) => {
             const m = name.match(/^(.+)-(\d+)$/);
@@ -155,6 +172,9 @@ const PHOTOSHOOT_TITLES = {
     "hwanhee": "Hwanhee",
     "hwanhee_2024": "Hwanhee 2024",
     "hwanhee_2026": "Hwanhee 2026",
+    "milozaya": "Milo&Zaya",
+    "sihun": "Sihun",
+    "leo": "Leo",
     "xinseha": "Xin Seha",
     "parkdongsun": "Park Dongsun",
     "ann": "Ann",

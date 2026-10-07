@@ -77,13 +77,26 @@
         return { title: cols[0] || getPage(), year: cols[1] || "", media: cols[2] || "" };
     }
 
-    // 사진 순서대로 페이지 묶기: 세로 사진 두 장이 연달아 나오면 한 페이지에
+    // 시퀀스: 연달아 나오면 한 페이지에 작게 한 줄로 (같은 높이)
+    const SEQUENCES = [
+        ["faces-105", "faces-106", "faces-107", "faces-108", "faces-109", "faces-110"]
+    ];
+    const sequenceOf = (name) => SEQUENCES.find((seq) => seq.includes(name));
+
+    // 사진 순서대로 페이지 묶기: 시퀀스는 한 페이지에, 그 외 세로 사진 두 장이 연달아 나오면 한 페이지에
     function groupPages(photos) {
         const pages = [];
         for (let i = 0; i < photos.length; i++) {
             const a = photos[i];
+            const seq = sequenceOf(a.name);
+            if (seq) {
+                const group = [a];
+                while (photos[i + 1] && seq.includes(photos[i + 1].name)) group.push(photos[++i]);
+                pages.push(group);
+                continue;
+            }
             const b = photos[i + 1];
-            if (a.h > a.w && b && b.h > b.w) {
+            if (a.h > a.w && b && b.h > b.w && !sequenceOf(b.name)) {
                 pages.push([a, b]);
                 i++;
             } else {
@@ -157,7 +170,8 @@
             for (let i = 0; i < sources.length; i++) {
                 setLabel(`↓ pdf ${i + 1}/${sources.length}`);
                 const jpg = await toJpeg(sources[i]);
-                photos.push({ w: jpg.w, h: jpg.h, image: await pdf.embedJpg(jpg.bytes) });
+                const name = sources[i].split("/").pop().replace(/\.avif$/, "");
+                photos.push({ name, w: jpg.w, h: jpg.h, image: await pdf.embedJpg(jpg.bytes) });
             }
 
             drawCover(pdf, fonts, info, photos.length);
