@@ -280,7 +280,8 @@ img {
 /* Credit Box (Editorial) */
 .credit-box-container {
     position: fixed;
-    top: 40px;
+    top: calc(var(--d-top) + var(--d-line) * 2);
+    /* 우측 상단 PDF 버튼 아래로 (겹치지 않게) */
     right: 0;
     transform: translateX(calc(100% - 70px));
     /* 70px만 보이도록 우측으로 밀어냄 */
@@ -1422,7 +1423,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
 }
 
 /* ===== 프로젝트 PDF 버튼: 우측 상단, 이름 블록과 같은 상단선·좌우 여백 =====
-   시리즈 그리드 페이지, 또는 사진을 크게 본 뒤 (index)를 열었을 때만 표시 */
+   Works 메뉴에 있는 모든 프로젝트 페이지에서 표시 */
 .d-pdf {
     display: none;
     position: fixed;
