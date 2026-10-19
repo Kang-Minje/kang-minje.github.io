@@ -107,6 +107,12 @@
       <input id="file" type="file" accept="image/*" multiple hidden>
     </section>
 
+    <section id="setBox" hidden>
+      <h2>세트</h2>
+      <div class="line"><button id="setSave">저장</button><button id="setReset">원래대로</button></div>
+      <div class="line hint" id="setState"></div>
+    </section>
+
     <section>
       <h2>풀</h2>
       <div class="line"><button id="toPool">선택한 것 풀로</button><button id="poolAll">모두 꺼내기</button></div>
@@ -194,7 +200,8 @@
   var S = {};
   try { S = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { S = {}; }
   for (var k in D) if (S[k] === undefined) S[k] = D[k];
-  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+  var noPersist = false;   /* ?set= 로 연 세트는 저장된 설정을 건드리지 않음 */
+  function persist(){ if (noPersist) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 
   var items = [], pool = [], uid = 0, page = 0, aspect = 16/9;
   var hits = [], hover = -1, drag = null, raf = 0;
@@ -236,6 +243,7 @@
   /* ---------- pool: 시트에서 빼두기 / 꺼내기 ---------- */
   function savePool(){}   /* 풀은 이 탭에서만 유지 (사진은 저장되지 않음) */
   function toPool(list){
+    list = list.filter(function(it){ return !it.blank; });
     if (!list.length) return;
     list.forEach(function(it){ var k = items.indexOf(it); if (k >= 0) items.splice(k, 1); it.sel = false; pool.push(it); });
     pool.sort(function(a, b){ return a.id - b.id; });
@@ -284,6 +292,7 @@
       var i = n - start, col = i % S.cols, row = Math.floor(i / S.cols);
       if (row >= S.rows) break;
       var it = items[n];
+      if (it.blank) continue;   /* 세트의 시트 나눔용 빈 칸 */
       var x = pad + col * (cw + gap), y = pad + row * (ch + gap);
       c.fillStyle = S.cell; c.fillRect(x, y, cw, ih);
       var rx = x, ry = y;
@@ -336,6 +345,7 @@
 
   /* ---------- render ---------- */
   function render(){
+    normalize();
     var r = ranges();
     page = clamp(page, 0, r.length - 1);
     var has = items.length > 0;
@@ -346,13 +356,15 @@
     var sel = items.filter(function(i){ return i.sel; }).length;
     $("pg").textContent = (page + 1) + " / " + r.length;
     $("prev").disabled = page <= 0; $("next").disabled = page >= r.length - 1;
-    var txt = has ? items.length + "장 · 선택 " + sel + " · " + r.length + "시트" : "";
+    var real = items.filter(function(i){ return !i.blank; }).length;
+    var txt = has ? real + "장 · 선택 " + sel + " · " + r.length + "시트" : "";
     $("info").textContent = txt;
-    $("count").textContent = has ? items.length + "장 · 선택 " + sel : "아직 사진이 없습니다.";
+    $("count").textContent = has ? real + "장 · 선택 " + sel : "아직 사진이 없습니다.";
     ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll"].forEach(function(id){ $(id).disabled = !has; });
     $("selFirst").disabled = !has || !sel;
     $("toPool").disabled = !sel;
     $("gapV").textContent = S.gap; $("dotV").textContent = S.dot; $("qualityV").textContent = S.quality;
+    setStatus();
     var d = clamp(S.dot / 80 * 20 + 5, 5, 25); $("dotMark").style.width = $("dotMark").style.height = d + "px";
   }
 
@@ -382,7 +394,8 @@
   cv.addEventListener("pointerup", function(){
     if (!drag) return;
     var d = drag; drag = null; cv.style.cursor = "pointer";
-    if (d.active) { if (d.to !== d.from) { var it = items.splice(d.from, 1)[0]; items.splice(d.to, 0, it); } }
+    if (d.active) { if (d.to !== d.from) { var it = items.splice(d.from, 1)[0]; items.splice(d.to, 0, it);
+      var nb = items[d.from < d.to ? d.to - 1 : d.to + 1]; if (nb && nb.grp !== undefined) it.grp = nb.grp; } }
     else items[d.from].sel = !items[d.from].sel;
     render();
   });
@@ -535,8 +548,107 @@
   window.addEventListener("resize", relayout);
   if (window.ResizeObserver) new ResizeObserver(relayout).observe($("stage"));
 
+  /* ---------- 세트: ?set=이름 ----------
+     items: [이름, 경로] 또는 [이름, [byte 시작, 길이]] (= 포트폴리오 PDF 안의 JPEG)
+     시트마다 새 페이지에서 시작 (남는 칸은 비워 둠) */
+  var SETS = {"best":{"title":"strongest","cols":7,"rows":7,"labels":"name","sheets":[{"title":"랜딩 49","items":[["A01 faces-01 ★","img/web/faces-01.avif"],["A02 faces-36 ★","img/web/faces-36.avif"],["A03 faces-91 ★","img/web/faces-91.avif"],["A04 faces-96 ★","img/web/faces-96.avif"],["A05 faces-112 ★","img/web/faces-112.avif"],["A06 faces-117 ★","img/web/faces-117.avif"],["A07 faces-121 ★","img/web/faces-121.avif"],["A08 ra4-04 ★","img/web/ra4-04.avif"],["A09 ra4-06 ★","img/web/ra4-06.avif"],["A10 ra4-13 ★","img/web/ra4-13.avif"],["A11 walk-03 ★","img/web/walk-03.avif"],["A12 walk-35 ★","img/web/walk-35.avif"],["A13 24-15","img/web/24-15.avif"],["A14 24-23","img/web/24-23.avif"],["A15 24-30","img/web/24-30.avif"],["A16 faces-05","img/web/faces-05.avif"],["A17 faces-11","img/web/faces-11.avif"],["A18 faces-13","img/web/faces-13.avif"],["A19 faces-14","img/web/faces-14.avif"],["A20 faces-25","img/web/faces-25.avif"],["A21 faces-31","img/web/faces-31.avif"],["A22 faces-32","img/web/faces-32.avif"],["A23 faces-57","img/web/faces-57.avif"],["A24 faces-67","img/web/faces-67.avif"],["A25 faces-80","img/web/faces-80.avif"],["A26 faces-101","img/web/faces-101.avif"],["A27 faces-105","img/web/faces-105.avif"],["A28 faces-109","img/web/faces-109.avif"],["A29 faces-113","img/web/faces-113.avif"],["A30 faces-122","img/web/faces-122.avif"],["A31 faces-123","img/web/faces-123.avif"],["A32 faces-124","img/web/faces-124.avif"],["A33 faces-126","img/web/faces-126.avif"],["A34 faces-127","img/web/faces-127.avif"],["A35 faces-130","img/web/faces-130.avif"],["A36 faces-133","img/web/faces-133.avif"],["A37 faces-135","img/web/faces-135.avif"],["A38 faces-136","img/web/faces-136.avif"],["A39 faces-138","img/web/faces-138.avif"],["A40 faces-139","img/web/faces-139.avif"],["A41 ra4-03","img/web/movingsphere/ra4-03.avif"],["A42 ra4-15","img/web/ra4-15.avif"],["A43 ra4-33","img/web/ra4-33.avif"],["A44 walk-11","img/web/walk-11.avif"],["A45 walk-12","img/web/walk-12.avif"],["A46 walk-13","img/web/walk-13.avif"],["A47 walk-30","img/web/walk-30.avif"],["A48 walk-31","img/web/walk-31.avif"],["A49 walk-36","img/web/walk-36.avif"]]},{"title":"포트폴리오 PDF","items":[["B01 ra4-03","img/web/movingsphere/ra4-03.avif"],["B02 ra4-06","img/web/ra4-06.avif"],["B03 ra4-09","img/web/movingsphere/ra4-09.avif"],["B04 faces-112","img/web/faces-112.avif"],["B05 spaghetti",[2136515,457177]],["B06 spaghetti",[2596573,423443]],["B07 faces-130","img/web/faces-130.avif"],["B08 faces-128","img/web/faces-128.avif"],["B09 faces-155","img/web/faces-155.avif"],["B10 faces-132","img/web/faces-132.avif"],["B11 faces-61","img/web/faces-61.avif"],["B12 faces-58","img/web/faces-58.avif"],["B13 faces-62","img/web/faces-62.avif"],["B14 faces-63","img/web/faces-63.avif"],["B15 faces-116","img/web/faces-116.avif"],["B16 faces-119","img/web/faces-119.avif"],["B17 faces-136","img/web/faces-136.avif"],["B18 haircuts",[6482893,334182]],["B19 haircuts",[6819887,485411]],["B20 haircuts",[7307001,488812]],["B21 haircuts",[7797522,288296]],["B22 haircuts",[8087595,705980]],["B23 faces-96","img/web/faces-96.avif"],["B24 faces-97","img/web/faces-97.avif"],["B25 faces-122","img/web/faces-122.avif"],["B26 faces-126","img/web/faces-126.avif"],["B27 faces-124","img/web/faces-124.avif"],["B28 faces-34","img/web/faces-34.avif"],["B29 faces-57","img/web/faces-57.avif"],["B30 faces-138","img/web/faces-138.avif"],["B31 leia",[11645667,203875]],["B32 leia",[11850243,199124]],["B33 walk-03","img/web/walk-03.avif"],["B34 faces-11","img/web/faces-11.avif"]]},{"title":"추가 셀렉 I·T","items":[["C01 faces-82 I","img/web/faces-82.avif"],["C02 faces-12 I","img/web/faces-12.avif"],["C03 faces-03 I","img/web/faces-03.avif"],["C04 faces-04 I","img/web/faces-04.avif"],["C05 faces-21 I","img/web/faces-21.avif"],["C06 faces-23 I","img/web/faces-23.avif"],["C07 faces-35 I","img/web/faces-35.avif"],["C08 faces-33 I","img/web/faces-33.avif"],["C09 faces-55 I","img/web/faces-55.avif"],["C10 faces-129 I","img/web/faces-129.avif"],["C11 faces-141 I","img/web/faces-141.avif"],["C12 faces-131 I","img/web/faces-131.avif"],["C13 faces-27 I","img/web/faces-27.avif"],["C14 faces-107 I","img/web/faces-107.avif"],["C15 faces-147 I","img/web/faces-147.avif"],["C16 ra4-08 I","img/web/ra4-08.avif"],["C17 ra4-16 I","img/web/movingsphere/ra4-16.avif"],["C18 walk-37 I","img/web/walk-37.avif"],["C19 faces-28 T","img/web/faces-28.avif"],["C20 faces-29 T","img/web/faces-29.avif"],["C21 faces-65 T","img/web/faces-65.avif"],["C22 faces-66 T","img/web/faces-66.avif"],["C23 faces-76 T","img/web/faces-76.avif"],["C24 faces-85 T","img/web/faces-85.avif"],["C25 faces-89 T","img/web/faces-89.avif"],["C26 faces-87 T","img/web/faces-87.avif"],["C27 faces-118 T","img/web/faces-118.avif"],["C28 faces-137 T","img/web/faces-137.avif"],["C29 faces-152 T","img/web/faces-152.avif"],["C30 ra4-40 T","img/web/movingsphere/ra4-40.avif"],["C31 ra4-46 T","img/web/movingsphere/ra4-46.avif"],["C32 24-09 T","img/web/24-09.avif"],["C33 faces-48 T","img/web/faces-48.avif"],["C34 walk-32 T","img/web/walk-32.avif"],["C35 faces-150 T","img/web/faces-150.avif"]]}]}};
+  var PDF_SRC = "CV+Portfolio/KangMinje_Portfolio.pdf", pdfP = null;
+  function loadSet(name){
+    var set = SETS[name]; if (!set) return say("세트를 찾지 못했습니다.");
+    noPersist = true;
+    ["cols", "rows", "labels"].forEach(function(k){ if (set[k] !== undefined) S[k] = set[k]; });
+    S.balance = false;
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(SET_KEY + name) || "null"); } catch(e) {}
+    if (saved && saved.S) for (var k in saved.S) S[k] = saved.S[k];
+    set.sheets.forEach(function(sh, si){
+      sh.items.forEach(function(x){
+        var it = { id:++uid, name:x[0], url:"", im:new Image(), ok:false, err:false, sel:false, grp:si };
+        it.im.onload = function(){ it.ok = true; schedule(); };
+        it.im.onerror = function(){ it.err = true; schedule(); };
+        if (typeof x[1] === "string") { it.url = it.im.src = x[1]; }
+        else {
+          pdfP = pdfP || fetch(PDF_SRC).then(function(r){ return r.arrayBuffer(); });
+          pdfP.then(function(buf){
+            it.pdf = true;
+            it.url = it.im.src = URL.createObjectURL(new Blob([buf.slice(x[1][0], x[1][0] + x[1][1])], { type:"image/jpeg" }));
+            if (pool.indexOf(it) >= 0) renderPool();
+          }).catch(function(){ it.err = true; schedule(); });
+        }
+        items.push(it);
+      });
+    });
+    if (saved) applySaved(saved);
+    setName = name; $("setBox").hidden = false; normalize();
+    savedSnap = snap();
+    page = 0; sync();
+    say(set.title + " · " + set.sheets.length + "시트" + (saved ? " · 저장한 상태" : ""));
+  }
+
+  /* ---------- 세트 저장: 이 브라우저(localStorage)에만. 다른 사람이 링크를 열면 원래 세트가 보임 ---------- */
+  var SET_KEY = "contactsheet.set.", SET_S = ["cols", "rows", "gap", "ratio", "labels", "showDots", "dot", "bg", "cell"];
+  var setName = null, savedSnap = "";
+  function keyOf(it){ return it.name; }
+  function snap(){
+    var o = {};
+    SET_S.forEach(function(k){ o[k] = S[k]; });
+    return JSON.stringify({
+      order: items.filter(function(i){ return !i.blank; }).map(keyOf),
+      grp: items.concat(pool).reduce(function(o, i){ if (!i.blank) o[keyOf(i)] = i.grp; return o; }, {}),
+      pool: pool.map(keyOf),
+      sel: items.concat(pool).filter(function(i){ return i.sel; }).map(keyOf),
+      S: o
+    });
+  }
+  function applySaved(sv){
+    var all = {}; items.forEach(function(i){ all[keyOf(i)] = i; });
+    var used = {};
+    function take(list){ return (list || []).map(function(k){ var it = all[k]; if (!it || used[k]) return null; used[k] = 1; return it; }).filter(Boolean); }
+    var ord = take(sv.order), pl = take(sv.pool);
+    items.forEach(function(i){ if (!used[keyOf(i)]) ord.push(i); });   /* 세트에 새로 추가된 사진은 뒤에 */
+    var sel = {}; (sv.sel || []).forEach(function(k){ sel[k] = 1; });
+    ord.concat(pl).forEach(function(i){ i.sel = !!sel[keyOf(i)]; if (sv.grp && sv.grp[keyOf(i)] !== undefined) i.grp = sv.grp[keyOf(i)]; });
+    items = ord; pool = pl; renderPool();
+  }
+  function normalize(){
+    if (!setName) return;
+    var real = items.filter(function(i){ return !i.blank; });
+    var groups = [];
+    real.forEach(function(i){ var g = i.grp | 0; (groups[g] = groups[g] || []).push(i); });
+    var per = S.cols * S.rows, out = [];
+    groups.forEach(function(g){
+      if (!g || !g.length) return;
+      if (out.length) while (out.length % per) out.push({ id:0, name:"", url:"", blank:true, ok:false, sel:false });
+      out.push.apply(out, g);
+    });
+    items = out;
+  }
+  function setStatus(){
+    if (!setName) return;
+    var dirty = snap() !== savedSnap;
+    $("setState").textContent = dirty ? "저장하지 않은 변경이 있습니다." : "저장됨 · 이 브라우저에만";
+    $("setSave").disabled = !dirty;
+  }
+  $("setSave").onclick = function(){
+    if (!setName) return;
+    var hasLocal = items.concat(pool).some(function(i){ return i.url.indexOf("blob:") === 0 && !i.pdf; });
+    try { savedSnap = snap(); localStorage.setItem(SET_KEY + setName, savedSnap); say("저장했습니다" + (hasLocal ? " · 직접 추가한 사진은 저장되지 않습니다" : "")); }
+    catch(e) { say("저장하지 못했습니다."); }
+    setStatus();
+  };
+  $("setReset").onclick = function(){
+    if (!setName || !confirm("저장한 순서·셀렉·풀을 지우고 원래 세트로 돌아갈까요?")) return;
+    try { localStorage.removeItem(SET_KEY + setName); } catch(e) {}
+    savedSnap = ""; location.reload();
+  };
+  window.addEventListener("beforeunload", function(ev){
+    if (setName && snap() !== savedSnap) { ev.preventDefault(); ev.returnValue = ""; }
+  });
+
   renderPool();
   sync();
+  var wantSet = new URLSearchParams(location.search).get("set");
+  if (wantSet) loadSet(wantSet);
 })();
 </script>
 
