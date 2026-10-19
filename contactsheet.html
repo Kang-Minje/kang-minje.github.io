@@ -36,6 +36,12 @@
   #menu .line { display:flex; flex-wrap:wrap; gap:0 14px; align-items:baseline; min-height:24px; }
   #menu .line > .k { min-width:76px; color:var(--mute); }
   #menu .gap { height:16px; }
+  #pool { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin-top:8px; }
+  #pool button { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  #pool button:hover { text-decoration:none; }
+  #pool button:hover span { text-decoration:underline; }
+  #pool img { display:block; width:100%; aspect-ratio:1; object-fit:contain; background:#eeeeee; }
+  #pool span { font-size:11px; line-height:14px; color:var(--mute); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .opt[aria-pressed=true] { font-weight:700; }
   .num { display:inline-flex; gap:10px; align-items:baseline; }
   input[type=number], input[type=text] { background:transparent; border:0; border-bottom:1px solid var(--fg); border-radius:0;
@@ -78,7 +84,6 @@
 </style>
 </head>
 <body>
-
 <header id="top">
   <div class="l">
     <button id="menuBtn" aria-label="메뉴 열고 닫기" aria-expanded="true">☰</button>
@@ -100,6 +105,13 @@
       <div class="line"><button id="sortName">이름순 정렬</button><button id="selFirst">선택한 것 앞으로</button></div>
       <div class="line hint" id="count"></div>
       <input id="file" type="file" accept="image/*" multiple hidden>
+    </section>
+
+    <section>
+      <h2>풀</h2>
+      <div class="line"><button id="toPool">선택한 것 풀로</button><button id="poolAll">모두 꺼내기</button></div>
+      <div class="line hint" id="poolCount"></div>
+      <div id="pool" aria-label="풀에 넣어둔 사진"></div>
     </section>
 
     <section>
@@ -145,10 +157,11 @@
     </section>
 
     <section class="hint">
-      <div>클릭 — 레드닷 선택·해제</div>
+            <div>클릭 — 레드닷 선택·해제</div>
       <div>드래그 — 순서 바꾸기</div>
       <div>← → — 시트 넘기기</div>
-      <div>Del — 가리킨 사진 삭제</div>
+      <div>Del — 가리킨 사진 풀로</div>
+      <div>풀의 사진 클릭 — 시트로 꺼내기</div>
       <div>H — 메뉴 숨기기</div>
       <div class="gap"></div>
       <div>사진은 이 기기 밖으로 나가지 않습니다.</div>
@@ -174,7 +187,7 @@
 
 <script>
 (function(){
-  var KEY = "contactsheet.settings.v2";
+  var KEY = "contactsheet.settings.v3";
   var $ = function(id){ return document.getElementById(id); };
   var D = { cols:8, rows:3, gap:8, ratio:"fit", balance:true, dot:17, showDots:true,
             bg:"#ffffff", cell:"#eeeeee", labels:"num", exportW:4800, quality:95, fname:"contactsheet" };
@@ -183,7 +196,7 @@
   for (var k in D) if (S[k] === undefined) S[k] = D[k];
   function persist(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 
-  var items = [], uid = 0, page = 0, aspect = 16/9;
+  var items = [], pool = [], uid = 0, page = 0, aspect = 16/9;
   var hits = [], hover = -1, drag = null, raf = 0;
   var cv = $("cv"), ctx = cv.getContext("2d");
 
@@ -220,9 +233,40 @@
     else if (skipped) say("브라우저가 읽을 수 없는 파일입니다.");
     render();
   }
+  /* ---------- pool: 시트에서 빼두기 / 꺼내기 ---------- */
+  function savePool(){}   /* 풀은 이 탭에서만 유지 (사진은 저장되지 않음) */
+  function toPool(list){
+    if (!list.length) return;
+    list.forEach(function(it){ var k = items.indexOf(it); if (k >= 0) items.splice(k, 1); it.sel = false; pool.push(it); });
+    pool.sort(function(a, b){ return a.id - b.id; });
+    hover = -1; savePool(); renderPool(); render();
+    say(list.length + "장을 풀에 넣었습니다");
+  }
+  function fromPool(list){
+    list.forEach(function(it){
+      var k = pool.indexOf(it); if (k >= 0) pool.splice(k, 1);
+      var at = items.findIndex(function(x){ return x.id > it.id; });
+      if (at < 0) items.push(it); else items.splice(at, 0, it);
+    });
+    savePool(); renderPool(); render();
+  }
+  function renderPool(){
+    var box = $("pool"); box.innerHTML = "";
+    pool.forEach(function(it){
+      var b = document.createElement("button");
+      b.title = it.name + " — 시트로 꺼내기";
+      var im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.loading = "lazy";
+      var s = document.createElement("span"); s.textContent = it.name;
+      b.appendChild(im); b.appendChild(s);
+      b.onclick = function(){ fromPool([it]); say(it.name + " 꺼냄"); };
+      box.appendChild(b);
+    });
+    $("poolCount").textContent = pool.length ? pool.length + "장" : "비어 있습니다. 시트에서 뺀 사진이 여기 모입니다.";
+    $("poolAll").disabled = !pool.length;
+  }
   function removeAt(i){
     if (i < 0 || i >= items.length) return;
-    URL.revokeObjectURL(items[i].url); items.splice(i, 1); hover = -1; render();
+    if (items[i].url.indexOf("blob:") === 0) URL.revokeObjectURL(items[i].url); items.splice(i, 1); hover = -1; render();
   }
 
   /* ---------- drawing ---------- */
@@ -307,6 +351,7 @@
     $("count").textContent = has ? items.length + "장 · 선택 " + sel : "아직 사진이 없습니다.";
     ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll"].forEach(function(id){ $(id).disabled = !has; });
     $("selFirst").disabled = !has || !sel;
+    $("toPool").disabled = !sel;
     $("gapV").textContent = S.gap; $("dotV").textContent = S.dot; $("qualityV").textContent = S.quality;
     var d = clamp(S.dot / 80 * 20 + 5, 5, 25); $("dotMark").style.width = $("dotMark").style.height = d + "px";
   }
@@ -353,6 +398,7 @@
     return new Promise(function(res, rej){
       c.toBlob(function(b){
         if (!b) return rej(new Error("encode"));
+        var fn = safeName() + (total > 1 ? "_" + (p + 1) + "of" + total : "") + ".jpg";
         var a = document.createElement("a");
         a.href = URL.createObjectURL(b);
         a.download = safeName() + (total > 1 ? "_" + (p + 1) + "of" + total : "") + ".jpg";
@@ -441,12 +487,14 @@
 
   $("add").onclick = $("add2").onclick = function(){ $("file").click(); };
   $("file").onchange = function(){ addFiles($("file").files); $("file").value = ""; };
-  $("clear").onclick = function(){ items.forEach(function(i){ URL.revokeObjectURL(i.url); }); items = []; page = 0; hover = -1; render(); };
+  $("clear").onclick = function(){ pool.forEach(function(i){ if (i.url.indexOf("blob:") === 0) URL.revokeObjectURL(i.url); }); pool = []; renderPool(); items.forEach(function(i){ if (i.url.indexOf("blob:") === 0) URL.revokeObjectURL(i.url); }); items = []; page = 0; hover = -1; render(); };
   $("sortName").onclick = function(){ items.sort(byName); render(); };
   $("selFirst").onclick = function(){
     items = items.filter(function(i){ return i.sel; }).concat(items.filter(function(i){ return !i.sel; }));
     page = 0; render(); say("선택한 사진을 앞으로 옮겼습니다");
   };
+  $("toPool").onclick = function(){ toPool(items.filter(function(i){ return i.sel; })); };
+  $("poolAll").onclick = function(){ var n = pool.length; fromPool(pool.slice()); say(n + "장을 꺼냈습니다"); };
   $("selAll").onclick = function(){ items.forEach(function(i){ i.sel = true; }); render(); };
   $("selNone").onclick = function(){ items.forEach(function(i){ i.sel = false; }); render(); };
   $("selInv").onclick = function(){ items.forEach(function(i){ i.sel = !i.sel; }); render(); };
@@ -468,7 +516,7 @@
     if (ev.key === "ArrowLeft") { page--; render(); }
     else if (ev.key === "ArrowRight") { page++; render(); }
     else if (ev.key === "h" || ev.key === "H") toggleMenu();
-    else if ((ev.key === "Delete" || ev.key === "Backspace") && hover >= 0) { ev.preventDefault(); removeAt(hover); }
+    else if ((ev.key === "Delete" || ev.key === "Backspace") && hover >= 0) { ev.preventDefault(); toPool([items[hover]]); }
   });
 
   /* ---------- drop files ---------- */
@@ -486,8 +534,11 @@
   function relayout(){ clearTimeout(rz); rz = setTimeout(function(){ layout(); render(); }, 50); }
   window.addEventListener("resize", relayout);
   if (window.ResizeObserver) new ResizeObserver(relayout).observe($("stage"));
+
+  renderPool();
   sync();
 })();
 </script>
+
 </body>
 </html>
