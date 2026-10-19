@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="사진을 끌어다 놓고, 밀착 시트로 배열하고, 레드닷으로 셀렉하고, JPG로 내보냅니다. 모든 작업은 브라우저 안에서만 이루어집니다.">
 <title>밀착</title>
+<script type="importmap">{ "imports": { "wasm-feature-detect": "https://cdn.jsdelivr.net/npm/wasm-feature-detect@1.8.0/dist/esm/index.js" } }</script>
 <style>
   :root { --bg:#ffffff; --fg:#000; --mute:#6a6a6a; }
   * { box-sizing:border-box; }
@@ -176,13 +177,17 @@
     </section>
 
     <section>
-      <h2>JPG 내보내기</h2>
-      <div class="line"><span class="k">가로</span><input id="exportW" type="number" min="800" max="12000" step="100" aria-label="가로 픽셀"><span class="hint">px</span></div>
-      <div class="line"><span class="k">화질</span><input id="quality" type="range" min="60" max="100" step="1" aria-label="화질"><span class="v" id="qualityV"></span></div>
+      <h2>내보내기</h2>
+      <div class="line"><span class="k">형식</span><span id="fmtOpts" class="line"></span></div>
+      <div class="line" id="qLine"><span class="k">화질</span><input id="quality" type="range" min="40" max="100" step="1" aria-label="화질"><span class="v" id="qualityV"></span></div>
+      <div class="gap"></div>
+      <div class="line"><span class="k">시트 가로</span><input id="exportW" type="number" min="400" step="100" aria-label="시트 가로 픽셀"><span class="hint">px</span><button id="wMax">최대</button></div>
+      <div class="line hint" id="wHint"></div>
+      <div class="line"><span class="k">낱장 긴 변</span><input id="eachEdge" type="number" min="100" step="100" placeholder="원본" aria-label="낱장 긴 변 픽셀"><span class="hint">px</span><button id="eachOrig">원본</button></div>
       <div class="line"><span class="k">파일명</span><input id="fname" type="text" maxlength="60" spellcheck="false" aria-label="파일명"></div>
       <div class="gap"></div>
-      <div class="line"><button id="exportOne">이 시트 내보내기</button></div>
-      <div class="line"><button id="exportAll">전체 시트 내보내기</button></div>
+      <div class="line"><button id="exportOne">이 시트</button><button id="exportAll">전체 시트</button><button id="exportEach">낱장</button></div>
+      <div class="line hint">원본보다 크게는 만들지 않습니다. 낱장은 지금 보기(전체 · 레드닷만 · 제외)의 사진을 한 장씩, 여러 장이면 zip 하나로.</div>
     </section>
 
     <section class="hint">
@@ -230,7 +235,7 @@
   var KEY = "contactsheet.settings.v3";
   var $ = function(id){ return document.getElementById(id); };
   var D = { cols:8, rows:3, gap:8, ratio:"fit", balance:true, dot:17, showDots:true,
-            bg:"#ffffff", cell:"#eeeeee", labels:"num", exportW:4800, quality:95, fname:"contactsheet" };
+            bg:"#ffffff", cell:"#eeeeee", labels:"num", exportW:4800, quality:95, fname:"contactsheet", fmt:"jpg", eachEdge:0 };
   var S = {};
   try { S = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { S = {}; }
   for (var k in D) if (S[k] === undefined) S[k] = D[k];
@@ -432,11 +437,13 @@
     var txt = has ? (vf === "all" ? real + "장" : "보기 " + shown + " / " + real + "장") + " · 선택 " + sel + " · " + r.length + "시트" : "";
     $("info").textContent = txt;
     $("count").textContent = has ? real + "장 · 선택 " + sel : "아직 사진이 없습니다.";
-    ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll"].forEach(function(id){ $(id).disabled = !has; });
+    ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll", "exportEach"].forEach(function(id){ $(id).disabled = !has; });
     $("selFirst").disabled = !has || !sel;
     $("toPool").disabled = !sel;
     $("gapV").textContent = S.gap; $("dotV").textContent = S.dot; $("qualityV").textContent = S.quality;
     setStatus();
+    if (has) { var mw = sheetMaxW(page); $("wHint").textContent = "이 시트 최대 " + mw + "px" + ((S.exportW | 0) > mw ? " · " + mw + "px로 저장됩니다" : ""); }
+    else $("wHint").textContent = "";
     var d = clamp(S.dot / 80 * 20 + 5, 5, 25); $("dotMark").style.width = $("dotMark").style.height = d + "px";
   }
 
@@ -476,46 +483,142 @@
 
   /* ---------- export ---------- */
   function safeName(){ return (S.fname || "contactsheet").replace(/[^\w\-가-힣 ]+/g, "").trim() || "contactsheet"; }
-  function exportSheet(p, total){
-    var r = ranges(), W = clamp(S.exportW | 0 || 4800, 800, 12000), H = Math.round(W / aspect);
-    var c = document.createElement("canvas"); c.width = W; c.height = H;
-    draw(c.getContext("2d"), W, H, r[p][0], r[p][1], false);
-    return new Promise(function(res, rej){
-      c.toBlob(function(b){
-        if (!b) return rej(new Error("encode"));
-        var fn = safeName() + (total > 1 ? "_" + (p + 1) + "of" + total : "") + ".jpg";
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(b);
-        a.download = safeName() + (total > 1 ? "_" + (p + 1) + "of" + total : "") + ".jpg";
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
-        res();
-      }, "image/jpeg", S.quality / 100);
+  function safeFile(t){ return String(t).replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim() || "photo"; }
+  var FMT = { png:{ mime:"image/png", ext:"png" }, jpg:{ mime:"image/jpeg", ext:"jpg" }, avif:{ mime:"image/avif", ext:"avif" } };
+
+  /* AVIF: 브라우저가 직접 못 만들면 인코더(jsquash, wasm)를 그때만 불러옴. 사진은 밖으로 나가지 않음 */
+  var avifNative = null, avifLib = null;
+  function encode(c){
+    var f = FMT[S.fmt] || FMT.jpg, q = S.quality / 100;
+    function native(type){ return new Promise(function(res, rej){ c.toBlob(function(b){ b ? res(b) : rej(new Error("encode")); }, type, q); }); }
+    if (S.fmt !== "avif") return native(f.mime);
+    var probe = avifNative === null
+      ? native("image/avif").then(function(b){ avifNative = b.type === "image/avif"; return avifNative ? b : null; })
+      : Promise.resolve(null);
+    return probe.then(function(b){
+      if (b) return b;
+      if (avifNative) return native("image/avif");
+      avifLib = avifLib || import("https://cdn.jsdelivr.net/npm/@jsquash/avif@2.1.1/encode.js");
+      return avifLib.then(function(m){
+        var d = c.getContext("2d").getImageData(0, 0, c.width, c.height);
+        return m.default(d, { quality:S.quality });
+      }).then(function(buf){ return new Blob([buf], { type:"image/avif" }); });
     });
   }
+  function download(blob, name){
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 10000);
+  }
+
+  /* 시트 최대 가로: 시트 안 어떤 사진도 원본보다 크게 그려지지 않는 크기 */
+  function sheetMaxW(p){
+    var r = ranges(); if (!r[p]) return 12000;
+    var W = 1000, s = W / 2560, H = W / aspect;
+    var pad = 8 * s, gap = S.gap * s, labH = S.labels === "off" ? 0 : 18 * s;
+    var cw = (W - 2 * pad - (S.cols - 1) * gap) / S.cols, ih = (H - 2 * pad - (S.rows - 1) * gap) / S.rows - labH;
+    var kmax = 0;
+    for (var vk = r[p][0]; vk < r[p][1]; vk++) {
+      var it = items[V[vk]];
+      if (!it || it.blank || !it.ok) continue;
+      kmax = Math.max(kmax, Math.min(cw / it.im.naturalWidth, ih / it.im.naturalHeight));
+    }
+    var max = kmax ? Math.floor(W / kmax) : 12000;
+    return clamp(max, 400, Math.floor(Math.min(16000, 16000 * aspect)));
+  }
+  function exportSheet(p, total){
+    var r = ranges(), W = Math.min(clamp(S.exportW | 0 || 4800, 400, 16000), sheetMaxW(p)), H = Math.round(W / aspect);
+    var c = document.createElement("canvas"); c.width = W; c.height = H;
+    draw(c.getContext("2d"), W, H, r[p][0], r[p][1], false);
+    return encode(c).then(function(b){
+      download(b, safeName() + (total > 1 ? "_" + (p + 1) + "of" + total : "") + "." + FMT[S.fmt].ext);
+      return W;
+    });
+  }
+  function eachBlob(it){
+    var nw = it.im.naturalWidth, nh = it.im.naturalHeight, long = Math.max(nw, nh);
+    var edge = S.eachEdge > 0 ? Math.min(S.eachEdge, long) : long, k = edge / long;
+    var c = document.createElement("canvas"); c.width = Math.round(nw * k); c.height = Math.round(nh * k);
+    var x = c.getContext("2d");
+    if (S.fmt === "jpg") { x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height); }
+    x.imageSmoothingQuality = "high"; x.drawImage(it.im, 0, 0, c.width, c.height);
+    return encode(c);
+  }
+
+  /* zip (무압축) — 낱장 여러 장을 파일 하나로 */
+  var CRC = (function(){ var t = [], c, n, k; for (n = 0; n < 256; n++) { c = n; for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(u){ var c = 0xFFFFFFFF; for (var i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function makeZip(files){
+    var enc = new TextEncoder(), parts = [], central = [], off = 0;
+    var d = new Date(), dt = ((d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1)), dd = (((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate());
+    files.forEach(function(f){
+      var name = enc.encode(f.name), data = f.data, crc = crc32(data);
+      var h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dt, true); h.setUint16(12, dd, true); h.setUint32(14, crc, true); h.setUint32(18, data.length, true); h.setUint32(22, data.length, true);
+      h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(h, name, data);
+      var c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true);
+      c.setUint16(12, dt, true); c.setUint16(14, dd, true); c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, data.length, true);
+      c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+      central.push(c, name);
+      off += 30 + name.length + data.length;
+    });
+    var size = central.reduce(function(s, x){ return s + x.byteLength; }, 0);
+    var e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true);
+    e.setUint32(12, size, true); e.setUint32(16, off, true);
+    return new Blob(parts.concat(central, [e]), { type:"application/zip" });
+  }
+
   function waitLoaded(){
     return new Promise(function(res){
       var t = 0, iv = setInterval(function(){
-        var left = items.some(function(i){ return !i.ok && !i.err; });
-        if (!left || ++t > 100) { clearInterval(iv); res(); }
+        var left = items.some(function(i){ return !i.blank && !i.missing && !i.ok && !i.err; });
+        if (!left || ++t > 150) { clearInterval(iv); res(); }
       }, 100);
     });
   }
+  function busy(on){ document.body.classList.toggle("busy", on); ["exportOne", "exportAll", "exportEach"].forEach(function(id){ $(id).disabled = on; }); }
+  function fail(e){ console.error(e); say(S.fmt === "avif" ? "AVIF로 만들지 못했습니다. 크기를 줄이거나 JPG로 해 보세요." : "내보내지 못했습니다. 크기를 줄여 보세요."); busy(false); }
   $("exportOne").onclick = function(){
-    var n = ranges().length;
-    document.body.classList.add("busy");
+    var n = ranges().length; busy(true); if (S.fmt === "avif") say("AVIF 만드는 중…");
     waitLoaded().then(function(){ return exportSheet(page, n); })
-      .then(function(){ say("저장했습니다 · " + (page + 1) + " / " + n); })
-      .catch(function(){ say("내보내지 못했습니다. 가로 크기를 줄여 보세요."); })
-      .then(function(){ document.body.classList.remove("busy"); });
+      .then(function(W){ say("저장했습니다 · " + (page + 1) + " / " + n + " · " + W + "px"); busy(false); render(); }).catch(fail);
   };
   $("exportAll").onclick = function(){
-    var n = ranges().length, i = 0;
-    document.body.classList.add("busy");
+    var n = ranges().length, i = 0; busy(true);
     waitLoaded().then(function next(){
-      if (i >= n) { say(n + "시트를 저장했습니다"); document.body.classList.remove("busy"); return; }
+      if (i >= n) { say(n + "시트를 저장했습니다"); busy(false); render(); return; }
+      say("시트 " + (i + 1) + " / " + n + " 만드는 중…");
       return exportSheet(i, n).then(function(){ i++; return new Promise(function(r){ setTimeout(r, 450); }); }).then(next);
-    }).catch(function(){ say("내보내지 못했습니다. 가로 크기를 줄여 보세요."); document.body.classList.remove("busy"); });
+    }).catch(fail);
+  };
+  $("exportEach").onclick = function(){
+    var list = V.map(function(n){ return items[n]; }).filter(function(it){ return it && !it.blank; });
+    if (!list.length) return say("내보낼 사진이 없습니다.");
+    busy(true);
+    waitLoaded().then(function(){
+      var ok = list.filter(function(it){ return it.ok; }), out = [], i = 0, ext = FMT[S.fmt].ext, skipped = list.length - ok.length;
+      function next(){
+        if (i >= ok.length) {
+          if (out.length === 1) download(out[0].blob, out[0].name);
+          else if (out.length) return Promise.all(out.map(function(f){ return f.blob.arrayBuffer().then(function(b){ return { name:f.name, data:new Uint8Array(b) }; }); }))
+            .then(function(files){ download(makeZip(files), safeName() + "_each_" + files.length + ".zip"); finish(); });
+          finish(); return;
+        }
+        var it = ok[i++];
+        say("낱장 " + i + " / " + ok.length + " 만드는 중…");
+        return eachBlob(it).then(function(b){
+          var n = items.indexOf(it) + 1;
+          out.push({ name:String(n).padStart(3, "0") + "_" + safeFile(it.name) + "." + ext, blob:b });
+        }).then(next);
+      }
+      function finish(){ busy(false); render(); say(out.length + "장 저장" + (skipped ? " · 불러오지 못한 " + skipped + "장 제외" : "")); }
+      return next();
+    }).catch(fail);
   };
 
   /* ---------- menu controls ---------- */
@@ -547,13 +650,15 @@
   }
   function sync(){
     $("cols").value = S.cols; $("rows").value = S.rows; $("gap").value = S.gap;
-    $("dot").value = S.dot; $("exportW").value = S.exportW; $("quality").value = S.quality; $("fname").value = S.fname;
+    $("dot").value = S.dot; $("exportW").value = S.exportW; $("eachEdge").value = S.eachEdge > 0 ? S.eachEdge : ""; $("quality").value = S.quality; $("fname").value = S.fname;
     optRow("presets", [["8x3","8×3"],["7x4","7×4"],["6x4","6×4"],["5x4","5×4"],["4x3","4×3"]],
       function(v){ return v === S.cols + "x" + S.rows; },
       function(v){ var p = v.split("x"); S.cols = +p[0]; S.rows = +p[1]; page = 0; sync(); });
     optRow("ratioOpts", [["fit","화면 맞춤"],["16:9","16:9"],["3:2","3:2"],["4:3","4:3"],["1.4142","A 가로"],["0.7071","A 세로"]],
       function(v){ return v === S.ratio; }, function(v){ S.ratio = v; sync(); });
     optRow("balOpts", [[true,"켬"],[false,"끔"]], function(v){ return v === S.balance; }, function(v){ S.balance = v; page = 0; sync(); });
+    optRow("fmtOpts", [["png","PNG"],["jpg","JPG"],["avif","AVIF"]], function(v){ return v === S.fmt; }, function(v){ S.fmt = v; sync(); });
+    $("qLine").style.opacity = S.fmt === "png" ? .35 : 1; $("quality").disabled = S.fmt === "png";
     optRow("viewOpts", [["all","전체"],["sel","레드닷만"],["unsel","레드닷 제외"]], function(v){ return v === vf; }, setView);
     optRow("dotOpts", [[true,"보이기"],[false,"숨기기"]], function(v){ return v === S.showDots; }, function(v){ S.showDots = v; sync(); });
     optRow("labelOpts", [["off","없음"],["num","번호"],["name","파일명"]], function(v){ return v === S.labels; }, function(v){ S.labels = v; sync(); });
@@ -566,9 +671,13 @@
     $(id).onchange = function(){ sync(); };
   }
   num("cols", "cols", 1, 20, true); num("rows", "rows", 1, 20, true);
-  num("gap", "gap", 0, 40); num("dot", "dot", 6, 80); num("quality", "quality", 60, 100);
+  num("gap", "gap", 0, 40); num("dot", "dot", 6, 80); num("quality", "quality", 40, 100);
   $("exportW").oninput = function(){ var v = parseInt($("exportW").value, 10); if (!isNaN(v)) { S.exportW = v; persist(); } };
-  $("exportW").onchange = function(){ S.exportW = clamp(S.exportW | 0 || 4800, 800, 12000); sync(); };
+  $("exportW").onchange = function(){ S.exportW = clamp(S.exportW | 0 || 4800, 400, 16000); sync(); };
+  $("wMax").onclick = function(){ S.exportW = sheetMaxW(page); sync(); say("시트 가로 " + S.exportW + "px (이 시트 원본 기준 최대)"); };
+  $("eachEdge").oninput = function(){ var v = parseInt($("eachEdge").value, 10); S.eachEdge = isNaN(v) || v <= 0 ? 0 : v; persist(); };
+  $("eachEdge").onchange = function(){ sync(); };
+  $("eachOrig").onclick = function(){ S.eachEdge = 0; sync(); };
   $("fname").oninput = function(){ S.fname = $("fname").value; persist(); };
   $("colsM").onclick = function(){ S.cols = clamp(S.cols - 1, 1, 20); page = 0; sync(); };
   $("colsP").onclick = function(){ S.cols = clamp(S.cols + 1, 1, 20); page = 0; sync(); };
@@ -601,7 +710,7 @@
   /* 메뉴 접기: ▸ 닫힘 · ▾ 열림 (이 브라우저에 기억) */
   var FOLD_KEY = "contactsheet.fold.v1", fold = {};
   try { fold = JSON.parse(localStorage.getItem(FOLD_KEY) || "{}") || {}; } catch(e) {}
-  var FOLD_DEFAULT = { "배치":1, "색":1, "캡션":1, "JPG 내보내기":1, "단축키":1 };
+  var FOLD_DEFAULT = { "배치":1, "색":1, "캡션":1, "내보내기":1, "단축키":1 };
   Array.prototype.forEach.call(document.querySelectorAll("#menu section > h2"), function(h){
     var title = h.textContent.trim(), sec = h.parentNode;
     var b = document.createElement("button"), tri = document.createElement("span");
