@@ -135,6 +135,7 @@
 
     <section>
       <h2>셀렉</h2>
+      <div class="line"><span class="k">보기</span><span id="viewOpts" class="line"></span></div>
       <div class="line"><span class="k">레드닷</span><span id="dotOpts" class="line"></span></div>
       <div class="line"><span class="k">크기</span><input id="dot" type="range" min="6" max="80" step="1" aria-label="레드닷 크기"><span class="v" id="dotV"></span><span id="dotMark" aria-hidden="true"></span></div>
       <div class="gap"></div>
@@ -168,6 +169,7 @@
       <div>← → — 시트 넘기기</div>
       <div>Del — 가리킨 사진 풀로</div>
       <div>풀의 사진 클릭 — 시트로 꺼내기</div>
+      <div>F — 보기 전환 (전체 · 레드닷만 · 제외)</div>
       <div>H — 메뉴 숨기기</div>
       <div class="gap"></div>
       <div>사진은 이 기기 밖으로 나가지 않습니다.</div>
@@ -212,8 +214,18 @@
     var t = $("status"); t.textContent = msg;
     clearTimeout(say._t); say._t = setTimeout(function(){ t.textContent = ""; }, 2600);
   }
+  /* ---------- 보기 필터: 전체 / 레드닷만 / 레드닷 제외 (번호는 원래 순서 그대로) ---------- */
+  var vf = "all", V = [];
+  function buildView(){
+    V = [];
+    items.forEach(function(it, i){
+      if (vf === "all") V.push(i);
+      else if (!it.blank && (vf === "sel" ? it.sel : !it.sel)) V.push(i);
+    });
+  }
   function ranges(){
-    var n = items.length, per = S.cols * S.rows;
+    buildView();
+    var n = V.length, per = S.cols * S.rows;
     var pc = Math.max(1, Math.ceil(n / per));
     var chunk = S.balance ? Math.max(1, Math.ceil(n / pc)) : per;
     var r = [];
@@ -288,8 +300,8 @@
     var lum = parseInt(S.bg.slice(1, 3), 16) * 0.3 + parseInt(S.bg.slice(3, 5), 16) * 0.59 + parseInt(S.bg.slice(5, 7), 16) * 0.11;
     var txt = lum < 128 ? "#f2f2f2" : "#000000";
     if (preview) hits = [];
-    for (var n = start; n < end; n++) {
-      var i = n - start, col = i % S.cols, row = Math.floor(i / S.cols);
+    for (var vk = start; vk < end; vk++) {
+      var n = V[vk], i = vk - start, col = i % S.cols, row = Math.floor(i / S.cols);
       if (row >= S.rows) break;
       var it = items[n];
       if (it.blank) continue;   /* 세트의 시트 나눔용 빈 칸 */
@@ -348,7 +360,7 @@
     normalize();
     var r = ranges();
     page = clamp(page, 0, r.length - 1);
-    var has = items.length > 0;
+    var has = items.length > 0, shown = V.length;
     $("empty").style.display = has ? "none" : "flex";
     cv.style.visibility = has ? "visible" : "hidden";
     if (has) draw(ctx, cv.width, cv.height, r[page][0], r[page][1], true);
@@ -357,7 +369,7 @@
     $("pg").textContent = (page + 1) + " / " + r.length;
     $("prev").disabled = page <= 0; $("next").disabled = page >= r.length - 1;
     var real = items.filter(function(i){ return !i.blank; }).length;
-    var txt = has ? real + "장 · 선택 " + sel + " · " + r.length + "시트" : "";
+    var txt = has ? (vf === "all" ? real + "장" : "보기 " + shown + " / " + real + "장") + " · 선택 " + sel + " · " + r.length + "시트" : "";
     $("info").textContent = txt;
     $("count").textContent = has ? real + "장 · 선택 " + sel : "아직 사진이 없습니다.";
     ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll"].forEach(function(id){ $(id).disabled = !has; });
@@ -469,6 +481,10 @@
     inp.onchange = function(){ sync(); };
     box.appendChild(inp);
   }
+  function setView(v){
+    vf = v; page = 0; sync();
+    if (v !== "all") say(V.length ? (v === "sel" ? "레드닷만 보기" : "레드닷 제외하고 보기") + " · " + V.length + "장" : "해당하는 사진이 없습니다.");
+  }
   function sync(){
     $("cols").value = S.cols; $("rows").value = S.rows; $("gap").value = S.gap;
     $("dot").value = S.dot; $("exportW").value = S.exportW; $("quality").value = S.quality; $("fname").value = S.fname;
@@ -478,6 +494,7 @@
     optRow("ratioOpts", [["fit","화면 맞춤"],["16:9","16:9"],["3:2","3:2"],["4:3","4:3"],["1.4142","A 가로"],["0.7071","A 세로"]],
       function(v){ return v === S.ratio; }, function(v){ S.ratio = v; sync(); });
     optRow("balOpts", [[true,"켬"],[false,"끔"]], function(v){ return v === S.balance; }, function(v){ S.balance = v; page = 0; sync(); });
+    optRow("viewOpts", [["all","전체"],["sel","레드닷만"],["unsel","레드닷 제외"]], function(v){ return v === vf; }, setView);
     optRow("dotOpts", [[true,"보이기"],[false,"숨기기"]], function(v){ return v === S.showDots; }, function(v){ S.showDots = v; sync(); });
     optRow("labelOpts", [["off","없음"],["num","번호"],["name","파일명"]], function(v){ return v === S.labels; }, function(v){ S.labels = v; sync(); });
     swatches("swBg", "bg", ["#ffffff", "#f1f1f1", "#cfcfcf", "#1a1a1a", "#000000"]);
@@ -529,6 +546,7 @@
     if (ev.key === "ArrowLeft") { page--; render(); }
     else if (ev.key === "ArrowRight") { page++; render(); }
     else if (ev.key === "h" || ev.key === "H") toggleMenu();
+    else if (ev.key === "f" || ev.key === "F") setView(vf === "all" ? "sel" : vf === "sel" ? "unsel" : "all");
     else if ((ev.key === "Delete" || ev.key === "Backspace") && hover >= 0) { ev.preventDefault(); toPool([items[hover]]); }
   });
 
