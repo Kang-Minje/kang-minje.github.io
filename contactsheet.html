@@ -42,6 +42,9 @@
   #pool button:hover { text-decoration:none; }
   #pool button:hover span { text-decoration:underline; }
   #pool img { display:block; width:100%; aspect-ratio:1; object-fit:contain; background:#eeeeee; }
+  #pool button { cursor:grab; }
+  #poolSec.drop { background:var(--fg); color:var(--bg); outline:8px solid var(--fg); }
+  #poolSec.drop .hint, #poolSec.drop button, #poolSec.drop h2 button { color:var(--bg); }
   #pool span { font-size:11px; line-height:14px; color:var(--mute); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .opt[aria-pressed=true] { font-weight:700; }
   .num { display:inline-flex; gap:10px; align-items:baseline; }
@@ -118,7 +121,7 @@
     <section>
       <h2>사진</h2>
       <div class="line"><button id="add">사진 추가…</button><button id="clear">모두 지우기</button></div>
-      <div class="line"><button id="sortName">이름순 정렬</button><button id="selFirst">선택한 것 앞으로</button></div>
+      <div class="line"><button id="sortName">이름순 정렬</button><button id="selFirst">레드닷 앞으로</button></div>
       <div class="line hint" id="count"></div>
       <input id="file" type="file" accept="image/*" multiple hidden>
     </section>
@@ -136,9 +139,9 @@
       <div class="line hint" id="setState"></div>
     </section>
 
-    <section>
+    <section id="poolSec">
       <h2>풀</h2>
-      <div class="line"><button id="toPool">선택한 것 풀로</button><button id="poolAll">모두 꺼내기</button></div>
+      <div class="line"><button id="toPool">선택한 것 풀로</button><button id="dotToPool">레드닷 풀로</button><button id="poolAll">모두 꺼내기</button></div>
       <div class="line hint" id="poolCount"></div>
       <div id="pool" aria-label="풀에 넣어둔 사진"></div>
     </section>
@@ -162,7 +165,7 @@
       <div class="line"><span class="k">레드닷</span><span id="dotOpts" class="line"></span></div>
       <div class="line"><span class="k">크기</span><input id="dot" type="range" min="6" max="80" step="1" aria-label="레드닷 크기"><span class="v" id="dotV"></span><span id="dotMark" aria-hidden="true"></span></div>
       <div class="gap"></div>
-      <div class="line"><button id="selAll">전체 선택</button><button id="selNone">전체 해제</button><button id="selInv">반전</button></div>
+      <div class="line"><button id="selAll">모두 레드닷</button><button id="selNone">레드닷 해제</button><button id="selInv">반전</button></div>
     </section>
 
     <section>
@@ -192,14 +195,19 @@
 
     <section class="hint">
       <h2>단축키</h2>
-      <div>클릭 — 레드닷 선택·해제</div>
-      <div>드래그 — 순서 바꾸기</div>
+      <div>클릭 — 선택</div>
+      <div>⇧ 클릭 · ⇧ 화살표 — 여러 장 이어서 선택</div>
+      <div>⌘ 클릭 — 선택에 더하기·빼기</div>
+      <div>⌘A — 모두 선택 · Esc — 선택 해제</div>
+      <div>1 — 레드닷 · 0 — 해제</div>
+      <div>⌘[ ⌘] — 왼쪽·오른쪽으로 90° 회전</div>
+      <div>드래그 — 순서 바꾸기 (선택한 것 함께)</div>
+      <div>풀로 드래그 — 풀에 넣기</div>
+      <div>풀의 사진 — 클릭하면 꺼내기, 시트로 드래그하면 그 자리에</div>
       <div>← → — 시트 넘기기</div>
-      <div>Del — 가리킨 사진 풀로</div>
-      <div>풀의 사진 클릭 — 시트로 꺼내기</div>
+      <div>Del — 선택한 사진 풀로</div>
       <div>F — 보기 전환 (전체 · 레드닷만 · 제외)</div>
       <div>Space — 가리킨 사진 크게 보기</div>
-      <div>1 — 레드닷 · 0 — 해제</div>
       <div>크게 보기에서 ← → 이동 · Space/Esc 닫기</div>
       <div>H — 메뉴 숨기기</div>
       <div class="gap"></div>
@@ -221,7 +229,7 @@
 <div id="fs" role="dialog" aria-label="크게 보기">
   <div class="top"><span id="fsName"></span><span class="hint" id="fsPos"></span></div>
   <div class="img"><img id="fsImg" alt=""><span class="dot" id="fsDot"></span></div>
-  <div class="bot"><span class="hint">1 레드닷 · 0 해제 · ← → 이동 · Space 닫기</span><button id="fsClose">닫기</button></div>
+  <div class="bot"><span class="hint">1 레드닷 · 0 해제 · ⌘[ ⌘] 회전 · ← → 이동 · Space 닫기</span><button id="fsClose">닫기</button></div>
 </div>
 
 <footer id="foot">
@@ -243,7 +251,7 @@
   function persist(){ if (noPersist) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 
   var items = [], pool = [], uid = 0, page = 0, aspect = 16/9;
-  var hits = [], hover = -1, drag = null, raf = 0;
+  var hits = [], hover = -1, drag = null, raf = 0, poolDragIt = null, dropAt = -1;
   var cv = $("cv"), ctx = cv.getContext("2d");
 
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
@@ -272,8 +280,72 @@
   function schedule(){ if (!raf) raf = requestAnimationFrame(function(){ raf = 0; render(); }); }
   function byName(a, b){ return a.name.localeCompare(b.name, undefined, { numeric:true, sensitivity:"base" }); }
 
+  /* ---------- 회전: 0 / 90 / 180 / 270 (시계 방향) ---------- */
+  function rot(it){ return (((it.rot | 0) % 360) + 360) % 360; }
+  function dims(it){ var w = it.im.naturalWidth, h = it.im.naturalHeight; return rot(it) % 180 ? [h, w] : [w, h]; }
+  /* w·h = 회전한 뒤 화면에 보이는 크기 */
+  function drawImg(c, it, x, y, w, h){
+    var r = rot(it);
+    if (!r) { c.drawImage(it.im, x, y, w, h); return; }
+    c.save(); c.translate(x + w / 2, y + h / 2); c.rotate(r * Math.PI / 180);
+    var dw = r % 180 ? h : w, dh = r % 180 ? w : h;
+    c.drawImage(it.im, -dw / 2, -dh / 2, dw, dh); c.restore();
+  }
+  function rotate(list, d){
+    if (!list.length) return say("회전할 사진을 선택하세요.");
+    list.forEach(function(it){ it.rot = (rot(it) + d + 360) % 360; });
+    if (list.some(function(it){ return pool.indexOf(it) >= 0; })) renderPool();
+    if (fsIt && list.indexOf(fsIt) >= 0) fsShow(fsIt);
+    render();
+  }
+
+  /* ---------- 선택 (Finder 방식): 클릭 · ⇧ 클릭/화살표 · ⌘ 클릭 ---------- */
+  var anchorIt = null, curIt = null, basePick = [];
+  function picked(){ return items.filter(function(i){ return i.pick && !i.blank; }); }
+  function setPicks(list){ items.forEach(function(i){ i.pick = false; }); list.forEach(function(i){ i.pick = true; }); }
+  function viewList(){ return V.map(function(n){ return items[n]; }).filter(function(i){ return i && !i.blank; }); }
+  function extendTo(it){
+    var v = viewList(), a = v.indexOf(anchorIt || it), b = v.indexOf(it);
+    if (a < 0) { anchorIt = it; a = b; }
+    var r = v.slice(Math.min(a, b), Math.max(a, b) + 1);
+    curIt = it;
+    setPicks(basePick.filter(function(x){ return r.indexOf(x) < 0 && items.indexOf(x) >= 0; }).concat(r));
+  }
+  function clickPick(it, mod){
+    if (mod === "cmd") { it.pick = !it.pick; anchorIt = curIt = it; basePick = picked(); }
+    else if (mod === "shift") { if (!anchorIt || items.indexOf(anchorIt) < 0) { anchorIt = it; basePick = []; } extendTo(it); }
+    else { setPicks([it]); anchorIt = curIt = it; basePick = []; }
+  }
+  function clearPicks(){ setPicks([]); anchorIt = curIt = null; basePick = []; }
+  /* 지금 다룰 사진: 선택한 것, 없으면 가리킨 것 */
+  function targets(){
+    var p = picked(); if (p.length) return p;
+    var h = items[hover]; return h && !h.blank ? [h] : [];
+  }
+  function showItem(it){
+    var k = V.indexOf(items.indexOf(it)); if (k < 0) return;
+    ranges().forEach(function(x, p){ if (k >= x[0] && k < x[1]) page = p; });
+  }
+  /* ⇧ 화살표: dx = 칸 수 (← → 1, ↑ ↓ 열 수) */
+  function stepPick(dx){
+    buildView(); if (!viewList().length) return;
+    var from = curIt && items.indexOf(curIt) >= 0 && V.indexOf(items.indexOf(curIt)) >= 0 ? curIt
+             : (items[hover] && !items[hover].blank ? items[hover] : null);
+    if (!from) {
+      var r = ranges()[page], first = null;
+      for (var q = r[0]; q < r[1] && !first; q++) if (!items[V[q]].blank) first = items[V[q]];
+      if (first) { clickPick(first, ""); render(); }
+      return;
+    }
+    if (!anchorIt || !anchorIt.pick) { anchorIt = from; basePick = []; }
+    var k = V.indexOf(items.indexOf(from)), s = dx > 0 ? 1 : -1, j = clamp(k + dx, 0, V.length - 1);
+    while (j > 0 && j < V.length - 1 && items[V[j]].blank) j += s;
+    if (items[V[j]].blank) return;
+    extendTo(items[V[j]]); showItem(items[V[j]]); render();
+  }
+
   /* ---------- files ---------- */
-  function addFiles(list){
+  function addFiles(list, intoPool){
     var all = Array.prototype.slice.call(list || []);
     var ok = all.filter(function(f){ return /^image\//.test(f.type) || /\.(jpe?g|png|webp|avif|gif|bmp)$/i.test(f.name); });
     var skipped = all.length - ok.length;
@@ -285,9 +357,10 @@
       if (ph) { ph.missing = false; setSrc(ph, URL.createObjectURL(f)); filled++; if (pool.indexOf(ph) >= 0) renderPool(); return; }
       var it = makeItem(name, "", lastG);
       setSrc(it, URL.createObjectURL(f));
-      items.push(it);
+      (intoPool ? pool : items).push(it);
     });
-    if (ok.length) say((filled ? "목록 자리 " + filled + "장 채움 · " : "") + (ok.length - filled) + "장 추가" + (skipped ? " · " + skipped + "개 제외" : ""));
+    if (intoPool) renderPool();
+    if (ok.length) say((filled ? "목록 자리 " + filled + "장 채움 · " : "") + (intoPool ? "풀에 " : "") + (ok.length - filled) + "장 추가" + (skipped ? " · " + skipped + "개 제외" : ""));
     else if (skipped) say("브라우저가 읽을 수 없는 파일입니다.");
     render();
   }
@@ -322,14 +395,20 @@
   function toPool(list){
     list = list.filter(function(it){ return !it.blank; });
     if (!list.length) return;
-    list.forEach(function(it){ var k = items.indexOf(it); if (k >= 0) items.splice(k, 1); it.sel = false; pool.push(it); });
+    list.forEach(function(it){ var k = items.indexOf(it); if (k >= 0) items.splice(k, 1); it.sel = false; it.pick = false; pool.push(it); });
+    if (list.indexOf(anchorIt) >= 0 || list.indexOf(curIt) >= 0) { anchorIt = curIt = null; basePick = []; }
     pool.sort(function(a, b){ return a.id - b.id; });
     hover = -1; savePool(); renderPool(); render();
     say(list.length + "장을 풀에 넣었습니다");
   }
-  function fromPool(list){
+  function fromPool(list, before){
     list.forEach(function(it){
       var k = pool.indexOf(it); if (k >= 0) pool.splice(k, 1);
+      if (before && items.indexOf(before) >= 0) {   /* 시트로 끌어다 놓은 자리 앞에 */
+        items.splice(items.indexOf(before), 0, it);
+        if (before.grp !== undefined) it.grp = before.grp;
+        return;
+      }
       var at = items.findIndex(function(x){ return x.id > it.id; });
       if (at < 0) items.push(it); else items.splice(at, 0, it);
     });
@@ -340,13 +419,18 @@
     pool.forEach(function(it){
       var b = document.createElement("button");
       b.title = it.name + " — 시트로 꺼내기";
-      var im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.loading = "lazy";
+      var im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.loading = "lazy"; im.draggable = false;
+      if (rot(it)) im.style.transform = "rotate(" + rot(it) + "deg)";
       var s = document.createElement("span"); s.textContent = it.name;
       b.appendChild(im); b.appendChild(s);
+      b.title = it.name + " — 클릭하면 꺼내기 · 시트로 끌면 그 자리에";
       b.onclick = function(){ fromPool([it]); say(it.name + " 꺼냄"); };
+      b.draggable = true;
+      b.ondragstart = function(ev){ poolDragIt = it; ev.dataTransfer.effectAllowed = "move"; ev.dataTransfer.setData("text/plain", it.name); };
+      b.ondragend = function(){ poolDragIt = null; dropAt = -1; schedule(); };
       box.appendChild(b);
     });
-    $("poolCount").textContent = pool.length ? pool.length + "장" : "비어 있습니다. 시트에서 뺀 사진이 여기 모입니다.";
+    $("poolCount").textContent = pool.length ? pool.length + "장" : "비어 있습니다. 시트의 사진을 여기로 끌어다 놓으면 빠집니다.";
     $("poolAll").disabled = !pool.length;
   }
   function removeAt(i){
@@ -374,11 +458,11 @@
       c.fillStyle = S.cell; c.fillRect(x, y, cw, ih);
       var rx = x, ry = y;
       if (it.ok) {
-        var k = Math.min(cw / it.im.naturalWidth, ih / it.im.naturalHeight);
-        var rw = it.im.naturalWidth * k, rh = it.im.naturalHeight * k;
+        var dm = dims(it), k = Math.min(cw / dm[0], ih / dm[1]);
+        var rw = dm[0] * k, rh = dm[1] * k;
         rx = x + (cw - rw) / 2; ry = y + (ih - rh) / 2;
-        if (preview && drag && drag.active && drag.from === n) c.globalAlpha = .35;
-        c.drawImage(it.im, rx, ry, rw, rh);
+        if (preview && drag && drag.active && drag.group.indexOf(it) >= 0) c.globalAlpha = .35;
+        drawImg(c, it, rx, ry, rw, rh);
         c.globalAlpha = 1;
       } else {
         c.fillStyle = "#8a8a8a"; c.font = (11 * s) + "px sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
@@ -399,9 +483,14 @@
       }
       if (preview) {
         hits.push({ x:x, y:y, w:cw, h:ih, n:n });
-        if (drag && drag.active && drag.to === n && drag.to !== drag.from) {
+        if (it.pick) {   /* 선택: 칸 둘레 선 (배경과 반대 색) */
+          var o = Math.min(4 * s, gap / 2), lw = 2 * s;
+          c.strokeStyle = txt; c.lineWidth = lw;
+          c.strokeRect(x - o + lw / 2, y - o + lw / 2, cw + 2 * o - lw, ih + 2 * o - lw);
+        }
+        if ((drag && drag.active && !drag.overPool && drag.to === n && drag.group.indexOf(it) < 0) || dropAt === n) {
           c.strokeStyle = "#e1251b"; c.lineWidth = 3 * s; c.strokeRect(x + 1.5 * s, y + 1.5 * s, cw - 3 * s, ih - 3 * s);
-        } else if (hover === n && !(drag && drag.active)) {
+        } else if (hover === n && !(drag && drag.active) && !it.pick) {
           c.strokeStyle = "rgba(225,37,27,.75)"; c.lineWidth = 2 * s; c.strokeRect(x + s, y + s, cw - 2 * s, ih - 2 * s);
         }
       }
@@ -434,12 +523,14 @@
     $("pg").textContent = (page + 1) + " / " + r.length;
     $("prev").disabled = page <= 0; $("next").disabled = page >= r.length - 1;
     var real = items.filter(function(i){ return !i.blank; }).length;
-    var txt = has ? (vf === "all" ? real + "장" : "보기 " + shown + " / " + real + "장") + " · 선택 " + sel + " · " + r.length + "시트" : "";
+    var pk = picked().length;
+    var txt = has ? (vf === "all" ? real + "장" : "보기 " + shown + " / " + real + "장") + (pk ? " · 선택 " + pk : "") + " · 레드닷 " + sel + " · " + r.length + "시트" : "";
     $("info").textContent = txt;
-    $("count").textContent = has ? real + "장 · 선택 " + sel : "아직 사진이 없습니다.";
+    $("count").textContent = has ? real + "장 · 레드닷 " + sel + (pk ? " · 선택 " + pk : "") : "아직 사진이 없습니다.";
     ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll", "exportEach"].forEach(function(id){ $(id).disabled = !has; });
     $("selFirst").disabled = !has || !sel;
-    $("toPool").disabled = !sel;
+    $("toPool").disabled = !pk;
+    $("dotToPool").disabled = !sel;
     $("gapV").textContent = S.gap; $("dotV").textContent = S.dot; $("qualityV").textContent = S.quality;
     setStatus();
     if (has) { var mw = sheetMaxW(page); $("wHint").textContent = "이 시트 최대 " + mw + "px" + ((S.exportW | 0) > mw ? " · " + mw + "px로 저장됩니다" : ""); }
@@ -457,28 +548,73 @@
     }
     return -1;
   }
+  var poolSec = $("poolSec");
+  function overPoolAt(x, y){
+    if ($("body").classList.contains("nomenu")) return false;
+    var r = poolSec.getBoundingClientRect();
+    return r.height > 0 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }
+  /* 여러 장을 한꺼번에 T 앞(뒤)으로 */
+  function moveGroup(group, T, after){
+    items = items.filter(function(i){ return group.indexOf(i) < 0; });
+    var k = items.indexOf(T) + (after ? 1 : 0);
+    items.splice.apply(items, [k, 0].concat(group));
+    if (T.grp !== undefined) group.forEach(function(g){ g.grp = T.grp; });
+  }
   cv.addEventListener("pointerdown", function(ev){
     if (ev.button !== 0) return;
-    var n = hitAt(ev); if (n < 0) return;
-    drag = { from:n, to:n, x:ev.clientX, y:ev.clientY, active:false };
+    var n = hitAt(ev), mod = ev.shiftKey ? "shift" : (ev.metaKey || ev.ctrlKey) ? "cmd" : "";
+    if (n < 0) { if (!mod) { clearPicks(); render(); } return; }
+    drag = { from:n, to:n, x:ev.clientX, y:ev.clientY, active:false, mod:mod, group:[], overPool:false };
     cv.setPointerCapture(ev.pointerId);
   });
   cv.addEventListener("pointermove", function(ev){
     var n = hitAt(ev);
     if (drag) {
-      if (!drag.active && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) > 6) drag.active = true;
-      if (drag.active) { drag.to = n < 0 ? drag.to : n; cv.style.cursor = "grabbing"; schedule(); }
+      if (!drag.active && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) > 6) {
+        drag.active = true;
+        var it = items[drag.from];
+        if (!it.pick) clickPick(it, "");   /* 선택 안 된 사진을 끌면 그 한 장만 */
+        drag.group = picked();
+      }
+      if (drag.active) {
+        drag.overPool = overPoolAt(ev.clientX, ev.clientY);
+        poolSec.classList.toggle("drop", drag.overPool);
+        if (n >= 0) drag.to = n;
+        cv.style.cursor = "grabbing"; schedule();
+      }
     } else if (n !== hover) { hover = n; cv.style.cursor = n >= 0 ? "pointer" : "default"; schedule(); }
   });
   cv.addEventListener("pointerup", function(){
     if (!drag) return;
-    var d = drag; drag = null; cv.style.cursor = "pointer"; cur = d.active ? d.to : d.from;
-    if (d.active) { if (d.to !== d.from) { var it = items.splice(d.from, 1)[0]; items.splice(d.to, 0, it);
-      var nb = items[d.from < d.to ? d.to - 1 : d.to + 1]; if (nb && nb.grp !== undefined) it.grp = nb.grp; } }
-    else items[d.from].sel = !items[d.from].sel;
+    var d = drag; drag = null; cv.style.cursor = "pointer"; poolSec.classList.remove("drop");
+    var it = items[d.from];
+    if (d.active) {
+      if (d.overPool) { toPool(d.group); return; }
+      var T = items[d.to];
+      if (T && d.group.indexOf(T) < 0) moveGroup(d.group, T, d.from < d.to);
+    }
+    else clickPick(it, d.mod);
     render();
   });
-  cv.addEventListener("pointercancel", function(){ drag = null; schedule(); });
+  cv.addEventListener("pointercancel", function(){ drag = null; poolSec.classList.remove("drop"); schedule(); });
+
+  /* 풀 → 시트: 놓은 자리 앞에 꺼내기 */
+  $("stage").addEventListener("dragover", function(ev){
+    if (!poolDragIt) return;
+    ev.preventDefault(); ev.dataTransfer.dropEffect = "move";
+    var n = hitAt(ev); if (n !== dropAt) { dropAt = n; schedule(); }
+  });
+  $("stage").addEventListener("dragleave", function(ev){
+    if (poolDragIt && !$("stage").contains(ev.relatedTarget)) { dropAt = -1; schedule(); }
+  });
+  $("stage").addEventListener("drop", function(ev){
+    if (!poolDragIt) return;
+    ev.preventDefault();
+    var it = poolDragIt, n = hitAt(ev); poolDragIt = null; dropAt = -1;
+    fromPool([it], n >= 0 ? items[n] : null);
+    say(it.name + " 꺼냄");
+  });
   cv.addEventListener("pointerleave", function(){ if (!drag && hover !== -1) { hover = -1; schedule(); } });
 
   /* ---------- export ---------- */
@@ -522,7 +658,7 @@
     for (var vk = r[p][0]; vk < r[p][1]; vk++) {
       var it = items[V[vk]];
       if (!it || it.blank || !it.ok) continue;
-      kmax = Math.max(kmax, Math.min(cw / it.im.naturalWidth, ih / it.im.naturalHeight));
+      var dm = dims(it); kmax = Math.max(kmax, Math.min(cw / dm[0], ih / dm[1]));
     }
     var max = kmax ? Math.floor(W / kmax) : 12000;
     return clamp(max, 400, Math.floor(Math.min(16000, 16000 * aspect)));
@@ -537,12 +673,12 @@
     });
   }
   function eachBlob(it){
-    var nw = it.im.naturalWidth, nh = it.im.naturalHeight, long = Math.max(nw, nh);
+    var dm = dims(it), nw = dm[0], nh = dm[1], long = Math.max(nw, nh);
     var edge = S.eachEdge > 0 ? Math.min(S.eachEdge, long) : long, k = edge / long;
     var c = document.createElement("canvas"); c.width = Math.round(nw * k); c.height = Math.round(nh * k);
     var x = c.getContext("2d");
     if (S.fmt === "jpg") { x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height); }
-    x.imageSmoothingQuality = "high"; x.drawImage(it.im, 0, 0, c.width, c.height);
+    x.imageSmoothingQuality = "high"; drawImg(x, it, 0, 0, c.width, c.height);
     return encode(c);
   }
 
@@ -692,7 +828,8 @@
     items = items.filter(function(i){ return i.sel; }).concat(items.filter(function(i){ return !i.sel; }));
     page = 0; render(); say("선택한 사진을 앞으로 옮겼습니다");
   };
-  $("toPool").onclick = function(){ toPool(items.filter(function(i){ return i.sel; })); };
+  $("toPool").onclick = function(){ toPool(picked()); };
+  $("dotToPool").onclick = function(){ toPool(items.filter(function(i){ return i.sel; })); };
   $("poolAll").onclick = function(){ var n = pool.length; fromPool(pool.slice()); say(n + "장을 꺼냈습니다"); };
   $("selAll").onclick = function(){ items.forEach(function(i){ i.sel = true; }); render(); };
   $("selNone").onclick = function(){ items.forEach(function(i){ i.sel = false; }); render(); };
@@ -723,19 +860,28 @@
   if (window.innerWidth <= 820) { $("body").classList.add("nomenu"); $("menuBtn").setAttribute("aria-expanded", "false"); }
 
   /* ---------- 크게 보기 ---------- */
-  var cur = -1, fsIt = null;
-  function target(){ var i = hover >= 0 ? hover : cur; return items[i] && !items[i].blank ? items[i] : null; }
+  var fsIt = null;
+  function target(){
+    if (items[hover] && !items[hover].blank) return items[hover];
+    return curIt && items.indexOf(curIt) >= 0 ? curIt : null;
+  }
   function fsShow(it){
     fsIt = it; $("fs").classList.add("on");
     var n = items.indexOf(it), vr = V.filter(function(i){ return !items[i].blank; }), k = vr.indexOf(n);
     $("fsImg").src = it.url || ""; $("fsName").textContent = (n + 1) + "  " + it.name;
     $("fsPos").textContent = (k + 1) + " / " + vr.length;
     $("fs").classList.toggle("sel", !!it.sel);
-    var img = $("fsImg");
-    function place(){ var d = $("fsDot"); d.style.left = (img.offsetLeft + 12) + "px"; d.style.top = (img.offsetTop + 12) + "px"; }
-    if (img.complete) place(); else img.onload = place;
+    var img = $("fsImg"), box = img.parentNode, r = rot(it);
+    img.style.transform = r ? "rotate(" + r + "deg)" : "";
+    if (r % 180) { img.style.maxWidth = box.clientHeight + "px"; img.style.maxHeight = Math.max(0, box.clientWidth - 30) + "px"; }
+    else img.style.maxWidth = img.style.maxHeight = "";
+    function place(){
+      var d = $("fsDot"), ir = img.getBoundingClientRect(), br = box.getBoundingClientRect();
+      d.style.left = (ir.left - br.left + 12) + "px"; d.style.top = (ir.top - br.top + 12) + "px";
+    }
+    img.onload = place; if (img.complete) place();
   }
-  function fsClose(){ $("fs").classList.remove("on"); if (fsIt) { cur = items.indexOf(fsIt); var k = V.indexOf(cur); if (k >= 0) { var r = ranges(); r.forEach(function(x, p){ if (k >= x[0] && k < x[1]) page = p; }); } } fsIt = null; render(); }
+  function fsClose(){ $("fs").classList.remove("on"); if (fsIt) { curIt = fsIt; showItem(fsIt); } fsIt = null; render(); }
   function fsStep(d){
     var k = V.indexOf(items.indexOf(fsIt)), v = V.filter(function(i){ return !items[i].blank; });
     var at = v.indexOf(V[k]) + d; if (at < 0 || at >= v.length) return;
@@ -750,7 +896,12 @@
     var t = ev.target, tag = t && t.tagName;
     if (tag === "INPUT" && t.type !== "range") return;
     if (tag === "SELECT" || tag === "TEXTAREA") return;
+    var cmd = ev.metaKey || ev.ctrlKey;
+    /* ⌘[ ⌘] 회전 — 브라우저 뒤로/앞으로 대신 */
+    var rotL = cmd && (ev.code === "BracketLeft" || ev.key === "["), rotR = cmd && (ev.code === "BracketRight" || ev.key === "]");
+    if (rotL || rotR) { ev.preventDefault(); rotate(fsIt ? [fsIt] : targets(), rotL ? -90 : 90); return; }
     if (fsIt) {
+      if (cmd || ev.altKey) return;
       if (ev.key === " " || ev.key === "Escape") { ev.preventDefault(); fsClose(); }
       else if (ev.key === "ArrowLeft") fsStep(-1);
       else if (ev.key === "ArrowRight") fsStep(1);
@@ -758,27 +909,49 @@
       else if (ev.key === "0") mark(fsIt, false);
       return;
     }
+    if (cmd && (ev.code === "KeyA" || ev.key === "a" || ev.key === "A")) {
+      ev.preventDefault(); var all = viewList(); setPicks(all); anchorIt = all[0] || null; curIt = all[all.length - 1] || null; basePick = []; render(); return;
+    }
+    if (cmd || ev.altKey) return;   /* 다른 ⌘ 단축키는 브라우저에 맡김 */
+    if (ev.shiftKey && /^Arrow/.test(ev.key)) {
+      ev.preventDefault();
+      stepPick(ev.key === "ArrowLeft" ? -1 : ev.key === "ArrowRight" ? 1 : ev.key === "ArrowUp" ? -S.cols : S.cols);
+      return;
+    }
+    if (ev.key === "Escape") { if (picked().length) { clearPicks(); render(); } return; }
     if (ev.key === " ") { ev.preventDefault(); if (document.activeElement) document.activeElement.blur(); var it = target(); if (it) fsShow(it); else say("크게 볼 사진을 가리키거나 클릭하세요."); return; }
-    if (ev.key === "1" || ev.key === "0") { var tt = target(); if (tt) mark(tt, ev.key === "1"); return; }
+    if (ev.key === "1" || ev.key === "0") {
+      var tl = targets(), on = ev.key === "1";
+      if (!tl.length) return say("레드닷을 찍을 사진을 클릭해서 선택하세요.");
+      tl.forEach(function(x){ x.sel = on; }); render(); return;
+    }
     if (ev.key === "ArrowLeft") { page--; render(); }
     else if (ev.key === "ArrowRight") { page++; render(); }
     else if (ev.key === "h" || ev.key === "H") toggleMenu();
     else if (ev.key === "f" || ev.key === "F") setView(vf === "all" ? "sel" : vf === "sel" ? "unsel" : "all");
-    else if ((ev.key === "Delete" || ev.key === "Backspace") && hover >= 0) { ev.preventDefault(); toPool([items[hover]]); }
+    else if (ev.key === "Delete" || ev.key === "Backspace") { var dl = targets(); if (dl.length) { ev.preventDefault(); toPool(dl); } }
   });
 
   /* ---------- drop files ---------- */
   var depth = 0;
   function hasFiles(ev){ return ev.dataTransfer && Array.prototype.indexOf.call(ev.dataTransfer.types || [], "Files") >= 0; }
-  window.addEventListener("dragenter", function(ev){ if (!hasFiles(ev)) return; ev.preventDefault(); depth++; $("stage").classList.add("over"); });
-  window.addEventListener("dragover", function(ev){ if (hasFiles(ev)) ev.preventDefault(); });
-  window.addEventListener("dragleave", function(ev){ if (!hasFiles(ev)) return; depth = Math.max(0, depth - 1); if (!depth) $("stage").classList.remove("over"); });
+  /* 파일을 풀 위에 놓으면 풀로, 그 밖이면 시트로 */
+  function fileTarget(ev){
+    var inPool = overPoolAt(ev.clientX, ev.clientY);
+    poolSec.classList.toggle("drop", inPool); $("stage").classList.toggle("over", !inPool);
+    return inPool;
+  }
+  function endFileDrag(){ depth = 0; $("stage").classList.remove("over"); poolSec.classList.remove("drop"); }
+  window.addEventListener("dragenter", function(ev){ if (!hasFiles(ev)) return; ev.preventDefault(); depth++; fileTarget(ev); });
+  window.addEventListener("dragover", function(ev){ if (hasFiles(ev)) { ev.preventDefault(); fileTarget(ev); } });
+  window.addEventListener("dragleave", function(ev){ if (!hasFiles(ev)) return; depth = Math.max(0, depth - 1); if (!depth) endFileDrag(); });
   window.addEventListener("drop", function(ev){
-    if (!hasFiles(ev)) return; ev.preventDefault(); depth = 0; $("stage").classList.remove("over");
+    if (!hasFiles(ev)) return; ev.preventDefault();
+    var inPool = overPoolAt(ev.clientX, ev.clientY); endFileDrag();
     var fl = Array.prototype.slice.call(ev.dataTransfer.files || []);
     var txt = fl.filter(function(f){ return /\.txt$/i.test(f.name) || f.type === "text/plain"; })[0];
     var imgs = fl.filter(function(f){ return f !== txt; });
-    if (imgs.length) addFiles(imgs);
+    if (imgs.length) addFiles(imgs, inPool);
     if (txt) readList(txt);
   });
 
@@ -824,7 +997,7 @@
     var L = ["# 밀착 목록 · " + new Date().toISOString().slice(0, 10) + (setName ? " · set=" + setName : "")];
     ["cols", "rows", "labels"].forEach(function(k){ L.push("#" + k + " " + S[k]); });
     var g = null;
-    function line(i){ return (i.sel ? "●" : "○") + "\t" + i.name + "\t" + (i.src || ""); }
+    function line(i){ return (i.sel ? "●" : "○") + "\t" + i.name + "\t" + (i.src || "") + (rot(i) ? "\t" + rot(i) : ""); }
     items.forEach(function(i){
       if (i.blank) return;
       if (i.grp !== undefined && i.grp !== g) { g = i.grp; L.push("", "#sheet " + (groupTitles[g] || String(g + 1))); }
@@ -863,7 +1036,7 @@
       used[name] = 1;
       var it = have[name];
       if (!it) { it = makeItem(name, src, g); if (!src) it.missing = true; }
-      it.sel = sel; if (g !== undefined) it.grp = g; else delete it.grp;
+      it.sel = sel; it.rot = parseInt(p[3], 10) || 0; if (g !== undefined) it.grp = g; else delete it.grp;
       (inPool ? pl : ord).push(it);
     });
     if (!ord.length && !pl.length) return say("목록에 사진이 없습니다.");
@@ -888,6 +1061,7 @@
       grp: items.concat(pool).reduce(function(o, i){ if (!i.blank) o[keyOf(i)] = i.grp; return o; }, {}),
       pool: pool.map(keyOf),
       sel: items.concat(pool).filter(function(i){ return i.sel; }).map(keyOf),
+      rot: items.concat(pool).reduce(function(o, i){ if (!i.blank && rot(i)) o[keyOf(i)] = rot(i); return o; }, {}),
       S: o
     });
   }
@@ -898,7 +1072,7 @@
     var ord = take(sv.order), pl = take(sv.pool);
     items.forEach(function(i){ if (!used[keyOf(i)]) ord.push(i); });   /* 세트에 새로 추가된 사진은 뒤에 */
     var sel = {}; (sv.sel || []).forEach(function(k){ sel[k] = 1; });
-    ord.concat(pl).forEach(function(i){ i.sel = !!sel[keyOf(i)]; if (sv.grp && sv.grp[keyOf(i)] !== undefined) i.grp = sv.grp[keyOf(i)]; });
+    ord.concat(pl).forEach(function(i){ i.sel = !!sel[keyOf(i)]; i.rot = sv.rot ? sv.rot[keyOf(i)] | 0 : 0; if (sv.grp && sv.grp[keyOf(i)] !== undefined) i.grp = sv.grp[keyOf(i)]; });
     items = ord; pool = pl; renderPool();
   }
   function normalize(){
