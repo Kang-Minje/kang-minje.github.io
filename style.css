@@ -1558,8 +1558,12 @@ body.video-active .series-video-sound {
     gap: 0.6em;
 }
 
-/* 동의 줄: □ I’ve read and agreed with the privacy policy (□ → ■) */
+/* 동의 줄: [ ] I’ve read and agreed with the privacy policy — 각진 네모 칸, 동의하면 채워짐. 문구는 hover해도 밑줄 없음 */
 .email-gate .eg-agree { gap: 0.3em; white-space: nowrap; }
+.email-gate .eg-chk { display: inline-flex; align-items: center; gap: 0.45em; }
+.email-gate .eg-chk:hover { text-decoration: none; }
+.email-gate .eg-box { width: 0.62em; height: 0.62em; border: 1px solid currentColor; border-radius: 0; box-sizing: border-box; flex: none; }
+.email-gate .eg-chk[aria-pressed="true"] .eg-box { background: currentColor; }
 .email-gate .eg-pol { color: inherit; text-decoration: underline 1px solid currentColor; text-underline-offset: 2px; }
 .email-gate.unagreed .eg-agree { animation: eg-blink .25s 2; }
 @keyframes eg-blink { 50% { opacity: .3; } }

@@ -1,6 +1,6 @@
 // email-gate.js — 다운로드 전에 이메일 + 개인정보 처리방침 동의 받기 (PDF, 포트폴리오/CV)
-// 다운로드 링크/버튼 자리에 밑줄 입력칸 "email ↓"과 그 아래 "□ I’ve read and agreed with the privacy policy"가 열림.
-// 동의(□ → ■)해야 다운로드. Enter 또는 ↓ → 다운로드, Esc → 취소. "privacy policy" → 처리방침 전체 화면 (Esc / ← return).
+// 다운로드 링크/버튼 자리에 밑줄 입력칸 "email ↓"과 그 아래 "[ ] I’ve read and agreed with the privacy policy"가 열림.
+// 동의(네모 칸 채움)해야 다운로드. Enter 또는 ↓ → 다운로드, Esc → 취소. "privacy policy" → 처리방침 전체 화면 (Esc / ← return).
 // 한 번 적은 이메일(동의 포함)은 이 브라우저에만 기억해두고 다음부터는 묻지 않음.
 (function () {
     const STORE_KEY = "km-download-email-v2";   // v2: 동의를 받은 뒤부터 기억 (이전 키는 동의 없이 저장된 것)
@@ -104,7 +104,7 @@
                 '<input type="email" name="email" placeholder="email" autocomplete="email" inputmode="email" aria-label="email for download">' +
                 '<button type="submit" aria-label="download">↓</button>' +
                 "</span>" +
-                '<span class="eg-row eg-agree"><button type="button" class="eg-chk" aria-pressed="false"><span class="eg-box">□</span> I’ve read and agreed with the</button> <a href="#privacy" class="eg-pol">privacy policy</a></span>';
+                '<span class="eg-row eg-agree"><button type="button" class="eg-chk" aria-pressed="false"><span class="eg-box" aria-hidden="true"></span>I’ve read and agreed with the</button> <a href="#privacy" class="eg-pol">privacy policy</a></span>';
             const input = form.querySelector("input");
             const chk = form.querySelector(".eg-chk");
             const agreed = () => chk.getAttribute("aria-pressed") === "true";
@@ -112,7 +112,6 @@
             chk.addEventListener("click", () => {
                 const on = !agreed();
                 chk.setAttribute("aria-pressed", String(on));
-                chk.querySelector(".eg-box").textContent = on ? "■" : "□";
                 form.classList.remove("unagreed");
             });
             form.querySelector(".eg-pol").addEventListener("click", (e) => { e.preventDefault(); openPolicy(); });
