@@ -71,7 +71,7 @@
         if (tapLocked) return;
 
         // 꾹 누르는 대상이 cv-link거나 이메일 입력칸이면 이미지 생성을 막음
-        if (e.target.classList.contains('cv-link') || e.target.closest('.email-gate')) return;
+        if (e.target.classList.contains('cv-link') || e.target.closest('.email-gate') || e.target.closest('#km-privacy')) return;
 
         tapLocked = true;
         showRandomImage();
@@ -83,7 +83,7 @@
     }
 
     function suppressGhostClick(e) {
-        if (e.target.classList.contains('cv-link') || e.target.closest('.email-gate')) return; // 링크·이메일 입력은 허용
+        if (e.target.classList.contains('cv-link') || e.target.closest('.email-gate') || e.target.closest('#km-privacy')) return; // 링크·이메일 입력·처리방침은 허용
         e.preventDefault();
         e.stopPropagation();
     }
@@ -127,7 +127,7 @@
                 link.className = 'cv-link'; // 탭 차단(suppressGhostClick)에 걸려 다운로드가 취소되지 않도록
                 link.href = 'CV+Portfolio/KangMinje_CVandPortfolio.zip';
                 link.download = 'KangMinje_CVandPortfolio.zip';
-                if (window.logDownload) window.logDownload({ type: "portfolio-cv", file: link.download, email });
+                if (window.logDownload) window.logDownload({ file: link.download, email });
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

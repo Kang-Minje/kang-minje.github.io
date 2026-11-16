@@ -187,7 +187,7 @@
             const name = `KangMinje_${info.title}${year ? "_" + year : ""}`
                 .replace(/[^A-Za-z0-9가-힣_-]+/g, "_").replace(/_+/g, "_").replace(/_$/, "");
             if (window.logDownload) {
-                window.logDownload({ type: "pdf", email, project: `${info.title}${year ? " " + year : ""}`, file: `${name}.pdf`, pages: pdf.getPageCount() });
+                window.logDownload({ email, file: `${name}.pdf` });
             }
             const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
             const a = document.createElement("a");
