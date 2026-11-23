@@ -13,64 +13,39 @@
   <meta property="og:image" content="https://kangminje.com/og.jpg" />
   <meta property="og:url" content="https://kangminje.com/prints/" />
 
+  <link rel="stylesheet" href="/style.css?v=20261123" />
   <style>
-    /* 메인 사이트(style.css)의 d-info / d-nav 문법을 그대로 따름: 10pt, 줄높이 16px, #111, 밑줄 hover */
-    :root {
-      --d-top: 48px;
-      --d-left: 64px;
-      --d-line: 16px;
-      --d-col: min(66.8vw, calc(100vw - 800px));
-      --d-c2: 336px;
-      --d-c3: 509px;
-      --gap: 36px;
-    }
-
+    /* 메인 style.css(상단 정보·메뉴·드롭다운)를 그대로 쓰고, 이 페이지는 스크롤되는 문서로 */
     html, body {
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #111;
+      height: auto !important;
+      overflow: auto !important;
     }
 
-    body {
+    /* 상단 정보·메뉴는 문서와 함께 스크롤 (콜린 도지슨 Viewing Room처럼) */
+    .d-info,
+    .d-nav {
+      position: absolute;
+    }
+
+    main {
+      padding: 400px var(--d-left) 120px;
+      transition: opacity 0.15s ease;
       font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
       font-size: 10pt;
       line-height: var(--d-line);
+      color: #111;
     }
 
-    a { color: inherit; text-decoration: none; }
-    a:hover, .current {
+    main a { color: inherit; text-decoration: none; }
+    main a:hover {
       text-decoration: underline 1px solid #111;
       text-underline-offset: 2px;
     }
-    p { margin: 0; }
+    main p { margin: 0; }
 
-    /* 좌상단 정보 (메인과 동일) */
-    .d-info {
-      position: absolute;
-      top: var(--d-top);
-      left: var(--d-left);
-    }
-    .d-info p { margin: 0 0 10px 0; }
-    .d-info .spacer { height: 14px; }
-
-    /* 상단 메뉴: Works / About / Prints */
-    .d-nav {
-      position: absolute;
-      top: var(--d-top);
-      left: var(--d-col);
-      right: 20px;
-      height: var(--d-line);
-    }
-    .d-nav a { position: absolute; top: 0; white-space: nowrap; }
-    .d-nav .works { left: 0; }
-    .d-nav .about { left: var(--d-c2); }
-    /* Prints: 우측 여백 = 좌상단 이름의 좌측 여백 */
-    .d-nav .prints { left: auto; right: calc(var(--d-left) - 20px); }
-
-    /* 본문 */
-    main {
-      padding: 320px var(--d-left) 120px;
+    /* Works·About 드롭다운이 열리면 사진은 잠시 숨김 (메뉴 글자가 사진과 겹치지 않게) */
+    body:has(.d-nav-item.open) main {
+      opacity: 0;
     }
 
     .prints-note {
@@ -81,7 +56,7 @@
     .prints-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: var(--gap);
+      column-gap: 36px;
       row-gap: 72px;
       align-items: start;
     }
@@ -93,35 +68,135 @@
       background: #f2f2f2;
     }
 
-    .caption {
-      margin-top: 10px;
-    }
+    .caption { margin-top: 10px; }
+    .caption .inquire { display: inline-block; margin-top: 6px; }
+    .prints-foot { margin-top: 96px; }
 
-    .caption .inquire {
-      display: inline-block;
-      margin-top: 6px;
-    }
-
-    .prints-foot {
-      margin-top: 96px;
-    }
-
-    @media (max-width: 900px) {
-      .d-nav { right: auto; top: calc(var(--d-top) + 232px); left: var(--d-left); }
-      .d-nav .about { left: 72px; }
-      .d-nav .prints { position: absolute; right: auto; left: 144px; }
-    }
+    /* 모바일 상단 정보 (PC용 .d-info/.d-nav는 style.css가 600px 이하에서 숨김) */
+    .p-minfo { display: none; }
 
     @media (max-width: 600px) {
-      :root { --d-left: 20px; --d-top: 24px; }
-      main { padding-top: 340px; }
+      .p-minfo {
+        display: block;
+        position: absolute;
+        top: calc(env(safe-area-inset-top) + 20px);
+        left: calc(env(safe-area-inset-left) + 20px);
+        font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+        font-size: 10pt;
+        line-height: 16px;
+        color: #111;
+      }
+      .p-minfo p { margin: 0 0 10px 0; }
+      .p-minfo .spacer { height: 14px; }
+      .p-minfo a { color: inherit; text-decoration: none; }
+      main { padding: 300px 20px 80px; }
       .prints-grid { grid-template-columns: 1fr; row-gap: 56px; }
     }
   </style>
 </head>
 
 <body>
+  <!-- PC: 메인과 같은 좌상단 정보 + 상단 메뉴(Works·About 드롭다운, Prints) -->
   <div class="d-info">
+    <p class="name"><a href="/" id="footer-home">Kang Minje</a></p>
+    <div class="spacer"></div>
+    <p>Photographer</p>
+    <p>flesh<br>hollow<br>breath</p>
+    <div class="spacer"></div>
+    <p>Seoul, Korea</p>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <a href="/CV+Portfolio/KangMinje_CVandPortfolio.zip" download="KangMinje_CVandPortfolio.zip" class="d-link">→ portfolio / cv</a>
+    <div class="spacer"></div>
+    <p><a href="mailto:info@kangminje.com?subject=Inquiry%20%E2%80%94%20KangMinje%20Studio" class="d-link">info@kangminje.com</a><br>+82 10 9323 9432</p>
+  </div>
+
+  <nav class="d-nav">
+    <div class="d-nav-item d-nav-works">
+      <a href="#" class="d-nav-trigger" onclick="return false;">Works</a>
+      <div class="d-panel">
+        <div class="d-works">
+          <div class="d-group">
+            <a href="/?page=all" class="d-row"><span>(index)</span></a>
+          </div>
+          <div class="d-group">
+            <a href="/?page=moving_sphere" class="d-row"><span>Moving Sphere</span><span>2025 -</span></a>
+            <a href="/?page=sundimming" class="d-row"><span>SunDimming</span><span>2025 -</span></a>
+            <a href="/?page=lips" class="d-row"><span>Lips</span><span>2021 - 2026</span></a>
+            <a href="/?page=faces" class="d-row"><span>Faces</span><span>2021 -</span></a>
+            <a href="/?page=dots" class="d-row"><span>Dots</span><span>2025 -</span></a>
+          </div>
+          <div class="d-group">
+            <a href="/?page=aria" class="d-row"><span>Aria</span><span>2025</span></a>
+            <a href="/?page=fluid_state" class="d-row"><span>Rose</span><span>2024</span></a>
+            <a href="/?page=hwanhee_2024" class="d-row"><span>Hwanhee</span><span>2024</span></a>
+            <a href="/?page=hwanhee_2026" class="d-row"><span>Hwanhee</span><span>2026</span></a>
+            <a href="/?page=xinseha" class="d-row"><span>Seha</span><span>2023</span></a>
+            <a href="/?page=parkdongsun" class="d-row"><span>Dongsun</span><span>2026</span></a>
+            <a href="/?page=ann" class="d-row"><span>Ann</span><span>2026</span></a>
+            <a href="/?page=ines" class="d-row"><span>Ines</span><span>2026</span></a>
+            <a href="/?page=chowoohyun" class="d-row"><span>Woohyun</span><span>2026</span></a>
+            <a href="/?page=milozaya" class="d-row"><span>Milo&amp;Zaya</span><span>2026</span></a>
+            <a href="/?page=sihun" class="d-row"><span>Sihun</span><span>2026</span></a>
+            <a href="/?page=leo" class="d-row"><span>Leo</span><span>2026</span></a>
+          </div>
+          <div class="d-group d-group-wide">
+            <a href="/?page=ripple_effects_2" class="d-row"><span>Ripple Effects 2</span><span>2026</span><span>Just Music</span></a>
+            <a href="/?page=editorial_lemile" class="d-row"><span>When Four Players Collapse Into One Sound</span><span>2026</span><span>Le Mile</span></a>
+            <a href="/?page=heigs" class="d-row"><span>Beurre Was Here Before You Noticed</span><span>2025</span><span>Le Mile</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-nav-item d-nav-about">
+      <a href="/?page=about" class="d-nav-trigger">About</a>
+      <div class="d-panel">
+        <div class="d-about">
+          <!-- 키워드 hover → 화면 중앙에 이미지 (data-img), data-full은 브라우저 전체 크기 (가로 사진만) -->
+          <p>(EN)</p>
+          <p>Kang Minje moves the <span class="d-word" data-img="walk-19">traces</span> of suppressed <span class="d-word" data-img="faces-01">emotion</span> into <span class="d-word" data-img="ra4-11">matter</span>.
+            The <span class="d-word" data-img="24-28" data-full>emotion</span> he works with is the <span class="d-word" data-img="faces-112">hollowness</span> of a <span class="d-word" data-img="faces-69">youth</span>
+            <span class="d-word" data-img="faces-110">pressed down</span> within the system.
+            It recalls <span class="d-word" data-img="24-12" data-full>han</span>, the Korean sentiment of an earlier age.</p>
+          <p>Instead of <span class="d-word" data-img="ra4-37">slick digital data</span>, he treats the <span class="d-word" data-img="faces-05">photograph</span> as an <span class="d-word" data-img="ra4-41">object</span>
+            with <span class="d-word" data-img="walk-11" data-full>mass</span> and <span class="d-word" data-img="faces-32">flesh</span>, <span class="d-word" data-img="ra4-09">folding</span> the print and intervening by <span class="d-word" data-img="ra4-12">hand</span>
+            in extreme push development and <span class="d-word" data-img="faces-16">printing</span>.</p>
+          <p class="d-about-last">Because he believes the fact that <span class="d-word" data-img="walk-31">it was there</span> still carries <span class="d-word" data-img="walk-37">weight</span>,
+            he calls himself a <span class="d-word" data-img="ra4-45">photographer</span> in the <span class="d-word" data-img="24-30" data-full>AI imaging era</span>.
+            His work asks again after the place of the <span class="d-word" data-img="faces-116">body</span>,
+            lost in technological acceleration.</p>
+          <p>(KR)</p>
+          <p>강민제는 억눌린 <span class="d-word" data-img="faces-01">감정</span>의 <span class="d-word" data-img="walk-19">자국</span>을 <span class="d-word" data-img="ra4-11">물질</span>로 옮긴다.
+            그가 다루는 <span class="d-word" data-img="24-28" data-full>정서</span>는 제도 안에서 <span class="d-word" data-img="faces-110">눌려</span> 생긴 <span class="d-word" data-img="faces-69">젊음</span>의 <span class="d-word" data-img="faces-112">공허</span>다.
+            오래전 한국의 <span class="d-word" data-img="24-12" data-full>한</span>이라는 정서와 닮아 있다.</p>
+          <p><span class="d-word" data-img="ra4-37">매끄러운 디지털 데이터</span> 대신, 그는 <span class="d-word" data-img="faces-05">사진</span>을 <span class="d-word" data-img="walk-11" data-full>무게</span>와 <span class="d-word" data-img="faces-32">피부</span>를 지닌 <span class="d-word" data-img="ra4-41">사물</span>로 다루며
+            인화지를 <span class="d-word" data-img="ra4-09">접고</span> 극단적인 증감 현상과 <span class="d-word" data-img="faces-16">인화 과정</span>에 <span class="d-word" data-img="ra4-12">직접</span> 개입한다.</p>
+          <p>무언가 <span class="d-word" data-img="walk-31">실제로 그 자리에 있었다</span>는 사실의 <span class="d-word" data-img="walk-37">무게</span>를 믿기에,
+            그는 <span class="d-word" data-img="24-30" data-full>AI 이미징 시대</span>에도 스스로를 <span class="d-word" data-img="ra4-45">사진가</span>로 칭한다.
+            그의 작업은 기술적 가속 속에서 상실된 <span class="d-word" data-img="faces-116">몸</span>의 자리를 다시 묻는다.</p>
+          <div class="d-other-webs">
+            <p>(other webs)</p>
+            <a class="other-link other-link-fragile" href="https://kangminje.com/fragilecalendar">fragilecalendar</a><br>
+            <a class="other-link other-link-jagook" href="https://kangminje.com/jagooknetwork">jagooknetwork</a><br>
+            <a class="other-link other-link-fluidpaper" href="https://fluidpaper.com">
+              <span class="fluidpaper-text">fluidpaper</span>
+              <img src="/logo_fluidpaper.png" alt="fluidpaper" aria-hidden="true">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Prints: 패널 없는 단독 링크 (메뉴 컨트롤러 대상인 .d-nav-item이 아님), 우측 여백 = 좌상단 이름 좌측 여백 -->
+    <a href="/prints/" class="d-nav-prints current">Prints</a>
+  </nav>
+
+  <!-- About 키워드 hover 이미지 -->
+  <div id="word-image" aria-hidden="true"><img alt="" /></div>
+
+  <!-- 모바일 상단 정보 -->
+  <div class="p-minfo">
     <p class="name"><a href="/">Kang Minje</a></p>
     <div class="spacer"></div>
     <p>Photographer</p>
@@ -129,14 +204,8 @@
     <div class="spacer"></div>
     <p>Seoul, Korea</p>
     <div class="spacer"></div>
-    <p><a href="mailto:info@kangminje.com?subject=Prints">info@kangminje.com</a></p>
+    <p><a href="mailto:info@kangminje.com?subject=Prints">info@kangminje.com</a><br>+82 10 9323 9432</p>
   </div>
-
-  <nav class="d-nav">
-    <a class="works" href="/?page=all">Works</a>
-    <a class="about" href="/?page=about">About</a>
-    <a class="prints current" href="/prints/">Prints</a>
-  </nav>
 
   <main>
     <p class="prints-note">Kang Minje moves the traces of suppressed emotion into matter.</p>
@@ -226,6 +295,9 @@
     <p class="prints-foot">Prices and availability on request.<br>
       <a href="mailto:info@kangminje.com?subject=Prints">info@kangminje.com</a></p>
   </main>
+  <script src="/log.js?v=20261116"></script>
+  <script src="/email-gate.js?v=20261116b"></script>
+  <script src="/nav.js?v=20261123"></script>
 </body>
 
 </html>

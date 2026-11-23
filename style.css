@@ -1032,8 +1032,10 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
     /* 좌상단 텍스트 좌측 여백 */
     --d-line: 16px;
     /* 10pt 기준 한 줄 높이 */
-    --d-col: min(66.8vw, calc(100vw - 800px));
-    /* Works = Threshold 좌측 정렬선 */
+    --prints-w: 36px;
+    /* Prints 링크 너비 (nav.js가 실제 값으로 갱신) */
+    --d-col: calc(100vw - var(--d-left) - var(--prints-w) - var(--d-c2) * 2);
+    /* Works = Threshold 좌측 정렬선. Works→About→Prints 같은 간격(--d-c2), Prints 우측 여백 = --d-left */
     --d-c2: 336px;
     /* 연도 / About 컬럼 */
     --d-c3: 509px;
@@ -1122,15 +1124,17 @@ footer .footer-link {
     left: var(--d-c2);
 }
 
-/* Prints: 우측 끝 정렬, 우측 여백 = 좌상단 이름의 좌측 여백(--d-left). 메뉴가 열리면 다른 트리거처럼 회색 */
+/* Prints: About에서 Works→About과 같은 간격(--d-c2). --d-col 계산으로 우측 여백 = --d-left */
 .d-nav .d-nav-prints {
-    position: fixed;
-    top: var(--d-top);
-    right: var(--d-left);
+    position: absolute;
+    top: 0;
+    left: calc(var(--d-c2) * 2);
+    white-space: nowrap;
     pointer-events: auto;
 }
 
-.d-nav .d-nav-prints:hover {
+.d-nav .d-nav-prints:hover,
+.d-nav .d-nav-prints.current {
     text-decoration: underline 1px solid black;
     text-underline-offset: 2px;
 }
@@ -1242,7 +1246,8 @@ footer .footer-link {
 
 /* About 텍스트 */
 .d-about {
-    max-width: 420px;
+    max-width: calc(var(--d-c2) + var(--prints-w));
+    /* About 텍스트 오른쪽 끝 = Prints 오른쪽 끝 (우측 여백 --d-left) */
     word-break: keep-all;
 }
 
