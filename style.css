@@ -11,8 +11,7 @@ html {
 }
 
 body {
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
 }
 
 /* Back navigation arrow */
@@ -627,8 +626,7 @@ img {
 
 .fs-link {
     all: unset;
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
     font-size: 13px;
     color: black;
     cursor: pointer;
@@ -660,7 +658,7 @@ img {
     left: 50%;
     transform: translateX(-50%);
     margin-top: 4px;
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
     font-size: 13px;
     color: black;
     cursor: pointer;
@@ -684,7 +682,7 @@ img {
     /* PC 전용 UI 감춤 */
 
     .m-info p.name {
-        font-size: 10pt;
+        font-size: 11px;
         line-height: inherit;
     }
 
@@ -692,7 +690,7 @@ img {
         display: block;
         color: #111;
         text-decoration: none;
-        font-size: 10pt;
+        font-size: 11px;
         /* name과 동일한 크기 */
         line-height: inherit;
         transition: color 1.5s linear;
@@ -738,8 +736,8 @@ img {
         z-index: 999;
         pointer-events: none;
         /* PC 본문과 동일한 폰트/크기/두께 */
-        font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-        font-size: 10pt;
+        font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+        font-size: 11px;
         line-height: inherit;
         /* PC 본문과 동일한 행간 */
     }
@@ -914,8 +912,7 @@ img {
     display: block;
     text-align: center;
     margin-top: 96px;
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
     font-size: 14px;
     color: black;
     text-decoration: underline;
@@ -947,7 +944,7 @@ img {
     margin-top: auto;
     /* Push to the bottom to align captions based on tallest image */
     padding-top: 8px;
-    font-family: -apple-system, system-ui, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
 }
 
 /* 반응형 */
@@ -1003,7 +1000,7 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
     margin-top: 12px; /* Close spacing between image and title */
     font-size: 11px;
     color: black;
-    font-family: -apple-system, system-ui, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
     text-align: center;
 }
 
@@ -1030,8 +1027,8 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
     /* 좌상단 텍스트 / Works·About 상한선 */
     --d-left: 64px;
     /* 좌상단 텍스트 좌측 여백 */
-    --d-line: 16px;
-    /* 10pt 기준 한 줄 높이 */
+    --d-line: 13px;
+    /* 11px Helvetica Neue 기준 한 줄 높이 (line-height normal ≈ 1.2) */
     --prints-w: 36px;
     /* Prints 링크 너비 (nav.js가 실제 값으로 갱신) */
     --d-col: calc(100vw - var(--d-left) - var(--prints-w) - var(--d-c2) * 2);
@@ -1044,8 +1041,8 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-cou
 
 .d-info,
 .d-nav {
-    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-    font-size: 10pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 11px;
     line-height: var(--d-line);
     color: #111;
     z-index: 1100;
@@ -1442,8 +1439,8 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
     /* 우측 상단 Prints 바로 아래 행 */
     right: var(--d-left);
     z-index: 1100;
-    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-    font-size: 10pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 11px;
     line-height: var(--d-line);
     color: #111;
     text-decoration: none;
@@ -1629,8 +1626,8 @@ body.video-active .series-video-sound {
     top: var(--d-top);
     right: var(--d-left);
     z-index: 1100;
-    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-    font-size: 10pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 11px;
     line-height: var(--d-line);
     color: #111;
 }
@@ -1642,7 +1639,7 @@ body.video-active .email-gate.d-pdf-gate {
 /* 모바일 좌상단 정보 안에서도 입력 가능하게 */
 .m-info .email-gate {
     pointer-events: auto;
-    font-size: 10pt;
+    font-size: 11px;
 }
 
 .m-info .email-gate input {
@@ -1658,8 +1655,8 @@ body.video-active .email-gate.d-pdf-gate {
     overflow-y: auto;
     background: #fff;
     color: #111;
-    font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-    font-size: 10pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+    font-size: 11px;
     line-height: 1.45;
     -webkit-overflow-scrolling: touch;
 }
