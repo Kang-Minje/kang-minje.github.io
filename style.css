@@ -269,8 +269,8 @@ img {
 /* Credit Box (Editorial) */
 .credit-box-container {
     position: fixed;
-    top: calc(var(--d-top) + var(--d-line) * 2);
-    /* 우측 상단 PDF 버튼 아래로 (겹치지 않게) */
+    top: calc(var(--d-top) + var(--d-line) * 3 + 10px);
+    /* 우측 상단 Prints·PDF 버튼 아래로 (겹치지 않게) */
     right: 0;
     transform: translateX(calc(100% - 70px));
     /* 70px만 보이도록 우측으로 밀어냄 */
@@ -1122,6 +1122,23 @@ footer .footer-link {
     left: var(--d-c2);
 }
 
+/* Prints: 우측 끝 정렬, 우측 여백 = 좌상단 이름의 좌측 여백(--d-left). 메뉴가 열리면 다른 트리거처럼 회색 */
+.d-nav .d-nav-prints {
+    position: fixed;
+    top: var(--d-top);
+    right: var(--d-left);
+    pointer-events: auto;
+}
+
+.d-nav .d-nav-prints:hover {
+    text-decoration: underline 1px solid black;
+    text-underline-offset: 2px;
+}
+
+.d-nav:has(.d-nav-item.open) .d-nav-prints {
+    color: #bbb;
+}
+
 /* 한쪽이 열리면 다른 쪽은 회색 (열림/닫힘은 script.js의 메뉴 컨트롤러가 .open으로 관리) */
 .d-nav:has(.d-nav-works.open) .d-nav-about > .d-nav-trigger,
 .d-nav:has(.d-nav-about.open) .d-nav-works > .d-nav-trigger {
@@ -1416,7 +1433,8 @@ body.grid-mode #canvas-container.photoshoot-series-layout .photoshoot-series-ite
 .d-pdf {
     display: none;
     position: fixed;
-    top: var(--d-top);
+    top: calc(var(--d-top) + var(--d-line) + 10px);
+    /* 우측 상단 Prints 바로 아래 행 */
     right: var(--d-left);
     z-index: 1100;
     font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;

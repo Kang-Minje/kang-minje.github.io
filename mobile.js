@@ -108,6 +108,7 @@
             <div class="spacer"></div>
             <div class="spacer"></div>
             <a href="CV+Portfolio/KangMinje_CVandPortfolio.zip" id="cv-download" class="cv-link">→ portfolio / cv</a>
+            <a href="prints/" class="cv-link">→ prints</a>
             <div class="spacer"></div>
             <p>info@kangminje.com<br>+82 10 9323 9432</p>
         `;
