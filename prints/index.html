@@ -65,7 +65,17 @@
       display: block;
       width: 100%;
       height: auto;
-      background: #f2f2f2;
+    }
+
+    /* PC: 모든 사진을 가로 사진 높이(가로 박스 10:7)에 맞추고, 박스 안에서 좌측 정렬.
+       세로·정사각 사진은 박스 높이에 맞춰 줄어들고 왼쪽에 붙음 (그리드 칸은 그대로) */
+    @media (min-width: 601px) {
+      .work img {
+        aspect-ratio: 10 / 7;
+        height: auto;
+        object-fit: contain;
+        object-position: left top;
+      }
     }
 
     .caption { margin-top: 10px; }
