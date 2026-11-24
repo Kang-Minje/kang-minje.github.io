@@ -129,6 +129,31 @@
   .lv:hover .nm { text-decoration:underline; text-underline-offset:2px; }
   .lv .mt { display:flex; flex-wrap:wrap; gap:0 10px; }
 
+  /* From web */
+  .wsrc { display:flex; flex-direction:column; }
+  .wsrc + .wsrc { margin-top:8px; }
+  .wrow { display:flex; justify-content:space-between; gap:10px; width:100%; }
+  .wrow .c { flex:none; }
+  .wsrc > .wrow { font-weight:400; }
+  .wsrc.open > .wrow .nm { font-weight:700; }
+  .wsub { display:flex; flex-direction:column; padding-left:12px; margin-top:2px; }
+  .wsub .wrow.cur .nm { font-weight:700; }
+  #webView { position:absolute; inset:0; z-index:6; background:var(--bg); overflow-y:auto; scrollbar-width:none; }
+  #webView::-webkit-scrollbar { display:none; }
+  #webView .lvh { margin-bottom:6px; }
+  .wvbar { flex-wrap:wrap; margin-bottom:16px !important; }
+  .wvbar #wvClose { margin-left:auto; }
+  #wvGrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:22px 16px; padding-bottom:30px; user-select:none; -webkit-user-select:none; }
+  .wi { cursor:pointer; display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .wi .im { aspect-ratio:1; display:flex; align-items:flex-end; }
+  .wi .im img { max-width:100%; max-height:100%; display:block; }
+  .wi .nm { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .wi .nm::before { content:""; display:inline-block; width:0; height:8px; margin-right:0; background:var(--fg); }
+  .wi.sel .nm { font-weight:700; }
+  .wi.sel .nm::before { width:8px; margin-right:6px; }
+  .wi.on .im { opacity:.35; }
+  .wi .st { color:var(--off); }
+
   /* 풀 */
   #pool { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; }
   #pool button { display:flex; flex-direction:column; gap:2px; min-width:0; cursor:grab; }
@@ -219,6 +244,11 @@
     </div>
   </section>
 
+  <section id="webSec">
+    <h2>From web</h2>
+    <div class="body"><div id="webSrc"></div></div>
+  </section>
+
   <section>
     <h2>Photos</h2>
     <div class="body">
@@ -257,6 +287,11 @@
     <span class="hint" id="emptyLib"></span>
   </div>
   <div id="veil">Release to add</div>
+  <div id="webView" hidden>
+    <div class="lvh"><b id="wvTitle"></b><span id="wvInfo"></span></div>
+    <div class="lvh wvbar"><button id="wvAll" class="btn">Select all</button><span id="wvNew"></span><button id="wvSheet" class="btn pri">Add to sheet</button><button id="wvPool" class="btn">Add to pool</button><button id="wvClose" class="btn">Close</button></div>
+    <div id="wvGrid"></div>
+  </div>
   <div id="libView" hidden><div class="lvh"><b>Library</b><span id="lvInfo"></span><button id="lvClose" class="btn">Close</button></div><div id="lvGrid"></div></div>
 </main>
 
@@ -317,6 +352,9 @@
       <dt class="grp">File</dt>
       <dt>⌘S</dt><dd>Save to library</dd>
       <dt>L</dt><dd>Library grid</dd>
+      <dt class="grp">From web</dt>
+      <dt>Click · ⇧ click</dt><dd>Pick photos · pick a range</dd>
+      <dt>⌘A · Enter · Esc</dt><dd>Pick all · add to sheet · close</dd>
       <dt>H</dt><dd>Hide panels</dd>
       <dt>?</dt><dd>This panel</dd>
     </dl>
@@ -1066,6 +1104,12 @@
     if (cmd && (ev.code === "KeyS" || ev.key === "s" || ev.key === "S")) { ev.preventDefault(); if (t === $("sheetName")) t.blur(); saveSheet(false); return; }
     if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
     if ($("keys").classList.contains("on")) { if (ev.key === "Escape" || ev.key === "?") keys(false); return; }
+    if (!$("webView").hidden) {
+      if (ev.key === "Escape") webClose();
+      else if (cmd && (ev.code === "KeyA" || ev.key === "a")) { ev.preventDefault(); wvSelectAll(true); }
+      else if (ev.key === "Enter") $("wvSheet").click();
+      return;
+    }
     var rotL = cmd && (ev.code === "BracketLeft" || ev.key === "["), rotR = cmd && (ev.code === "BracketRight" || ev.key === "]");
     if (rotL || rotR) { ev.preventDefault(); rotate(fsIt ? [fsIt] : targets(), rotL ? -90 : 90); return; }
     if (fsIt) {
@@ -1131,7 +1175,7 @@
   if (window.ResizeObserver) new ResizeObserver(relayout).observe($("stage"));
 
   /* ---------- 세트: ?set=이름 ---------- */
-  var SETS = {"all":{"title":"All photos","cols":10,"rows":6,"labels":"name","sheets":[{"title":"Faces (183)","items":[["faces-01 Delighted","img/web/faces-01.avif"],["faces-02 SunDimming","img/web/faces-02.avif"],["faces-03 Delighted","img/web/faces-03.avif"],["faces-04 C","img/web/faces-04.avif"],["faces-05 SunDimming","img/web/faces-05.avif"],["faces-06 Blues","img/web/faces-06.avif"],["faces-07 Blurred","img/web/faces-07.avif"],["faces-08 Blurred","img/web/faces-08.avif"],["faces-09 C","img/web/faces-09.avif"],["faces-10 superposition","img/web/faces-10.avif"],["faces-11 Yu","img/web/faces-11.avif"],["faces-12 SunDimming","img/web/faces-12.avif"],["faces-13 fluid state","img/web/faces-13.avif"],["faces-14 Delighted","img/web/faces-14.avif"],["faces-15 C","img/web/faces-15.avif"],["faces-16","img/web/faces-16.avif"],["faces-17 face","img/web/faces-17.avif"],["faces-18 C","img/web/faces-18.avif"],["faces-19 Delighted - Pixel","img/web/faces-19.avif"],["faces-20 SunDimming","img/web/faces-20.avif"],["faces-21 superposition","img/web/faces-21.avif"],["faces-22 fluid state","img/web/faces-22.avif"],["faces-23 face","img/web/faces-23.avif"],["faces-24 SunDimming","img/web/faces-24.avif"],["faces-25 SunDimming","img/web/faces-25.avif"],["faces-26 C","img/web/faces-26.avif"],["faces-27 rabbit hole","img/web/faces-27.avif"],["faces-28 alloy","img/web/faces-28.avif"],["faces-29 alloy","img/web/faces-29.avif"],["faces-30 alloy","img/web/faces-30.avif"],["faces-31 flesh","img/web/faces-31.avif"],["faces-32 flesh","img/web/faces-32.avif"],["faces-33 1/20","img/web/faces-33.avif"],["faces-34 1/20","img/web/faces-34.avif"],["faces-35 1/20","img/web/faces-35.avif"],["faces-36 1/20","img/web/faces-36.avif"],["faces-37 1/20","img/web/faces-37.avif"],["faces-38 1/20","img/web/faces-38.avif"],["faces-39 1/20","img/web/faces-39.avif"],["faces-40 1/20","img/web/faces-40.avif"],["faces-41 LIPS","img/web/faces-41.avif"],["faces-42 LIPS","img/web/faces-42.avif"],["faces-43 LIPS","img/web/faces-43.avif"],["faces-44 LIPS","img/web/faces-44.avif"],["faces-45 LIPS","img/web/faces-45.avif"],["faces-46 LIPS","img/web/faces-46.avif"],["faces-47 LIPS","img/web/faces-47.avif"],["faces-48 LIPS","img/web/faces-48.avif"],["faces-49 LIPS","img/web/faces-49.avif"],["faces-50 LIPS","img/web/faces-50.avif"],["faces-51 LIPS","img/web/faces-51.avif"],["faces-52 LIPS","img/web/faces-52.avif"],["faces-53 LIPS","img/web/faces-53.avif"],["faces-54 LIPS","img/web/faces-54.avif"],["faces-55 LIPS","img/web/faces-55.avif"],["faces-56 LIPS","img/web/faces-56.avif"],["faces-57 10","img/web/faces-57.avif"],["faces-58 Le Mile SS26","img/web/faces-58.avif"],["faces-59 Le Mile SS26","img/web/faces-59.avif"],["faces-60 Le Mile SS26","img/web/faces-60.avif"],["faces-61 Le Mile SS26","img/web/faces-61.avif"],["faces-62 Le Mile SS26","img/web/faces-62.avif"],["faces-63 Le Mile SS26","img/web/faces-63.avif"],["faces-64 Le Mile SS26","img/web/faces-64.avif"],["faces-65 Le Mile SS26","img/web/faces-65.avif"],["faces-66 Le Mile SS26","img/web/faces-66.avif"],["faces-67 Le Mile SS26","img/web/faces-67.avif"],["faces-68 Le Mile SS26","img/web/faces-68.avif"],["faces-69 Le Mile SS26","img/web/faces-69.avif"],["faces-70 Le Mile SS26","img/web/faces-70.avif"],["faces-71 Beurre Was Here Before You Noticed","img/web/faces-71.avif"],["faces-72 Beurre Was Here Before You Noticed","img/web/faces-72.avif"],["faces-73 Beurre Was Here Before You Noticed","img/web/faces-73.avif"],["faces-74 Beurre Was Here Before You Noticed","img/web/faces-74.avif"],["faces-75 Beurre Was Here Before You Noticed","img/web/faces-75.avif"],["faces-76 Beurre Was Here Before You Noticed","img/web/faces-76.avif"],["faces-77 Beurre Was Here Before You Noticed","img/web/faces-77.avif"],["faces-78 Beurre Was Here Before You Noticed","img/web/faces-78.avif"],["faces-79 Beurre Was Here Before You Noticed","img/web/faces-79.avif"],["faces-80 Beurre Was Here Before You Noticed","img/web/faces-80.avif"],["faces-81 hwanhee","img/web/faces-81.avif"],["faces-82 hwanhee","img/web/faces-82.avif"],["faces-83 hwanhee","img/web/faces-83.avif"],["faces-85 hwanhee","img/web/faces-85.avif"],["faces-86 hwanhee","img/web/faces-86.avif"],["faces-87 hwanhee","img/web/faces-87.avif"],["faces-88 hwanhee","img/web/faces-88.avif"],["faces-89 hwanhee","img/web/faces-89.avif"],["faces-90 hwanhee","img/web/faces-90.avif"],["faces-91 hwanhee","img/web/faces-91.avif"],["faces-92 hwanhee","img/web/faces-92.avif"],["faces-93 hwanhee","img/web/faces-93.avif"],["faces-94 hwanhee","img/web/faces-94.avif"],["faces-95 hwanhee","img/web/faces-95.avif"],["faces-96 hwanhee","img/web/faces-96.avif"],["faces-97 hwanhee","img/web/faces-97.avif"],["faces-98 hwanhee","img/web/faces-98.avif"],["faces-99 hwanhee","img/web/faces-99.avif"],["faces-100 hwanhee","img/web/faces-100.avif"],["faces-101 hwanhee","img/web/faces-101.avif"],["faces-102 hwanhee","img/web/faces-102.avif"],["faces-103 hwanhee","img/web/faces-103.avif"],["faces-105 parkdongsun","img/web/faces-105.avif"],["faces-106 parkdongsun","img/web/faces-106.avif"],["faces-107 parkdongsun","img/web/faces-107.avif"],["faces-108 parkdongsun","img/web/faces-108.avif"],["faces-109 parkdongsun","img/web/faces-109.avif"],["faces-110 parkdongsun","img/web/faces-110.avif"],["faces-111 parkdongsun","img/web/faces-111.avif"],["faces-112 parkdongsun","img/web/faces-112.avif"],["faces-113 ann","img/web/faces-113.avif"],["faces-114 ann","img/web/faces-114.avif"],["faces-115 ann","img/web/faces-115.avif"],["faces-116 ann","img/web/faces-116.avif"],["faces-117 ann","img/web/faces-117.avif"],["faces-118 ann","img/web/faces-118.avif"],["faces-119 ann","img/web/faces-119.avif"],["faces-120 ann","img/web/faces-120.avif"],["faces-121 Inès 1","img/web/faces-121.avif"],["faces-122 Inès 2","img/web/faces-122.avif"],["faces-123 Inès 3","img/web/faces-123.avif"],["faces-124 Inès 4","img/web/faces-124.avif"],["faces-125 Inès 5","img/web/faces-125.avif"],["faces-126 Inès 6","img/web/faces-126.avif"],["faces-127 Inès 7","img/web/faces-127.avif"],["faces-128 chowoohyun 1","img/web/faces-128.avif"],["faces-129 chowoohyun 2","img/web/faces-129.avif"],["faces-130 chowoohyun 3","img/web/faces-130.avif"],["faces-131 chowooseok 1","img/web/faces-131.avif"],["faces-132 chowooseok 2","img/web/faces-132.avif"],["faces-133 chowooseok 3","img/web/faces-133.avif"],["faces-134 chowooseok 4","img/web/faces-134.avif"],["faces-135 chowooseok 5","img/web/faces-135.avif"],["faces-136 Gyeongju","img/web/faces-136.avif"],["faces-137 Ripple Effects 2 1","img/web/faces-137.avif"],["faces-138 Ripple Effects 2 2","img/web/faces-138.avif"],["faces-139 Ripple Effects 2 3","img/web/faces-139.avif"],["faces-140 Ripple Effects 2 4","img/web/faces-140.avif"],["faces-141 Ripple Effects 2 5","img/web/faces-141.avif"],["faces-142 Ripple Effects 2 6","img/web/faces-142.avif"],["faces-143 milo & zaya 1","img/web/faces-143.avif"],["faces-144 milo & zaya 2","img/web/faces-144.avif"],["faces-145 milo & zaya 3","img/web/faces-145.avif"],["faces-146 milo & zaya 4","img/web/faces-146.avif"],["faces-147 milo & zaya 5","img/web/faces-147.avif"],["faces-148 milo & zaya 6","img/web/faces-148.avif"],["faces-149 milo & zaya 7","img/web/faces-149.avif"],["faces-150 milo & zaya 8","img/web/faces-150.avif"],["faces-151 milo & zaya 9","img/web/faces-151.avif"],["faces-152 milo & zaya 10","img/web/faces-152.avif"],["faces-153 milo & zaya 11","img/web/faces-153.avif"],["faces-154 milo & zaya 12","img/web/faces-154.avif"],["faces-155 milo & zaya 13","img/web/faces-155.avif"],["faces-156 sihun 1","img/web/faces-156.avif"],["faces-157 sihun 2","img/web/faces-157.avif"],["faces-158 sihun 3","img/web/faces-158.avif"],["faces-159 sihun 4","img/web/faces-159.avif"],["faces-160 sihun 5","img/web/faces-160.avif"],["faces-161 sihun 6","img/web/faces-161.avif"],["faces-162 sihun 7","img/web/faces-162.avif"],["faces-163 sihun 8","img/web/faces-163.avif"],["faces-164 sihun 9","img/web/faces-164.avif"],["faces-165 sihun 10","img/web/faces-165.avif"],["faces-166 sihun 11","img/web/faces-166.avif"],["faces-167 sihun 12","img/web/faces-167.avif"],["faces-168 sihun 13","img/web/faces-168.avif"],["faces-169 sihun 14","img/web/faces-169.avif"],["faces-170 sihun 15","img/web/faces-170.avif"],["faces-171 sihun 16","img/web/faces-171.avif"],["faces-172 leo 1","img/web/faces-172.avif"],["faces-173 leo 2","img/web/faces-173.avif"],["faces-174 leo 3","img/web/faces-174.avif"],["faces-175 leo 4","img/web/faces-175.avif"],["faces-176 leo 5","img/web/faces-176.avif"],["faces-177 leo 6","img/web/faces-177.avif"],["faces-178 leo 7","img/web/faces-178.avif"],["faces-179 leo 8","img/web/faces-179.avif"],["faces-180 leo 9","img/web/faces-180.avif"],["faces-181 leo 10","img/web/faces-181.avif"],["faces-182 leo 11","img/web/faces-182.avif"],["faces-183 leo 12","img/web/faces-183.avif"],["faces-184 leo 13","img/web/faces-184.avif"],["faces-185 leo 14","img/web/faces-185.avif"]]},{"title":"Walk (37)","items":[["walk-01 plastic house","img/web/walk-01.avif"],["walk-02 still life","img/web/walk-02.avif"],["walk-03 play","img/web/walk-03.avif"],["walk-04 portrait","img/web/walk-04.avif"],["walk-05 CLT 3","img/web/walk-05.avif"],["walk-06 sun 1","img/web/walk-06.avif"],["walk-07 sun 2","img/web/walk-07.avif"],["walk-08 portrait","img/web/walk-08.avif"],["walk-09 liv in screen","img/web/walk-09.avif"],["walk-10 self-portrait","img/web/walk-10.avif"],["walk-11 tip","img/web/walk-11.avif"],["walk-12 still life","img/web/walk-12.avif"],["walk-13 liv in screen","img/web/walk-13.avif"],["walk-14 portrait","img/web/walk-14.avif"],["walk-15 breakfast","img/web/walk-15.avif"],["walk-16 seungzae","img/web/walk-16.avif"],["walk-17 portrait","img/web/walk-17.avif"],["walk-18 still life","img/web/walk-18.avif"],["walk-19 taped","img/web/walk-19.avif"],["walk-20 taped","img/web/walk-20.avif"],["walk-21 taped","img/web/walk-21.avif"],["walk-22 taped","img/web/walk-22.avif"],["walk-23 taped","img/web/walk-23.avif"],["walk-24 taped","img/web/walk-24.avif"],["walk-25 taped","img/web/walk-25.avif"],["walk-26 taped","img/web/walk-26.avif"],["walk-27 m","img/web/walk-27.avif"],["walk-28 m","img/web/walk-28.avif"],["walk-29 kids","img/web/walk-29.avif"],["walk-30 warm juice","img/web/walk-30.avif"],["walk-31 warm juice","img/web/walk-31.avif"],["walk-32 warm juice","img/web/walk-32.avif"],["walk-33 warm juice","img/web/walk-33.avif"],["walk-34 warm juice","img/web/walk-34.avif"],["walk-35 walls","img/web/walk-35.avif"],["walk-36 walls","img/web/walk-36.avif"],["walk-37 walls","img/web/walk-37.avif"]]},{"title":"RA4 (47)","items":[["ra4-01 jeff and daniela","img/web/movingsphere/ra4-01.avif"],["ra4-02 ghost 1","img/web/ra4-02.avif"],["ra4-03 jeff 1","img/web/ra4-03.avif"],["ra4-04 daniela","img/web/ra4-04.avif"],["ra4-05 ghost 2","img/web/ra4-05.avif"],["ra4-06 jeff 2","img/web/ra4-06.avif"],["ra4-07 triangle","img/web/ra4-07.avif"],["ra4-08 jeff 3","img/web/ra4-08.avif"],["ra4-09 jeff 4","img/web/movingsphere/ra4-09.avif"],["ra4-10 jeff 5","img/web/ra4-10.avif"],["ra4-11 burnt","img/web/ra4-11.avif"],["ra4-12 hoyeong","img/web/movingsphere/ra4-12.avif"],["ra4-13 feet in studio 1","img/web/ra4-13.avif"],["ra4-14 seoul","img/web/ra4-14.avif"],["ra4-15 CLT 1","img/web/ra4-15.avif"],["ra4-16 broken 1","img/web/movingsphere/ra4-16.avif"],["ra4-17 self-portrait","img/web/ra4-17.avif"],["ra4-18 feet in studio 2","img/web/movingsphere/ra4-18.avif"],["ra4-19 christmas 1","img/web/ra4-19.avif"],["ra4-20 christmas 2","img/web/ra4-20.avif"],["ra4-21 window(night)","img/web/ra4-21.avif"],["ra4-22 window(day) 1","img/web/ra4-22.avif"],["ra4-23 window(day) 2","img/web/movingsphere/ra4-23.avif"],["ra4-24 lamp 1","img/web/ra4-24.avif"],["ra4-25 broken 2","img/web/ra4-25.avif"],["ra4-26 seoul","img/web/ra4-26.avif"],["ra4-27 seoul","img/web/ra4-27.avif"],["ra4-28 seoul","img/web/ra4-28.avif"],["ra4-29 CLT 2","img/web/ra4-29.avif"],["ra4-30 lamp 2","img/web/ra4-30.avif"],["ra4-31 101","img/web/movingsphere/ra4-31.avif"],["ra4-32 noise 1 (day)","img/web/ra4-32.avif"],["ra4-33 noise 1 (night)","img/web/ra4-33.avif"],["ra4-34 noise 2 (day)","img/web/ra4-34.avif"],["ra4-35 noise 2 (night)","img/web/ra4-35.avif"],["ra4-36 seoul","img/web/ra4-36.avif"],["ra4-37 Legs(pixelated)","img/web/movingsphere/ra4-37.avif"],["ra4-38 Sun","img/web/movingsphere/ra4-38.avif"],["ra4-39 Sphere","img/web/movingsphere/ra4-39.avif"],["ra4-40 Sahrah","img/web/movingsphere/ra4-40.avif"],["ra4-41 Roof","img/web/movingsphere/ra4-41.avif"],["ra4-42 Cup","img/web/movingsphere/ra4-42.avif"],["ra4-43 Bottle","img/web/movingsphere/ra4-43.avif"],["ra4-44 Flower","img/web/movingsphere/ra4-44.avif"],["ra4-45 Jeff","img/web/movingsphere/ra4-45.avif"],["ra4-46 Man in the Sphere","img/web/movingsphere/ra4-46.avif"],["ra4-47 Plastic Eye","img/web/movingsphere/ra4-47.avif"]]},{"title":"24 (35)","items":[["24-01 Breeze","img/web/24-01.avif"],["24-02 Breeze","img/web/24-02.avif"],["24-03 Breeze","img/web/24-03.avif"],["24-04 Breeze","img/web/24-04.avif"],["24-05 Breeze","img/web/24-05.avif"],["24-06 March","img/web/24-06.avif"],["24-07 March","img/web/24-07.avif"],["24-08 March","img/web/24-08.avif"],["24-09 March","img/web/24-09.avif"],["24-10 March","img/web/24-10.avif"],["24-11 March","img/web/24-11.avif"],["24-12 March","img/web/24-12.avif"],["24-13 March","img/web/24-13.avif"],["24-14 March","img/web/24-14.avif"],["24-15 March","img/web/24-15.avif"],["24-16 March","img/web/24-16.avif"],["24-17 March","img/web/24-17.avif"],["24-18 March","img/web/24-18.avif"],["24-19 하강Descending","img/web/24-19.avif"],["24-20 하강Descending","img/web/24-20.avif"],["24-21 하강Descending","img/web/24-21.avif"],["24-22 1/20","img/web/24-22.avif"],["24-23 1/20","img/web/24-23.avif"],["24-24 1/20","img/web/24-24.avif"],["24-25 1/20","img/web/24-25.avif"],["24-26 1/20","img/web/24-26.avif"],["24-27 1/20","img/web/24-27.avif"],["24-28 pot","img/web/24-28.avif"],["24-29 Two","img/web/24-29.avif"],["24-30 Two","img/web/24-30.avif"],["24-31 Two","img/web/24-31.avif"],["24-32 Two","img/web/24-32.avif"],["24-33 Two","img/web/24-33.avif"],["24-34 Two","img/web/24-34.avif"],["24-35 Two","img/web/24-35.avif"]]},{"title":"Dots (7)","items":[["dots-1 Workroom","img/web/dots-1.avif"],["dots-2 Shoes","img/web/dots-2.avif"],["dots-3 Workroom","img/web/dots-3.avif"],["dots-4 Workroom","img/web/dots-4.avif"],["dots-5 Ceiling lamp","img/web/dots-5.avif"],["dots-6 Ceiling lamp","img/web/dots-6.avif"],["dots-7 Ceiling lamp","img/web/dots-7.avif"]]},{"title":"Moving Sphere (1)","items":[["movingsphere_installationview","img/web/movingsphere/movingsphere_installationview.avif"]]}]},"best":{"title":"strongest","cols":7,"rows":7,"labels":"name","sheets":[{"title":"랜딩 49","items":[["A01 faces-01 ★","img/web/faces-01.avif"],["A02 faces-36 ★","img/web/faces-36.avif"],["A03 faces-91 ★","img/web/faces-91.avif"],["A04 faces-96 ★","img/web/faces-96.avif"],["A05 faces-112 ★","img/web/faces-112.avif"],["A06 faces-117 ★","img/web/faces-117.avif"],["A07 faces-121 ★","img/web/faces-121.avif"],["A08 ra4-04 ★","img/web/ra4-04.avif"],["A09 ra4-06 ★","img/web/ra4-06.avif"],["A10 ra4-13 ★","img/web/ra4-13.avif"],["A11 walk-03 ★","img/web/walk-03.avif"],["A12 walk-35 ★","img/web/walk-35.avif"],["A13 24-15","img/web/24-15.avif"],["A14 24-23","img/web/24-23.avif"],["A15 24-30","img/web/24-30.avif"],["A16 faces-05","img/web/faces-05.avif"],["A17 faces-11","img/web/faces-11.avif"],["A18 faces-13","img/web/faces-13.avif"],["A19 faces-14","img/web/faces-14.avif"],["A20 faces-25","img/web/faces-25.avif"],["A21 faces-31","img/web/faces-31.avif"],["A22 faces-32","img/web/faces-32.avif"],["A23 faces-57","img/web/faces-57.avif"],["A24 faces-67","img/web/faces-67.avif"],["A25 faces-80","img/web/faces-80.avif"],["A26 faces-101","img/web/faces-101.avif"],["A27 faces-105","img/web/faces-105.avif"],["A28 faces-109","img/web/faces-109.avif"],["A29 faces-113","img/web/faces-113.avif"],["A30 faces-122","img/web/faces-122.avif"],["A31 faces-123","img/web/faces-123.avif"],["A32 faces-124","img/web/faces-124.avif"],["A33 faces-126","img/web/faces-126.avif"],["A34 faces-127","img/web/faces-127.avif"],["A35 faces-130","img/web/faces-130.avif"],["A36 faces-133","img/web/faces-133.avif"],["A37 faces-135","img/web/faces-135.avif"],["A38 faces-136","img/web/faces-136.avif"],["A39 faces-138","img/web/faces-138.avif"],["A40 faces-139","img/web/faces-139.avif"],["A41 ra4-03","img/web/movingsphere/ra4-03.avif"],["A42 ra4-15","img/web/ra4-15.avif"],["A43 ra4-33","img/web/ra4-33.avif"],["A44 walk-11","img/web/walk-11.avif"],["A45 walk-12","img/web/walk-12.avif"],["A46 walk-13","img/web/walk-13.avif"],["A47 walk-30","img/web/walk-30.avif"],["A48 walk-31","img/web/walk-31.avif"],["A49 walk-36","img/web/walk-36.avif"]]},{"title":"포트폴리오 PDF","items":[["B01 ra4-03","img/web/movingsphere/ra4-03.avif"],["B02 ra4-06","img/web/ra4-06.avif"],["B03 ra4-09","img/web/movingsphere/ra4-09.avif"],["B04 faces-112","img/web/faces-112.avif"],["B05 spaghetti",[2136515,457177]],["B06 spaghetti",[2596573,423443]],["B07 faces-130","img/web/faces-130.avif"],["B08 faces-128","img/web/faces-128.avif"],["B09 faces-155","img/web/faces-155.avif"],["B10 faces-132","img/web/faces-132.avif"],["B11 faces-61","img/web/faces-61.avif"],["B12 faces-58","img/web/faces-58.avif"],["B13 faces-62","img/web/faces-62.avif"],["B14 faces-63","img/web/faces-63.avif"],["B15 faces-116","img/web/faces-116.avif"],["B16 faces-119","img/web/faces-119.avif"],["B17 faces-136","img/web/faces-136.avif"],["B18 haircuts",[6482893,334182]],["B19 haircuts",[6819887,485411]],["B20 haircuts",[7307001,488812]],["B21 haircuts",[7797522,288296]],["B22 haircuts",[8087595,705980]],["B23 faces-96","img/web/faces-96.avif"],["B24 faces-97","img/web/faces-97.avif"],["B25 faces-122","img/web/faces-122.avif"],["B26 faces-126","img/web/faces-126.avif"],["B27 faces-124","img/web/faces-124.avif"],["B28 faces-34","img/web/faces-34.avif"],["B29 faces-57","img/web/faces-57.avif"],["B30 faces-138","img/web/faces-138.avif"],["B31 leia",[11645667,203875]],["B32 leia",[11850243,199124]],["B33 walk-03","img/web/walk-03.avif"],["B34 faces-11","img/web/faces-11.avif"]]},{"title":"추가 셀렉 I·T","items":[["C01 faces-82 I","img/web/faces-82.avif"],["C02 faces-12 I","img/web/faces-12.avif"],["C03 faces-03 I","img/web/faces-03.avif"],["C04 faces-04 I","img/web/faces-04.avif"],["C05 faces-21 I","img/web/faces-21.avif"],["C06 faces-23 I","img/web/faces-23.avif"],["C07 faces-35 I","img/web/faces-35.avif"],["C08 faces-33 I","img/web/faces-33.avif"],["C09 faces-55 I","img/web/faces-55.avif"],["C10 faces-129 I","img/web/faces-129.avif"],["C11 faces-141 I","img/web/faces-141.avif"],["C12 faces-131 I","img/web/faces-131.avif"],["C13 faces-27 I","img/web/faces-27.avif"],["C14 faces-107 I","img/web/faces-107.avif"],["C15 faces-147 I","img/web/faces-147.avif"],["C16 ra4-08 I","img/web/ra4-08.avif"],["C17 ra4-16 I","img/web/movingsphere/ra4-16.avif"],["C18 walk-37 I","img/web/walk-37.avif"],["C19 faces-28 T","img/web/faces-28.avif"],["C20 faces-29 T","img/web/faces-29.avif"],["C21 faces-65 T","img/web/faces-65.avif"],["C22 faces-66 T","img/web/faces-66.avif"],["C23 faces-76 T","img/web/faces-76.avif"],["C24 faces-85 T","img/web/faces-85.avif"],["C25 faces-89 T","img/web/faces-89.avif"],["C26 faces-87 T","img/web/faces-87.avif"],["C27 faces-118 T","img/web/faces-118.avif"],["C28 faces-137 T","img/web/faces-137.avif"],["C29 faces-152 T","img/web/faces-152.avif"],["C30 ra4-40 T","img/web/movingsphere/ra4-40.avif"],["C31 ra4-46 T","img/web/movingsphere/ra4-46.avif"],["C32 24-09 T","img/web/24-09.avif"],["C33 faces-48 T","img/web/faces-48.avif"],["C34 walk-32 T","img/web/walk-32.avif"],["C35 faces-150 T","img/web/faces-150.avif"]]}]},"ra4":{"title":"RA4 전체","cols":8,"rows":6,"labels":"name","sheets":[{"title":"RA4 01–47","items":[["ra4-01 jeff and daniela","img/web/movingsphere/ra4-01.avif"],["ra4-02 ghost 1","img/web/ra4-02.avif"],["ra4-03 jeff 1","img/web/movingsphere/ra4-03.avif"],["ra4-04 daniela","img/web/ra4-04.avif"],["ra4-05 ghost 2","img/web/ra4-05.avif"],["ra4-06 jeff 2","img/web/ra4-06.avif"],["ra4-07 triangle","img/web/ra4-07.avif"],["ra4-08 jeff 3","img/web/ra4-08.avif"],["ra4-09 jeff 4","img/web/movingsphere/ra4-09.avif"],["ra4-10 jeff 5","img/web/ra4-10.avif"],["ra4-11 burnt","img/web/ra4-11.avif"],["ra4-12 hoyeong","img/web/movingsphere/ra4-12.avif"],["ra4-13 feet in studio 1","img/web/ra4-13.avif"],["ra4-14 seoul","img/web/ra4-14.avif"],["ra4-15 CLT 1","img/web/ra4-15.avif"],["ra4-16 broken 1","img/web/movingsphere/ra4-16.avif"],["ra4-17 self-portrait","img/web/ra4-17.avif"],["ra4-18 feet in studio 2","img/web/movingsphere/ra4-18.avif"],["ra4-19 christmas 1","img/web/ra4-19.avif"],["ra4-20 christmas 2","img/web/ra4-20.avif"],["ra4-21 window(night)","img/web/ra4-21.avif"],["ra4-22 window(day) 1","img/web/ra4-22.avif"],["ra4-23 window(day) 2","img/web/movingsphere/ra4-23.avif"],["ra4-24 lamp 1","img/web/ra4-24.avif"],["ra4-25 broken 2","img/web/ra4-25.avif"],["ra4-26 seoul","img/web/ra4-26.avif"],["ra4-27 seoul","img/web/ra4-27.avif"],["ra4-28 seoul","img/web/ra4-28.avif"],["ra4-29 CLT 2","img/web/ra4-29.avif"],["ra4-30 lamp 2","img/web/ra4-30.avif"],["ra4-31 101","img/web/movingsphere/ra4-31.avif"],["ra4-32 noise 1 (day)","img/web/ra4-32.avif"],["ra4-33 noise 1 (night)","img/web/ra4-33.avif"],["ra4-34 noise 2 (day)","img/web/ra4-34.avif"],["ra4-35 noise 2 (night)","img/web/ra4-35.avif"],["ra4-36 seoul","img/web/ra4-36.avif"],["ra4-37 Legs(pixelated)","img/web/movingsphere/ra4-37.avif"],["ra4-38 Sun","img/web/movingsphere/ra4-38.avif"],["ra4-39 Sphere","img/web/movingsphere/ra4-39.avif"],["ra4-40 Sahrah","img/web/movingsphere/ra4-40.avif"],["ra4-41 Roof","img/web/movingsphere/ra4-41.avif"],["ra4-42 Cup","img/web/movingsphere/ra4-42.avif"],["ra4-43 Bottle","img/web/movingsphere/ra4-43.avif"],["ra4-44 Flower","img/web/movingsphere/ra4-44.avif"],["ra4-45 Jeff","img/web/movingsphere/ra4-45.avif"],["ra4-46 Man in the Sphere","img/web/movingsphere/ra4-46.avif"],["ra4-47 Plastic Eye","img/web/movingsphere/ra4-47.avif"]]}]}};
+  var SETS = {"best":{"title":"strongest","cols":7,"rows":7,"labels":"name","sheets":[{"title":"랜딩 49","items":[["A01 faces-01 ★","img/web/faces-01.avif"],["A02 faces-36 ★","img/web/faces-36.avif"],["A03 faces-91 ★","img/web/faces-91.avif"],["A04 faces-96 ★","img/web/faces-96.avif"],["A05 faces-112 ★","img/web/faces-112.avif"],["A06 faces-117 ★","img/web/faces-117.avif"],["A07 faces-121 ★","img/web/faces-121.avif"],["A08 ra4-04 ★","img/web/ra4-04.avif"],["A09 ra4-06 ★","img/web/ra4-06.avif"],["A10 ra4-13 ★","img/web/ra4-13.avif"],["A11 walk-03 ★","img/web/walk-03.avif"],["A12 walk-35 ★","img/web/walk-35.avif"],["A13 24-15","img/web/24-15.avif"],["A14 24-23","img/web/24-23.avif"],["A15 24-30","img/web/24-30.avif"],["A16 faces-05","img/web/faces-05.avif"],["A17 faces-11","img/web/faces-11.avif"],["A18 faces-13","img/web/faces-13.avif"],["A19 faces-14","img/web/faces-14.avif"],["A20 faces-25","img/web/faces-25.avif"],["A21 faces-31","img/web/faces-31.avif"],["A22 faces-32","img/web/faces-32.avif"],["A23 faces-57","img/web/faces-57.avif"],["A24 faces-67","img/web/faces-67.avif"],["A25 faces-80","img/web/faces-80.avif"],["A26 faces-101","img/web/faces-101.avif"],["A27 faces-105","img/web/faces-105.avif"],["A28 faces-109","img/web/faces-109.avif"],["A29 faces-113","img/web/faces-113.avif"],["A30 faces-122","img/web/faces-122.avif"],["A31 faces-123","img/web/faces-123.avif"],["A32 faces-124","img/web/faces-124.avif"],["A33 faces-126","img/web/faces-126.avif"],["A34 faces-127","img/web/faces-127.avif"],["A35 faces-130","img/web/faces-130.avif"],["A36 faces-133","img/web/faces-133.avif"],["A37 faces-135","img/web/faces-135.avif"],["A38 faces-136","img/web/faces-136.avif"],["A39 faces-138","img/web/faces-138.avif"],["A40 faces-139","img/web/faces-139.avif"],["A41 ra4-03","img/web/movingsphere/ra4-03.avif"],["A42 ra4-15","img/web/ra4-15.avif"],["A43 ra4-33","img/web/ra4-33.avif"],["A44 walk-11","img/web/walk-11.avif"],["A45 walk-12","img/web/walk-12.avif"],["A46 walk-13","img/web/walk-13.avif"],["A47 walk-30","img/web/walk-30.avif"],["A48 walk-31","img/web/walk-31.avif"],["A49 walk-36","img/web/walk-36.avif"]]},{"title":"포트폴리오 PDF","items":[["B01 ra4-03","img/web/movingsphere/ra4-03.avif"],["B02 ra4-06","img/web/ra4-06.avif"],["B03 ra4-09","img/web/movingsphere/ra4-09.avif"],["B04 faces-112","img/web/faces-112.avif"],["B05 spaghetti",[2136515,457177]],["B06 spaghetti",[2596573,423443]],["B07 faces-130","img/web/faces-130.avif"],["B08 faces-128","img/web/faces-128.avif"],["B09 faces-155","img/web/faces-155.avif"],["B10 faces-132","img/web/faces-132.avif"],["B11 faces-61","img/web/faces-61.avif"],["B12 faces-58","img/web/faces-58.avif"],["B13 faces-62","img/web/faces-62.avif"],["B14 faces-63","img/web/faces-63.avif"],["B15 faces-116","img/web/faces-116.avif"],["B16 faces-119","img/web/faces-119.avif"],["B17 faces-136","img/web/faces-136.avif"],["B18 haircuts",[6482893,334182]],["B19 haircuts",[6819887,485411]],["B20 haircuts",[7307001,488812]],["B21 haircuts",[7797522,288296]],["B22 haircuts",[8087595,705980]],["B23 faces-96","img/web/faces-96.avif"],["B24 faces-97","img/web/faces-97.avif"],["B25 faces-122","img/web/faces-122.avif"],["B26 faces-126","img/web/faces-126.avif"],["B27 faces-124","img/web/faces-124.avif"],["B28 faces-34","img/web/faces-34.avif"],["B29 faces-57","img/web/faces-57.avif"],["B30 faces-138","img/web/faces-138.avif"],["B31 leia",[11645667,203875]],["B32 leia",[11850243,199124]],["B33 walk-03","img/web/walk-03.avif"],["B34 faces-11","img/web/faces-11.avif"]]},{"title":"추가 셀렉 I·T","items":[["C01 faces-82 I","img/web/faces-82.avif"],["C02 faces-12 I","img/web/faces-12.avif"],["C03 faces-03 I","img/web/faces-03.avif"],["C04 faces-04 I","img/web/faces-04.avif"],["C05 faces-21 I","img/web/faces-21.avif"],["C06 faces-23 I","img/web/faces-23.avif"],["C07 faces-35 I","img/web/faces-35.avif"],["C08 faces-33 I","img/web/faces-33.avif"],["C09 faces-55 I","img/web/faces-55.avif"],["C10 faces-129 I","img/web/faces-129.avif"],["C11 faces-141 I","img/web/faces-141.avif"],["C12 faces-131 I","img/web/faces-131.avif"],["C13 faces-27 I","img/web/faces-27.avif"],["C14 faces-107 I","img/web/faces-107.avif"],["C15 faces-147 I","img/web/faces-147.avif"],["C16 ra4-08 I","img/web/ra4-08.avif"],["C17 ra4-16 I","img/web/movingsphere/ra4-16.avif"],["C18 walk-37 I","img/web/walk-37.avif"],["C19 faces-28 T","img/web/faces-28.avif"],["C20 faces-29 T","img/web/faces-29.avif"],["C21 faces-65 T","img/web/faces-65.avif"],["C22 faces-66 T","img/web/faces-66.avif"],["C23 faces-76 T","img/web/faces-76.avif"],["C24 faces-85 T","img/web/faces-85.avif"],["C25 faces-89 T","img/web/faces-89.avif"],["C26 faces-87 T","img/web/faces-87.avif"],["C27 faces-118 T","img/web/faces-118.avif"],["C28 faces-137 T","img/web/faces-137.avif"],["C29 faces-152 T","img/web/faces-152.avif"],["C30 ra4-40 T","img/web/movingsphere/ra4-40.avif"],["C31 ra4-46 T","img/web/movingsphere/ra4-46.avif"],["C32 24-09 T","img/web/24-09.avif"],["C33 faces-48 T","img/web/faces-48.avif"],["C34 walk-32 T","img/web/walk-32.avif"],["C35 faces-150 T","img/web/faces-150.avif"]]}]},"ra4":{"title":"RA4 전체","cols":8,"rows":6,"labels":"name","sheets":[{"title":"RA4 01–47","items":[["ra4-01 jeff and daniela","img/web/movingsphere/ra4-01.avif"],["ra4-02 ghost 1","img/web/ra4-02.avif"],["ra4-03 jeff 1","img/web/movingsphere/ra4-03.avif"],["ra4-04 daniela","img/web/ra4-04.avif"],["ra4-05 ghost 2","img/web/ra4-05.avif"],["ra4-06 jeff 2","img/web/ra4-06.avif"],["ra4-07 triangle","img/web/ra4-07.avif"],["ra4-08 jeff 3","img/web/ra4-08.avif"],["ra4-09 jeff 4","img/web/movingsphere/ra4-09.avif"],["ra4-10 jeff 5","img/web/ra4-10.avif"],["ra4-11 burnt","img/web/ra4-11.avif"],["ra4-12 hoyeong","img/web/movingsphere/ra4-12.avif"],["ra4-13 feet in studio 1","img/web/ra4-13.avif"],["ra4-14 seoul","img/web/ra4-14.avif"],["ra4-15 CLT 1","img/web/ra4-15.avif"],["ra4-16 broken 1","img/web/movingsphere/ra4-16.avif"],["ra4-17 self-portrait","img/web/ra4-17.avif"],["ra4-18 feet in studio 2","img/web/movingsphere/ra4-18.avif"],["ra4-19 christmas 1","img/web/ra4-19.avif"],["ra4-20 christmas 2","img/web/ra4-20.avif"],["ra4-21 window(night)","img/web/ra4-21.avif"],["ra4-22 window(day) 1","img/web/ra4-22.avif"],["ra4-23 window(day) 2","img/web/movingsphere/ra4-23.avif"],["ra4-24 lamp 1","img/web/ra4-24.avif"],["ra4-25 broken 2","img/web/ra4-25.avif"],["ra4-26 seoul","img/web/ra4-26.avif"],["ra4-27 seoul","img/web/ra4-27.avif"],["ra4-28 seoul","img/web/ra4-28.avif"],["ra4-29 CLT 2","img/web/ra4-29.avif"],["ra4-30 lamp 2","img/web/ra4-30.avif"],["ra4-31 101","img/web/movingsphere/ra4-31.avif"],["ra4-32 noise 1 (day)","img/web/ra4-32.avif"],["ra4-33 noise 1 (night)","img/web/ra4-33.avif"],["ra4-34 noise 2 (day)","img/web/ra4-34.avif"],["ra4-35 noise 2 (night)","img/web/ra4-35.avif"],["ra4-36 seoul","img/web/ra4-36.avif"],["ra4-37 Legs(pixelated)","img/web/movingsphere/ra4-37.avif"],["ra4-38 Sun","img/web/movingsphere/ra4-38.avif"],["ra4-39 Sphere","img/web/movingsphere/ra4-39.avif"],["ra4-40 Sahrah","img/web/movingsphere/ra4-40.avif"],["ra4-41 Roof","img/web/movingsphere/ra4-41.avif"],["ra4-42 Cup","img/web/movingsphere/ra4-42.avif"],["ra4-43 Bottle","img/web/movingsphere/ra4-43.avif"],["ra4-44 Flower","img/web/movingsphere/ra4-44.avif"],["ra4-45 Jeff","img/web/movingsphere/ra4-45.avif"],["ra4-46 Man in the Sphere","img/web/movingsphere/ra4-46.avif"],["ra4-47 Plastic Eye","img/web/movingsphere/ra4-47.avif"]]}]}};
   var PDF_SRC = "CV+Portfolio/KangMinje_Portfolio.pdf", groupTitles = [];
   function loadSet(name){
     var set = SETS[name]; if (!set) return say("Set not found.");
@@ -1642,7 +1686,170 @@
   };
   $("ghToken").onkeydown = function(e){ if (e.key === "Enter") $("ghConnect").click(); };
 
+  /* ================= From web: 내 사이트의 사진을 그대로 불러오기 =================
+     kangminje.com   → 레포 트리(GitHub API, 공개)에서 img/web/시리즈-번호.avif, 제목은 image-titles.js
+     Fragile Calendar → fragilecalendar/entries.js (날짜·메모), 월별로 묶음. 그리드는 public/thumbs
+     경로는 이 페이지 기준 상대 경로 → 같은 출처라 내보내기도 되고, 저장할 땐 경로만 남음 */
+  var SERIES_ORDER = ["faces", "walk", "ra4", "24", "dots"], SERIES_NAME = { faces:"Faces", walk:"Walk", ra4:"RA4", dots:"Dots" };
+  function loadKmj(force){
+    var CK = "contactsheet.web.kmj.v1", cached = null;
+    try { cached = JSON.parse(localStorage.getItem(CK) || "null"); } catch(e) {}
+    if (!force && cached && Date.now() - cached.t < 10 * 60 * 1000) return Promise.resolve(cached.g);
+    return Promise.all([
+      fetch("https://api.github.com/repos/Kang-Minje/kang-minje.github.io/git/trees/main?recursive=1", { cache:"no-store" }).then(function(r){ if (!r.ok) throw ghErr(r.status); return r.json(); }),
+      fetch("image-titles.js", { cache:"no-cache" }).then(function(r){ return r.ok ? r.text() : ""; }).catch(function(){ return ""; })
+    ]).then(function(res){
+      var titles = {}, by = {}, groups = {};
+      res[1].replace(/"img\/(?:[\w-]+\/)*([\w-]+)\.avif"\s*:\s*\{\s*title:\s*"([^"]*)"/g, function(m, a, b){ titles[a] = b; });
+      (res[0].tree || []).forEach(function(e){
+        var m = /^img\/web\/(?:[\w-]+\/)?([a-z0-9]+)-(\d+)\.(avif|jpe?g|webp)$/i.exec(e.path);
+        if (e.type !== "blob" || !m) return;
+        var base = m[1] + "-" + m[2]; if (by[base]) return;
+        var x = by[base] = { s:m[1].toLowerCase(), n:+m[2], name:base + (titles[base] ? " " + titles[base] : ""), src:e.path };
+        (groups[x.s] = groups[x.s] || []).push(x);
+      });
+      var keys = Object.keys(groups).sort(function(a, b){
+        var ia = SERIES_ORDER.indexOf(a), ib = SERIES_ORDER.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
+      });
+      var g = keys.map(function(k){
+        return { title:SERIES_NAME[k] || k.charAt(0).toUpperCase() + k.slice(1),
+                 items:groups[k].sort(function(a, b){ return a.n - b.n; }).map(function(x){ return { name:x.name, src:x.src }; }) };
+      });
+      try { localStorage.setItem(CK, JSON.stringify({ t:Date.now(), g:g })); } catch(e) {}
+      return g;
+    }).catch(function(e){ if (cached) return cached.g; throw e; });   /* API 한도(시간당 60번)에 걸리면 마지막 목록 */
+  }
+  function loadFc(force){
+    return new Promise(function(res, rej){
+      if (window.FRAGILE_ENTRIES && !force) return res();
+      var sc = document.createElement("script"); sc.src = "fragilecalendar/entries.js?" + Date.now();
+      sc.onload = function(){ res(); }; sc.onerror = function(){ rej(new Error("load")); };
+      document.head.appendChild(sc);
+    }).then(function(){
+      var E = (window.FRAGILE_ENTRIES || []).slice().sort(function(a, b){ return a.date < b.date ? -1 : 1; }), by = {}, order = [];
+      E.forEach(function(en){
+        var mo = String(en.date).slice(0, 7); if (!by[mo]) { by[mo] = []; order.push(mo); }
+        (en.images || []).forEach(function(im){
+          var file = im.split("/").pop().replace(/\.[^.]+$/, ""), note = String(en.note || "").split("\n")[0].trim();
+          by[mo].push({ name:file + (note ? " " + note : ""), src:"fragilecalendar/" + im, thumb:"fragilecalendar/public/thumbs/" + file + ".avif" });
+        });
+      });
+      return order.reverse().map(function(mo){ return { title:mo.replace("-", "."), items:by[mo] }; });
+    });
+  }
+  var WEB = [ { id:"kmj", name:"kangminje.com", load:loadKmj }, { id:"fc", name:"Fragile Calendar", load:loadFc } ];
+  var webData = {}, webErr = {}, webOpenSrc = {}, wv = null;
+  try { webOpenSrc = JSON.parse(localStorage.getItem("contactsheet.web.open") || "{}") || {}; } catch(e) {}
+  function webLoad(src, force){
+    webErr[src.id] = null; if (force) delete webData[src.id];
+    renderWeb();
+    return src.load(force).then(function(g){ webData[src.id] = g; renderWeb(); return g; })
+      .catch(function(e){ webErr[src.id] = e && e.status === 403 ? "GitHub limit reached. Try again in a while." : "Couldn't load."; renderWeb(); });
+  }
+  function onSheetMap(){ var m = {}; items.forEach(function(i){ if (!i.blank && i.src) m[i.src] = "sheet"; }); pool.forEach(function(i){ if (i.src) m[i.src] = "pool"; }); return m; }
+  function renderWeb(){
+    var box = $("webSrc"); box.innerHTML = "";
+    WEB.forEach(function(src){
+      var open = !!webOpenSrc[src.id], g = webData[src.id];
+      var wrap = el("div", "wsrc" + (open ? " open" : ""));
+      var head = el("button", "wrow"); head.appendChild(el("span", "nm", src.name));
+      head.appendChild(el("span", "c", g ? String(g.reduce(function(n, x){ return n + x.items.length; }, 0)) : open ? "" : "+"));
+      head.onclick = function(){
+        webOpenSrc[src.id] = !open; try { localStorage.setItem("contactsheet.web.open", JSON.stringify(webOpenSrc)); } catch(e) {}
+        if (!open && !webData[src.id]) webLoad(src); else renderWeb();
+      };
+      wrap.appendChild(head);
+      if (open) {
+        var sub = el("div", "wsub");
+        if (webErr[src.id]) {
+          var r = el("button", "wrow", webErr[src.id] + " Retry"); r.onclick = function(){ webLoad(src, true); }; sub.appendChild(r);
+        } else if (!g) sub.appendChild(el("span", null, "Loading…"));
+        else {
+          var all = el("button", "wrow" + (wv && wv.src === src && wv.gi < 0 ? " cur" : ""));
+          all.appendChild(el("span", "nm", "All")); all.appendChild(el("span", "c", String(g.reduce(function(n, x){ return n + x.items.length; }, 0))));
+          all.onclick = function(){ webView(src, -1); }; sub.appendChild(all);
+          g.forEach(function(gr, gi){
+            var b = el("button", "wrow" + (wv && wv.src === src && wv.gi === gi ? " cur" : ""));
+            b.appendChild(el("span", "nm", gr.title)); b.appendChild(el("span", "c", String(gr.items.length)));
+            b.title = "Browse " + gr.title;
+            b.onclick = function(){ webView(src, gi); }; sub.appendChild(b);
+          });
+          var rf = el("button", "wrow"); rf.appendChild(el("span", "nm", "Refresh")); rf.onclick = function(){ webLoad(src, true); }; sub.appendChild(rf);
+        }
+        wrap.appendChild(sub);
+      }
+      box.appendChild(wrap);
+    });
+  }
+  /* 둘러보기: 썸네일을 골라 시트나 풀로. 아무것도 안 골랐으면 아직 안 들어간 사진 전부 */
+  var wvNewSheet = true;
+  function webView(src, gi){
+    var g = webData[src.id]; if (!g) return;
+    $("libView").hidden = true; $("libBtn").style.fontWeight = "";
+    var list = gi < 0 ? g.reduce(function(a, x){ return a.concat(x.items); }, []) : g[gi].items;
+    wv = { src:src, gi:gi, list:list, title:gi < 0 ? src.name : g[gi].title, sel:{}, anchor:-1 };
+    $("webView").hidden = false; $("webView").scrollTop = 0;
+    $("wvTitle").textContent = src.name + (gi < 0 ? "" : " / " + g[gi].title);
+    var grid = $("wvGrid"); grid.innerHTML = "";
+    var on = onSheetMap();
+    wv.cells = list.map(function(x, k){
+      var c = el("div", "wi" + (on[x.src] ? " on" : "")); c.title = x.name;
+      var im = el("div", "im"), i = el("img"); i.src = x.thumb || x.src; i.alt = ""; i.loading = "lazy"; i.decoding = "async"; im.appendChild(i);
+      c.appendChild(im); c.appendChild(el("div", "nm", x.name));
+      if (on[x.src]) c.appendChild(el("div", "st", on[x.src] === "pool" ? "In pool" : "On sheet"));
+      c.onclick = function(e){
+        if (e.shiftKey && wv.anchor >= 0) {
+          var a = Math.min(wv.anchor, k), b = Math.max(wv.anchor, k);
+          for (var j = a; j <= b; j++) wv.sel[j] = true;
+        } else { wv.sel[k] = !wv.sel[k]; wv.anchor = k; }
+        wvUpd();
+      };
+      c.ondblclick = function(){ wv.sel = {}; wv.sel[k] = true; $("wvSheet").click(); };
+      grid.appendChild(c); return c;
+    });
+    wvUpd(); renderWeb();
+  }
+  function wvPicked(){ return wv.list.filter(function(x, k){ return wv.sel[k]; }); }
+  function wvTargets(){ var p = wvPicked(); if (p.length) return p; var on = onSheetMap(); return wv.list.filter(function(x){ return !on[x.src]; }); }
+  function wvUpd(){
+    var on = onSheetMap(), p = wvPicked(), t = wvTargets(), inn = wv.list.filter(function(x){ return on[x.src]; }).length;
+    wv.cells.forEach(function(c, k){ c.classList.toggle("sel", !!wv.sel[k]); });
+    $("wvInfo").textContent = wv.list.length + " photos" + (inn ? " · " + inn + " already in" : "") + (p.length ? " · " + p.length + " picked" : "");
+    $("wvAll").textContent = p.length ? "Pick none" : "Pick all";
+    $("wvSheet").textContent = t.length ? "Add " + (p.length ? p.length : "all " + t.length) + " to sheet" : "Add to sheet";
+    $("wvSheet").disabled = $("wvPool").disabled = !t.length;
+    $("wvPool").textContent = "Add to pool";
+  }
+  function wvSelectAll(on){ wv.sel = {}; if (on) wv.list.forEach(function(x, k){ wv.sel[k] = true; }); wvUpd(); }
+  function webClose(){ if (!wv) return; $("webView").hidden = true; wv = null; renderWeb(); }
+  $("wvAll").onclick = function(){ wvSelectAll(!wvPicked().length); };
+  $("wvClose").onclick = webClose;
+  seg($("wvNew"), "New sheet", [[true,"On"],[false,"Off"]], function(){ return wvNewSheet; }, function(v){ wvNewSheet = v; UPD.forEach(function(f){ f(); }); }, true);
+  function addFromWeb(intoPool){
+    var on = onSheetMap(), list = wvTargets().filter(function(x){ return !on[x.src]; });
+    if (!list.length) return say("Already on the sheet.");
+    var g;
+    if (!intoPool && (wvNewSheet || maxGrp() !== undefined)) {
+      var real = items.filter(function(i){ return !i.blank; });
+      if (maxGrp() === undefined && real.length) { real.forEach(function(i){ i.grp = 0; }); groupTitles[0] = groupTitles[0] || "Sheet 1"; }
+      if (wvNewSheet || maxGrp() === undefined) { g = real.length ? (maxGrp() | 0) + 1 : 0; groupTitles[g] = wv.title; }
+      else g = maxGrp();
+    }
+    var first = null;
+    list.forEach(function(x){ var it = makeItem(x.name, x.src, intoPool ? undefined : g); if (!first) first = it; (intoPool ? pool : items).push(it); });
+    var n = list.length, title = wv.title;
+    if (intoPool) { renderPool(); wvUpd(); wv.cells.forEach(function(c, k){ if (onSheetMap()[wv.list[k].src]) c.classList.add("on"); }); wv.sel = {}; wvUpd(); say("Added " + n + " to pool"); render(); return; }
+    webClose(); render(); showItem(first); render();
+    say("Added " + n + " from " + title);
+  }
+  $("wvSheet").onclick = function(){ addFromWeb(false); };
+  $("wvPool").onclick = function(){ addFromWeb(true); };
+  renderWeb();
+  WEB.forEach(function(src){ if (webOpenSrc[src.id]) webLoad(src); });
+
   function libView(on){
+    if (on) webClose();
     $("libView").hidden = !on;
     $("libBtn").style.fontWeight = on ? "700" : "";
     if (on) refreshLib(true), (gh && refreshLib());
