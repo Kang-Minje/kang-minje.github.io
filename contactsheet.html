@@ -216,7 +216,7 @@
     #pg { min-width:52px; }
     #libBtn, #keysBtn, #panelBtn { display:none; }
 
-    #stage { order:1; flex:1 1 auto; min-height:120px; height:auto; margin:0 15px; }
+    #stage { order:1; flex:1 1 auto; min-height:120px; height:auto; margin:0 15px; justify-content:center; }
     #stage #status:not(:empty) { position:absolute; left:0; bottom:0; z-index:4; max-width:100%; padding:2px 7px; background:var(--fg); color:var(--bg); }
     #foot { display:none; }
 
@@ -686,7 +686,13 @@
     var v = $("stage"), cs = getComputedStyle(v);
     var aw = Math.max(50, v.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
     var ah = Math.max(50, v.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom));
-    if (S.ratio === "fit") aspect = aw / ah;
+    /* 모바일: 도구 시트·선택 줄이 열려도 '접었을 때' 크기로 비율을 잡음 → 그리드는 그대로, 그림만 작아짐 */
+    var fh = ah;
+    if (MQ.matches) {
+      Array.prototype.forEach.call(document.querySelectorAll(".panel"), function(p){ if (!p.classList.contains("mOff")) fh += p.offsetHeight; });
+      if (!$("pickbar").hidden) fh += $("pickbar").offsetHeight;
+    }
+    if (S.ratio === "fit") aspect = aw / fh;
     else if (S.ratio.indexOf(":") > 0) { var p = S.ratio.split(":"); aspect = p[0] / p[1]; }
     else aspect = parseFloat(S.ratio);
     var w = aw, h = w / aspect;
