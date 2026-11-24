@@ -112,7 +112,7 @@ const navIsAboutMode = () => document.documentElement.classList.contains("about-
     const nav = document.querySelector(".d-nav");
     if (!nav) return;
     const items = [...nav.querySelectorAll(".d-nav-item")];
-    const CLOSE_DELAY = 400;
+    const CLOSE_DELAY = 6000; // 메뉴를 벗어난 뒤 6초간 유지 (읽을 시간)
     const SWITCH_DELAY = 120;
     let active = null;
     let closeTimer = null;
