@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="description" content="Drop photos, lay them out as contact sheets, mark selects with a red dot, export as JPG. Everything happens in the browser.">
 <title>Contact Sheet</title>
 <script type="importmap">{ "imports": { "wasm-feature-detect": "https://cdn.jsdelivr.net/npm/wasm-feature-detect@1.8.0/dist/esm/index.js" } }</script>
@@ -195,15 +195,76 @@
   #keys .grp { grid-column:1 / -1; font-weight:700; margin-top:18px; }
   #keys .grp:first-child { margin-top:0; }
 
+  /* 모바일 전용 요소: 데스크톱에선 숨김 */
+  #tabs, #pickbar, #fsBar { display:none; }
+
+  /* 모바일: 사진 편집 앱처럼 — 위 이름·쪽수 / 가운데 캔버스 / 아래 도구 시트 / 맨 아래 탭 */
   @media (max-width: 820px) {
-    body { overflow:auto; }
-    html, body { height:auto; }
-    #app { height:auto; display:flex; flex-direction:column; padding:0 15px; }
-    #top { display:flex; flex-wrap:wrap; }
-    #sheetName { width:150px; }
-    #stage { height:62vh; flex:none; }
-    .panel { overflow:visible; margin-top:28px; }
-    #foot { display:flex; flex-wrap:wrap; }
+    :root { --tabH:calc(48px + env(safe-area-inset-bottom)); }
+    html { touch-action:manipulation; }
+    html, body { font-size:14px; line-height:20px; }
+    body { overflow:hidden; }
+    #app, #app.nopanel { height:100vh; height:100dvh; display:flex; flex-direction:column; padding:0; column-gap:0; }
+
+    #top { order:0; flex:none; display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"tl tl" "tr tc"; gap:8px 16px; padding:calc(12px + env(safe-area-inset-top)) 15px 10px; }
+    #top .tl { grid-area:tl; gap:14px; }
+    #top .tl > b { display:none; }
+    #sheetName { flex:1; width:auto; }
+    #top .tr { grid-area:tr; justify-content:flex-start; }
+    #top .tc { grid-area:tc; gap:0; }
+    #prev, #next { padding:0 10px; }
+    #pg { min-width:52px; }
+    #libBtn, #keysBtn, #panelBtn { display:none; }
+
+    #stage { order:1; flex:1 1 auto; min-height:120px; height:auto; margin:0 15px; }
+    #stage #status:not(:empty) { position:absolute; left:0; bottom:0; z-index:4; max-width:100%; padding:2px 7px; background:var(--fg); color:var(--bg); }
+    #foot { display:none; }
+
+    #pickbar { order:2; }
+    #pickbar:not([hidden]) { display:flex; flex:none; align-items:baseline; gap:0 18px; padding:10px 15px 0; overflow-x:auto; white-space:nowrap; scrollbar-width:none; }
+    #pickbar::-webkit-scrollbar { display:none; }
+    #pbN { font-weight:700; }
+    #pbDone { margin-left:auto; }
+
+    #left { order:3; }
+    #right { order:4; }
+    #app .panel, #app.nopanel .panel { display:block; flex:none; max-height:42vh; max-height:42dvh; margin:0; padding:16px 15px 18px; overflow-y:auto; overscroll-behavior:contain; }
+    #app .panel.mOff { display:none; }
+    .panel section.tOff { display:none; }
+    .panel section, .panel section + section { margin-top:0; }
+    .panel section:not(.tOff) ~ section:not(.tOff) { margin-top:24px; }
+    .panel section.solo > h2 { display:none; }
+    .panel section.solo .body { display:flex; padding-top:0; }
+    .panel button, #top button, #pickbar button { padding-top:4px; padding-bottom:4px; }
+    .panel .body { gap:6px; }
+    input[type=range] { height:28px; }
+    input[type=range]::-webkit-slider-thumb { width:10px; height:20px; margin-top:-9.5px; }
+    input[type=range]::-moz-range-thumb { width:10px; height:20px; }
+    #pool { grid-template-columns:repeat(5, minmax(0,1fr)); }
+
+    #tabs { order:5; display:flex; flex:none; align-items:stretch; height:var(--tabH); padding:0 5px env(safe-area-inset-bottom); }
+    #tabs button { flex:1 1 0; display:flex; align-items:center; justify-content:center; }
+    #tabs button[aria-pressed=true] { font-weight:700; }
+
+    #libView, #webView { position:fixed; top:0; left:0; right:0; bottom:var(--tabH); z-index:15; padding:calc(14px + env(safe-area-inset-top)) 15px 0; }
+    #lvGrid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:22px 14px; }
+    #wvGrid { grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px 10px; }
+    .lvh button { padding:4px 0; }
+
+    #fs .top { padding:calc(14px + env(safe-area-inset-top)) 15px 14px; }
+    #fs .img { padding:0; }
+    #fs .bot { padding:12px 15px calc(12px + env(safe-area-inset-bottom)); }
+    #fs .bot > .hint, #fsClose { display:none; }
+    #fsBar { display:flex; width:100%; justify-content:space-between; }
+    #fsBar button { padding:6px 0; min-width:56px; }
+    #fsBar #fsMark { text-align:center; }
+    #fsBar #fsNext { text-align:right; }
+  }
+  /* 손가락: 호버 대신 누르는 순간만 밑줄, 숨은 버튼은 늘 보이게 */
+  @media (hover: none) {
+    button:hover:not(:disabled), .li:hover .nm, .lv:hover .nm { text-decoration:none; }
+    button:active:not(:disabled) { text-decoration:underline; text-underline-offset:2px; }
+    .li .del, .lv .act { visibility:visible; }
   }
 </style>
 </head>
@@ -230,7 +291,7 @@
 </header>
 
 <aside id="left" class="panel" aria-label="Library and photos">
-  <section id="libSec">
+  <section id="libSec" data-tab="library">
     <h2>Library</h2>
     <div class="body">
       <div class="row"><button id="newBtn" class="btn wide">New</button><button id="saveAsBtn" class="btn wide">Save as…</button></div>
@@ -248,12 +309,12 @@
     </div>
   </section>
 
-  <section id="webSec">
+  <section id="webSec" data-tab="photos">
     <h2>From web</h2>
     <div class="body"><div id="webSrc"></div></div>
   </section>
 
-  <section>
+  <section data-tab="photos">
     <h2>Photos</h2>
     <div class="body">
       <div class="row"><button id="add" class="btn pri wide">Add photos…</button></div>
@@ -263,7 +324,7 @@
     </div>
   </section>
 
-  <section id="poolSec">
+  <section id="poolSec" data-tab="photos">
     <h2>Pool</h2>
     <div class="body">
             <div class="btns3"><button id="toPool" class="btn" title="Move picked photos to the pool">Picked to pool</button><button id="dotToPool" class="btn" title="Move selected (red-dotted) photos to the pool">Selected to pool</button><button id="poolAll" class="btn" title="Put every pool photo back on the sheet">Restore all</button></div>
@@ -272,7 +333,7 @@
     </div>
   </section>
 
-  <section>
+  <section data-tab="library">
     <h2>Text list</h2>
     <div class="body">
       <div class="row"><button id="listSave" class="btn wide">Save .txt</button><button id="listLoad" class="btn wide">Load .txt…</button></div>
@@ -300,13 +361,13 @@
 </main>
 
 <aside id="right" class="panel" aria-label="Settings">
-  <section><h2>Layout</h2><div class="body" id="cBatch"></div></section>
-  <section><h2>Select</h2><div class="body" id="cSel">
+  <section data-tab="layout"><h2>Layout</h2><div class="body" id="cBatch"></div></section>
+  <section data-tab="select" class="solo"><h2>Select</h2><div class="body" id="cSel">
     <div class="btns3" id="selBtns"><button id="selAll" class="btn">Dot all</button><button id="selNone" class="btn">Clear dots</button><button id="selInv" class="btn">Invert</button></div>
   </div></section>
-  <section><h2>Color</h2><div class="body" id="cColor"></div></section>
-  <section><h2>Captions</h2><div class="body" id="cLabel"></div></section>
-  <section><h2>Export</h2><div class="body" id="cExport">
+  <section data-tab="color" class="solo"><h2>Color</h2><div class="body" id="cColor"></div></section>
+  <section data-tab="layout"><h2>Captions</h2><div class="body" id="cLabel"></div></section>
+  <section data-tab="export" class="solo"><h2>Export</h2><div class="body" id="cExport">
     <div id="cExportTop"></div>
     <div class="fd"><span class="k">Sheet width</span><input id="exportW" type="number" min="400" step="100" aria-label="Sheet width in pixels"><span class="u">px</span><button id="wMax" class="btn">Max</button></div>
     <div class="hint" id="wHint"></div>
@@ -323,12 +384,15 @@
   <span id="status" role="status" aria-live="polite"></span>
   <span class="r"><span id="footNote">Photos never leave this device</span> · © 2026 Kang Minje</span>
 </footer>
+
+<div id="pickbar" hidden><span id="pbN"></span><button id="pbAll">All</button><button id="pbDot">Dot</button><button id="pbL" aria-label="Rotate left">↺</button><button id="pbR" aria-label="Rotate right">↻</button><button id="pbView">View</button><button id="pbPool">To pool</button><button id="pbDone">Done</button></div>
+<nav id="tabs" aria-label="Tools"><button data-t="library">Library</button><button data-t="photos">Photos</button><button data-t="layout">Layout</button><button data-t="select">Select</button><button data-t="color">Color</button><button data-t="export">Export</button></nav>
 </div>
 
 <div id="fs" role="dialog" aria-label="Loupe">
   <div class="top"><span id="fsName"></span><span class="hint" id="fsPos"></span></div>
   <div class="img"><img id="fsImg" alt=""><span class="dot" id="fsDot"></span></div>
-  <div class="bot"><span class="hint">1 dot · 0 clear · ⌘[ ⌘] rotate · ← → move · Space close</span><button id="fsClose" class="btn">Close</button></div>
+  <div class="bot"><span class="hint">1 dot · 0 clear · ⌘[ ⌘] rotate · ← → move · Space close</span><button id="fsClose" class="btn">Close</button><div id="fsBar"><button id="fsX">Close</button><button id="fsPrev" aria-label="Previous photo">←</button><button id="fsMark">Dot</button><button id="fsNext" aria-label="Next photo">→</button></div></div>
 </div>
 
 <div id="keys" role="dialog" aria-label="Shortcuts">
@@ -380,6 +444,7 @@
   var items = [], pool = [], uid = 0, page = 0, aspect = 16/9;
   var hits = [], hover = -1, drag = null, raf = 0, poolDragIt = null, dropAt = -1;
   var cv = $("cv"), ctx = cv.getContext("2d");
+  var MQ = window.matchMedia("(max-width: 820px)"), TOUCH = window.matchMedia("(hover: none)").matches, lastTap = {};
 
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
   function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
@@ -554,7 +619,7 @@
       b.ondragend = function(){ poolDragIt = null; dropAt = -1; schedule(); };
       box.appendChild(b);
     });
-    $("poolCount").textContent = pool.length ? pool.length + " photos" : "Empty. Drag photos here from the sheet to set them aside.";
+    $("poolCount").textContent = pool.length ? pool.length + " photos" : TOUCH ? "Empty. Pick photos on the sheet and tap To pool." : "Empty. Drag photos here from the sheet to set them aside.";
     $("poolAll").disabled = !pool.length;
   }
 
@@ -683,6 +748,7 @@
     $("selFirst").disabled = !has || !sel;
     $("toPool").disabled = !pk;
     $("dotToPool").disabled = !sel;
+    updPick();
     if (has) { var mw = sheetMaxW(page); $("wHint").textContent = "Max for this sheet " + mw + "px" + ((S.exportW | 0) > mw ? " · will export at " + mw + "px" : ""); }
     else $("wHint").textContent = "";
     setStatus();
@@ -715,7 +781,7 @@
     if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
     var n = hitAt(ev), mod = ev.shiftKey ? "shift" : (ev.metaKey || ev.ctrlKey) ? "cmd" : "";
     if (n < 0) { if (!mod) { clearPicks(); render(); } return; }
-    drag = { from:n, to:n, x:ev.clientX, y:ev.clientY, active:false, mod:mod, group:[], overPool:false };
+    drag = { from:n, to:n, x:ev.clientX, y:ev.clientY, active:false, mod:mod, group:[], overPool:false, pt:ev.pointerType };
     cv.setPointerCapture(ev.pointerId);
   });
   cv.addEventListener("pointermove", function(ev){
@@ -744,7 +810,14 @@
       var T = items[d.to];
       if (T && d.group.indexOf(T) < 0) moveGroup(d.group, T, d.from < d.to);
     }
-    else clickPick(it, d.mod);
+    else {
+      /* 손가락: 탭 = 고르기/빼기 (여러 장), 두 번 탭 = 크게 보기 */
+      var tap = d.pt === "touch" && !d.mod;
+      if (tap && lastTap.n === d.from && Date.now() - lastTap.t < 320) { it.pick = lastTap.was; lastTap = {}; render(); fsShow(it); return; }
+      if (tap) lastTap = { n:d.from, t:Date.now(), was:!!it.pick };
+      clickPick(it, tap ? "cmd" : d.mod);
+    }
+    if (d.pt === "touch") hover = -1;
     render();
   });
   cv.addEventListener("pointercancel", function(){ drag = null; poolSec.classList.remove("drop"); schedule(); });
@@ -1099,7 +1172,47 @@
     set(fold[title] !== undefined ? !!fold[title] : !!FOLD_DEFAULT[title]);
     b.onclick = function(){ var c = !sec.classList.contains("closed"); set(c); fold[title] = c ? 1 : 0; try { localStorage.setItem(FOLD_KEY, JSON.stringify(fold)); } catch(e) {} };
   });
-  if (window.innerWidth <= 820) { $("app").classList.add("nopanel"); $("panelBtn").setAttribute("aria-expanded", "false"); }
+
+  /* ---------- 모바일: 아래 탭 → 도구 시트, 고른 사진엔 작업 줄 ---------- */
+  var curTab = null;
+  function setTab(t){
+    curTab = t;
+    Array.prototype.forEach.call(document.querySelectorAll(".panel"), function(p){
+      var any = false;
+      Array.prototype.forEach.call(p.querySelectorAll(":scope > section"), function(s){ var on = s.getAttribute("data-tab") === t; s.classList.toggle("tOff", !on); if (on) any = true; });
+      p.classList.toggle("mOff", !any);
+      if (any) p.scrollTop = 0;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-t") === t)); });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function(b){
+    b.onclick = function(){
+      var t = b.getAttribute("data-t"), cover = !$("libView").hidden || !$("webView").hidden;
+      if (cover) { libView(false); webClose(); }
+      setTab(curTab === t && !cover ? null : t);
+    };
+  });
+  setTab(null);
+  function updPick(){
+    var p = picked(); $("pickbar").hidden = !p.length; if (!p.length) return;
+    $("pbN").textContent = p.length + " picked";
+    $("pbDot").textContent = p.every(function(i){ return i.sel; }) ? "Undot" : "Dot";
+  }
+  $("pbAll").onclick = function(){ var all = viewList(); setPicks(all); anchorIt = all[0] || null; curIt = all[all.length - 1] || null; basePick = []; render(); };
+  $("pbDot").onclick = function(){ var p = picked(), on = !p.every(function(i){ return i.sel; }); p.forEach(function(i){ i.sel = on; }); render(); };
+  $("pbL").onclick = function(){ rotate(picked(), -90); };
+  $("pbR").onclick = function(){ rotate(picked(), 90); };
+  $("pbView").onclick = function(){ var it = curIt && curIt.pick ? curIt : picked()[0]; if (it) fsShow(it); };
+  $("pbPool").onclick = function(){ toPool(picked()); };
+  $("pbDone").onclick = function(){ clearPicks(); render(); };
+  function placeStatus(){
+    var s = $("status");
+    if (MQ.matches) { if (s.parentNode !== $("stage")) $("stage").appendChild(s); }
+    else if (s.parentNode !== $("foot")) $("foot").insertBefore(s, $("foot").querySelector(".r"));
+  }
+  placeStatus();
+  if (MQ.addEventListener) MQ.addEventListener("change", placeStatus); else if (MQ.addListener) MQ.addListener(placeStatus);
+  if (TOUCH) { $("empty").querySelector("b").textContent = "No photos yet"; $("add2").classList.add("pri"); }
 
   /* ---------- 크게 보기 ---------- */
   var fsIt = null;
@@ -1112,7 +1225,7 @@
     var n = items.indexOf(it), vr = V.filter(function(i){ return !items[i].blank; }), k = vr.indexOf(n);
     $("fsImg").src = it.url || ""; $("fsName").textContent = (n + 1) + "  " + it.name;
     $("fsPos").textContent = (k + 1) + " / " + vr.length;
-    $("fs").classList.toggle("sel", !!it.sel);
+    $("fs").classList.toggle("sel", !!it.sel); $("fsMark").textContent = it.sel ? "Undot" : "Dot";
     var img = $("fsImg"), box = img.parentNode, r = rot(it);
     img.style.transform = r ? "rotate(" + r + "deg)" : "";
     if (r % 180) { img.style.maxWidth = box.clientHeight + "px"; img.style.maxHeight = Math.max(0, box.clientWidth - 32) + "px"; }
@@ -1129,7 +1242,20 @@
     var at = v.indexOf(V[k]) + d; if (at < 0 || at >= v.length) return;
     fsShow(items[v[at]]);
   }
-  function mark(it, on){ if (!it) return; it.sel = on; if (fsIt === it) $("fs").classList.toggle("sel", on); render(); }
+  function mark(it, on){ if (!it) return; it.sel = on; if (fsIt === it) { $("fs").classList.toggle("sel", on); $("fsMark").textContent = on ? "Undot" : "Dot"; } render(); }
+  $("fsX").onclick = fsClose;
+  $("fsPrev").onclick = function(){ fsStep(-1); };
+  $("fsNext").onclick = function(){ fsStep(1); };
+  $("fsMark").onclick = function(){ if (fsIt) mark(fsIt, !fsIt.sel); };
+  /* 크게 보기: 좌우로 밀어 넘기기, 아래로 내려 닫기 */
+  var sw0 = null;
+  $("fs").addEventListener("touchstart", function(e){ sw0 = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null; }, { passive:true });
+  $("fs").addEventListener("touchend", function(e){
+    if (!sw0 || !fsIt) return;
+    var t = e.changedTouches[0], dx = t.clientX - sw0[0], dy = t.clientY - sw0[1]; sw0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) fsStep(dx < 0 ? 1 : -1);
+    else if (dy > 90 && dy > Math.abs(dx) * 1.5) fsClose();
+  });
   $("fsClose").onclick = fsClose;
   $("fs").addEventListener("click", function(ev){ if (ev.target === $("fs") || ev.target.className === "img") fsClose(); });
 
