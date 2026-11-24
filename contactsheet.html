@@ -101,7 +101,7 @@
 
   /* 라이브러리 */
   #lib { display:flex; flex-direction:column; gap:10px; }
-  .li { display:grid; grid-template-columns:72px minmax(0,1fr); gap:10px; align-items:start; cursor:pointer; }
+  .li { display:flex; flex-direction:column; cursor:pointer; }
   .li.cur .nm { font-weight:700; }
   .li:hover .nm { text-decoration:underline; text-underline-offset:2px; }
   .li .th { width:72px; height:48px; display:flex; align-items:flex-start; }
@@ -128,6 +128,10 @@
   .lv.cur .nm { font-weight:700; }
   .lv:hover .nm { text-decoration:underline; text-underline-offset:2px; }
   .lv .mt { display:flex; flex-wrap:wrap; gap:0 10px; }
+  .lv .act { visibility:hidden; }
+  .lv:hover .act, .lv .act.arm { visibility:visible; }
+  .lv .act.arm { color:var(--red); }
+  input.rn { width:100%; text-decoration:underline; text-underline-offset:2px; font-weight:700; }
 
   /* From web */
   .wsrc { display:flex; flex-direction:column; }
@@ -229,7 +233,7 @@
   <section id="libSec">
     <h2>Library</h2>
     <div class="body">
-      <div class="row"><button id="newBtn" class="btn wide">New</button><button id="saveAsBtn" class="btn wide">Save as…</button><button id="libGridBtn" class="btn">Grid view</button></div>
+      <div class="row"><button id="newBtn" class="btn wide">New</button><button id="saveAsBtn" class="btn wide">Save as…</button></div>
       <div id="lib"></div>
       <div class="hint" id="libHint"></div>
       <div class="ghbox">
@@ -262,7 +266,7 @@
   <section id="poolSec">
     <h2>Pool</h2>
     <div class="body">
-            <div class="btns3"><button id="toPool" class="btn" title="Move selected photos to the pool">Selected to pool</button><button id="dotToPool" class="btn" title="Move dotted photos to the pool">Dots to pool</button><button id="poolAll" class="btn" title="Put every pool photo back on the sheet">Restore all</button></div>
+            <div class="btns3"><button id="toPool" class="btn" title="Move picked photos to the pool">Picked to pool</button><button id="dotToPool" class="btn" title="Move dotted photos to the pool">Dots to pool</button><button id="poolAll" class="btn" title="Put every pool photo back on the sheet">Restore all</button></div>
       <div id="pool" aria-label="Photos set aside in the pool"></div>
       <div class="hint" id="poolCount"></div>
     </div>
@@ -642,8 +646,8 @@
     $("prev").disabled = page <= 0; $("next").disabled = page >= r.length - 1;
     var real = items.filter(function(i){ return !i.blank; }).length;
     var pk = picked().length;
-    $("info").textContent = has ? (vf === "all" ? real + " photos" : "Showing " + shown + " / " + real) + (pk ? " · " + pk + " selected" : "") + " · " + sel + (sel === 1 ? " dot · " : " dots · ") + r.length + (r.length > 1 ? " sheets" : " sheet") + (pool.length ? " · pool " + pool.length : "") : "";
-    $("count").textContent = has ? real + " photos · " + sel + (sel === 1 ? " dot" : " dots") + (pk ? " · " + pk + " selected" : "") : "No photos yet.";
+    $("info").textContent = has ? (vf === "all" ? real + " photos" : "Showing " + shown + " / " + real) + (pk ? " · " + pk + " picked" : "") + " · " + sel + " selected · " + r.length + (r.length > 1 ? " sheets" : " sheet") + (pool.length ? " · pool " + pool.length : "") : "";
+    $("count").textContent = has ? real + " photos · " + sel + " selected" + (pk ? " · " + pk + " picked" : "") : "No photos yet.";
     ["clear", "sortName", "selAll", "selNone", "selInv", "exportOne", "exportAll", "exportEach"].forEach(function(id){ $(id).disabled = !has; });
     $("selFirst").disabled = !has || !sel;
     $("toPool").disabled = !pk;
@@ -1054,6 +1058,11 @@
     var b = el("button"), tri = el("span", "tri");
     b.appendChild(document.createTextNode(title)); b.appendChild(tri);
     h.textContent = ""; h.appendChild(b);
+    if (title === "Library") {
+      tri.textContent = "Grid"; b.title = "Open the library grid (L)";
+      b.onclick = function(){ libView($("libView").hidden); };
+      return;
+    }
     function set(closed){ sec.classList.toggle("closed", closed); tri.textContent = closed ? "+" : "−"; b.setAttribute("aria-expanded", String(!closed)); }
     set(fold[title] !== undefined ? !!fold[title] : !!FOLD_DEFAULT[title]);
     b.onclick = function(){ var c = !sec.classList.contains("closed"); set(c); fold[title] = c ? 1 : 0; try { localStorage.setItem(FOLD_KEY, JSON.stringify(fold)); } catch(e) {} };
@@ -1450,7 +1459,7 @@
   function ghLoad(id){
     return api("/contents/sheets/" + id + ".json?ref=" + gh.branch, { raw:"text" }).then(function(t){
       var sh = JSON.parse(t), e = ghIndex.filter(function(x){ return x.id === id; })[0] || {};
-      return { id:id, name:sh.name || e.name, count:e.count, data:sh.data };
+      return { id:id, name:e.name || sh.name, count:e.count, data:sh.data };
     });
   }
   function ghPhoto(path){
@@ -1579,20 +1588,50 @@
     return (d.getFullYear() !== n.getFullYear() ? d.getFullYear() + "." : "") + (d.getMonth() + 1) + "." + d.getDate() + " " + hm;
   }
   function mb(b){ return b > 1e9 ? (b / 1e9).toFixed(1) + "GB" : Math.round(b / 1e6) + "MB"; }
+  function metaText(sh){ return sh.count + " photos" + (sh.dots ? " · " + sh.dots + " selected" : ""); }
+  /* 이름 바꾸기: 이름 자리가 입력칸으로 바뀜. Enter 저장 · Esc 취소 */
+  function renameInline(nameEl, sh){
+    var inp = el("input", "rn"); inp.type = "text"; inp.value = sh.name; inp.maxLength = 80; inp.spellcheck = false;
+    nameEl.replaceWith(inp); inp.focus(); inp.select();
+    var done = false;
+    function finish(ok){
+      if (done) return; done = true;
+      var v = inp.value.trim();
+      if (!ok || !v || v === sh.name) { inp.replaceWith(nameEl); return; }
+      nameEl.textContent = v; inp.replaceWith(nameEl);
+      renameSheet(sh.id, v);
+    }
+    inp.onkeydown = function(e){ e.stopPropagation(); if (e.key === "Enter") finish(true); if (e.key === "Escape") finish(false); };
+    inp.onclick = function(e){ e.stopPropagation(); };
+    inp.onblur = function(){ finish(true); };
+  }
+  function renameSheet(id, name){
+    var job = gh
+      ? ghCommit(function(ctx){
+          var idx = ctx.index.map(function(e){ return e.id === id ? Object.assign({}, e, { name:name }) : e; });
+          return { files:[{ path:"index.json", text:JSON.stringify(idx) }], message:"Rename: " + name, index:idx };
+        }).then(function(plan){ ghIndex = plan.index; })
+      : getSheet(id).then(function(sh){ if (!sh) return; sh.name = name; return idb("sheets", "readwrite", function(st){ st.put(sh); }); });
+    say("Renaming…");
+    job.then(function(){
+      if (id === curId) { var dirtyBefore = isDirty(); $("sheetName").value = name; if (!dirtyBefore) markSaved(); else savedName = name; setStatus(); }
+      refreshLib(true); say("Renamed to " + name);
+    }).catch(function(e){ console.error(e); say("Couldn't rename."); refreshLib(true); });
+  }
   function drawLib(list){
     list = list.slice().sort(function(a, b){ return b.updated - a.updated; });
     var box = $("lib"); box.innerHTML = "";
     if (!list.length) { var em = el("div", null, gh ? "No sheets in the repo yet. Add photos and press ⌘S." : "No saved sheets yet. Add photos and press ⌘S."); em.id = "libEmpty"; box.appendChild(em); }
     list.forEach(function(sh){
       var row = el("div", "li" + (sh.id === curId ? " cur" : "")); row.tabIndex = 0; row.title = "Open " + sh.name;
-      var th = el("div", "th"); if (sh.thumb) { var im = el("img"); im.src = sh.thumb; im.alt = ""; th.appendChild(im); }
       var tx = el("div"), mt = el("div", "mt"), del = el("button", "del", "Delete");
       tx.style.minWidth = "0";
       tx.appendChild(el("div", "nm", sh.name));
       mt.appendChild(el("span", null, fmtDate(sh.updated)));
-      mt.appendChild(el("span", null, sh.count + " photos" + (sh.dots ? " · ●" + sh.dots : "")));
-      mt.appendChild(del); tx.appendChild(mt);
-      row.appendChild(th); row.appendChild(tx);
+      mt.appendChild(el("span", null, metaText(sh)));
+      var rn = el("button", "del", "Rename"); rn.onclick = function(e){ e.stopPropagation(); renameInline(tx.firstChild, sh); };
+      mt.appendChild(rn); mt.appendChild(del); tx.appendChild(mt);
+      row.appendChild(tx);
       row.onclick = function(){ openSheet(sh.id); };
       row.onkeydown = function(e){ if (e.key === "Enter") openSheet(sh.id); };
       del.onclick = function(e){
@@ -1607,8 +1646,18 @@
     list.forEach(function(sh){
       var c = el("div", "lv" + (sh.id === curId ? " cur" : "")); c.tabIndex = 0; c.title = "Open " + sh.name;
       var im = el("div", "im"); if (sh.thumb) { var i = el("img"); i.src = sh.thumb; i.alt = ""; i.loading = "lazy"; im.appendChild(i); }
-      var mt = el("div", "mt"); mt.appendChild(el("span", null, fmtDate(sh.updated))); mt.appendChild(el("span", null, sh.count + " photos" + (sh.dots ? " · ●" + sh.dots : "")));
-      c.appendChild(im); c.appendChild(el("div", "nm", sh.name)); c.appendChild(mt);
+      var nm = el("div", "nm", sh.name), mt = el("div", "mt");
+      mt.appendChild(el("span", null, sh.count + " photos"));
+      mt.appendChild(el("span", null, (sh.dots || 0) + " selected"));
+      var mt2 = el("div", "mt"); mt2.appendChild(el("span", null, fmtDate(sh.updated)));
+      var rn = el("button", "act", "Rename"); rn.onclick = function(e){ e.stopPropagation(); renameInline(nm, sh); };
+      var dl = el("button", "act", "Delete"); dl.onclick = function(e){
+        e.stopPropagation();
+        if (!dl.classList.contains("arm")) { dl.classList.add("arm"); dl.textContent = "Really delete"; setTimeout(function(){ dl.classList.remove("arm"); dl.textContent = "Delete"; }, 3000); return; }
+        deleteSheet(sh.id);
+      };
+      mt2.appendChild(rn); mt2.appendChild(dl);
+      c.appendChild(im); c.appendChild(nm); c.appendChild(mt); c.appendChild(mt2);
       c.onclick = function(){ libView(false); openSheet(sh.id); };
       c.onkeydown = function(e){ if (e.key === "Enter") c.onclick(); };
       g.appendChild(c);
@@ -1855,7 +1904,6 @@
     if (on) refreshLib(true), (gh && refreshLib());
   }
   $("libBtn").onclick = function(){ libView($("libView").hidden); };
-  $("libGridBtn").onclick = function(){ libView(true); };
   $("lvClose").onclick = function(){ libView(false); };
   $("saveTop").onclick = function(){ saveSheet(false); };
   $("saveAsBtn").onclick = function(){ saveSheet(true); };
