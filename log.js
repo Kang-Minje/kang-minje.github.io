@@ -1,5 +1,5 @@
 // log.js — 다운로드 기록. 다운로드가 일어날 때마다 구글 시트("다운로드 기록 — 강민제 (kangminje.com)")에 한 줄씩.
-// 기록 항목: 날짜(시트에서 기록), 이메일(다운로드 전에 입력·동의, email-gate.js), 파일명 — 이것만 (개인정보 처리방침 "What is collected")
+// 기록 항목: 날짜(시트에서 기록), 파일명 — 이것만. 이메일은 더 이상 묻지 않음 (email-gate.js 제거, 2026-11-25)
 //
 // LOG_ENDPOINT: 구글 시트의 Apps Script를 "웹 앱"으로 배포하면 나오는 주소 (https://script.google.com/macros/s/…/exec)
 // 비어 있으면 아무것도 보내지 않음.
@@ -24,5 +24,9 @@
         } catch (e) {}
     };
 
-    // 포트폴리오 / CV zip 다운로드 기록은 email-gate.js(PC)와 mobile.js(모바일)에서 이메일과 함께 보냄
+    // 포트폴리오 / CV zip (PC 좌상단): 바로 다운로드, 파일명만 기록. 모바일은 mobile.js에서 기록
+    document.addEventListener("click", (e) => {
+        const a = e.target.closest(".d-info a[download]");
+        if (a && /CVandPortfolio\.zip$/i.test(a.getAttribute("href") || "")) window.logDownload({ file: a.getAttribute("download") });
+    });
 })();
