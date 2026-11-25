@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>Kang Minje — The Korea Fashion Photography Prize</title>
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -14,7 +14,8 @@
 
   <link rel="stylesheet" href="/style.css?v=20261125" />
   <style>
-    html, body { height: 100%; overflow: hidden; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    html, body { height: 100%; overflow: hidden; overscroll-behavior: none; touch-action: manipulation; }
     body { font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif; font-size: 10pt; line-height: var(--d-line); color: #111; }
     p { margin: 0; }
     a { color: inherit; text-decoration: none; }
@@ -30,7 +31,7 @@
     .spread figure { margin: 0; flex: none; }
     .spread figure.off { display: none; }
     .spread img { display: block; width: var(--w, auto); height: var(--h, auto); }
-    .spread figcaption { margin-top: 10px; }
+    .spread figcaption { margin-top: 10px; font-size: 10pt; line-height: var(--d-line); }
 
     /* text pages inside the stage: statement first, cv last */
     .sheet { position: absolute; inset: 0; display: none; overflow-y: auto; scrollbar-width: none; }
@@ -59,14 +60,20 @@
     @media (hover: none) { #cur { display: none; } }
 
     @media (max-width: 600px) {
-      #stage { top: 300px; bottom: 64px; left: 20px; right: 20px; }
+      /* 사진: 연락처 아래 20px부터 카운터 줄까지, 하단 정렬 (top은 JS가 연락처 위치로 맞춤) */
+      #stage { top: var(--m-top, 300px); bottom: 24px; left: 20px; right: 20px; z-index: 1; touch-action: none; }
+      .spread { align-items: flex-end; }
+      /* 글 페이지: 화면 전체에서 스크롤, 위쪽은 하얀 정보 블록 아래로 지나감 */
+      .sheet { position: fixed; inset: 0; padding: var(--m-top, 300px) 20px 48px; touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
       .fb-text, .fb-cv { grid-template-columns: 1fr; row-gap: 32px; }
+      .fb-text section[lang="ko"] { order: 1; }
+      .fb-text section:not([lang]) { order: 2; }
       .fb-cv dl { grid-template-columns: 76px 1fr; }
       #count { right: 20px; bottom: 24px; }
     }
     .p-minfo { display: none; }
     @media (max-width: 600px) {
-      .p-minfo { display: block; position: absolute; top: calc(env(safe-area-inset-top) + 20px); left: calc(env(safe-area-inset-left) + 20px); line-height: 16px; }
+      .p-minfo { display: block; position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: #fff; padding: calc(env(safe-area-inset-top) + 20px) 20px 10px calc(env(safe-area-inset-left) + 20px); line-height: 16px; }
       .p-minfo p { margin: 0 0 10px 0; }
       .p-minfo .spacer { height: 14px; }
     }
@@ -255,9 +262,9 @@
       <section>
         <p class="lbl">(education)</p>
         <dl>
-          <dt>2020 – 2026</dt><dd>Chung-Ang University, Photography, graduated first in class</dd>
+          <dt>2026</dt><dd>Chung-Ang University, Photography, graduated first in class</dd>
           <dt>2025</dt><dd>Bauhaus-Universität Weimar, Visuelle Kommunikation, exchange</dd>
-          <dt>2017 – 2019</dt><dd>Anyang Arts High School, Photography</dd>
+          <dt>2020</dt><dd>Anyang Arts High School, Photography</dd>
         </dl>
       </section>
       <section>
@@ -281,7 +288,7 @@
       <section>
         <p class="lbl">(experience)</p>
         <dl>
-          <dt>2021 – 2023</dt><dd>Photographer to the Chief of Naval Operations, Republic of Korea Navy</dd>
+          <dt>2023</dt><dd>Photographer to the Chief of Naval Operations, Republic of Korea Navy</dd>
         </dl>
       </section>
     </div>
@@ -302,7 +309,8 @@
     // a step is a whole spread on a computer, one picture on a phone
     function build() {
       steps = [];
-      blocks.forEach(b => {
+      const order = small.matches ? [...blocks.slice(1), blocks[0]] : blocks;   // 폰: 스테이트먼트는 맨 끝
+      order.forEach(b => {
         if (!b.classList.contains('spread')) steps.push({ el: b });
         else if (small.matches) [...b.children].forEach(f => steps.push({ el: b, figs: [f] }));
         else steps.push({ el: b, figs: [...b.children] });
@@ -314,7 +322,8 @@
     // pictures in a spread share one height, as large as the stage allows
     function fit(st) {
       if (!st.figs) return;
-      const W = stage.clientWidth, H = stage.clientHeight - CAP;
+      const cap = Math.max(...st.figs.map(f => { const c = f.querySelector('figcaption'); return c ? c.offsetHeight + 10 : 0; }), small.matches ? 0 : CAP);
+      const W = stage.clientWidth, H = stage.clientHeight - cap;
       const rs = st.figs.map(f => +f.firstElementChild.getAttribute('width') / +f.firstElementChild.getAttribute('height'));
       const h = Math.min(H, (W - GAP() * (rs.length - 1)) / rs.reduce((a, r) => a + r, 0));
       st.figs.forEach((f, k) => { f.style.setProperty('--h', Math.floor(h) + 'px'); f.style.setProperty('--w', Math.floor(h * rs[k]) + 'px'); });
@@ -377,8 +386,21 @@
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
     });
     addEventListener('dragstart', e => e.preventDefault());
-    addEventListener('resize', () => fit(steps[i]));
-    small.addEventListener('change', () => { const el = steps[i].el, f = steps[i].figs && steps[i].figs[0]; build(); show(Math.max(0, steps.findIndex(s => s.el === el && (!f || s.figs.includes(f))))); });
+    // 폰: 사진 위 간격 = 좌측 여백(20px), 연락처 바로 아래부터
+    const minfo = document.querySelector('.p-minfo');
+    function setTop() {
+      if (!small.matches) return;
+      const last = minfo.querySelector('p:last-of-type');
+      document.documentElement.style.setProperty('--m-top', Math.ceil(last.getBoundingClientRect().bottom + 20) + 'px');
+    }
+    // 폰: 페이지 자체는 움직이지 않음 (글 페이지 안에서만 스크롤)
+    document.addEventListener('touchmove', e => {
+      const sh = e.target.closest && e.target.closest('.sheet');
+      if (!(sh && sh.scrollHeight > sh.clientHeight)) e.preventDefault();
+    }, { passive: false });
+    setTop();
+    addEventListener('resize', () => { setTop(); fit(steps[i]); });
+    small.addEventListener('change', () => { setTop(); const el = steps[i].el, f = steps[i].figs && steps[i].figs[0]; build(); show(Math.max(0, steps.findIndex(s => s.el === el && (!f || s.figs.includes(f))))); });
     build(); show(0);
   })();
   </script>
