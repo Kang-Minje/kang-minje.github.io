@@ -1,427 +1,541 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow, noimageindex">
-<title>Kang Minje — Portfolio for The Korea Fashion Photography Prize</title>
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta property="og:title" content="Kang Minje — Portfolio">
-<meta property="og:image" content="https://kangminje.com/og.jpg">
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:48px}
-  html,body{background:#fff;color:#000}
-  body{font-family:"Helvetica Neue",Helvetica,Arial,"Noto Sans KR",sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"kern" 1}
-  a{color:inherit;text-decoration:none}
-  ::selection{background:#000;color:#fff}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kang Minje — The Korea Fashion Photography Prize</title>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <meta name="robots" content="noindex, nofollow, noimageindex" />
+  <meta property="og:title" content="Kang Minje" />
+  <meta property="og:image" content="https://kangminje.com/og.jpg" />
+  <meta property="og:url" content="https://kangminje.com/forbazaar/" />
 
-  /* top bar */
-  .bar{position:fixed;inset:0 0 auto 0;z-index:40;display:flex;justify-content:space-between;align-items:center;gap:20px;
-       padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px;background:linear-gradient(#fff 60%,rgba(255,255,255,0))}
-  .bar nav{display:flex;gap:22px}
-  .bar nav a,.bar button{font:inherit;background:none;border:0;color:#000;cursor:pointer;padding:0;transition:color .15s}
-  .bar nav a:hover,.bar button:hover{color:rgba(0,0,0,.45)}
-  .bar .count{font-variant-numeric:tabular-nums;color:rgba(0,0,0,.45);min-width:44px;text-align:right}
+  <link rel="stylesheet" href="/style.css?v=20261125" />
+  <style>
+    /* 메인 style.css(상단 정보·메뉴·드롭다운)를 그대로 쓰고, 이 페이지는 스크롤되는 문서로 */
+    html, body {
+      height: auto !important;
+      overflow: auto !important;
+    }
 
-  /* intro */
-  .intro{min-height:100svh;padding:120px 20px 80px;display:grid;grid-template-columns:repeat(12,1fr);column-gap:20px;align-content:end}
-  .intro h1{grid-column:1/-1;font-weight:400;font-size:14px;margin-bottom:60px}
-  .intro h1 b{font-weight:700}
-  .intro h1 span{display:block;color:rgba(0,0,0,.45)}
-  .lbl{color:rgba(0,0,0,.45);margin-bottom:6px}
-  .stmt{grid-column:span 4}
-  .stmt p+p{margin-top:10px}
-  .stmt.kr{grid-column:6/span 4;word-break:keep-all}
-  .scroll{grid-column:1/-1;margin-top:80px;color:rgba(0,0,0,.45)}
+    /* 상단 정보·메뉴는 문서와 함께 스크롤 (콜린 도지슨 Viewing Room처럼) */
+    .d-info,
+    .d-nav {
+      position: absolute;
+    }
 
-  /* works */
-  .work{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:64px 20px 28px}
-  .work img{display:block;max-width:100%;max-height:calc(100svh - 120px);width:auto;height:auto;object-fit:contain;background:#f4f4f4}
-  .work figcaption{align-self:stretch;display:flex;gap:18px;margin-top:12px;max-width:100%}
-  .work .n{font-variant-numeric:tabular-nums;color:rgba(0,0,0,.45)}
+    main {
+      padding: 400px var(--d-left) 120px;
+      transition: opacity 0.15s ease;
+      font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+      font-size: 10pt;
+      line-height: var(--d-line);
+      color: #111;
+    }
 
-  /* cv */
-  .cv{padding:120px 20px 120px;display:grid;grid-template-columns:repeat(12,1fr);column-gap:20px;row-gap:36px}
-  .cv section{grid-column:span 4}
-  .cv h2{font-size:14px;font-weight:400;color:rgba(0,0,0,.45);margin-bottom:6px}
-  .cv dl{display:grid;grid-template-columns:88px 1fr;row-gap:2px;column-gap:12px}
-  .cv dt{font-variant-numeric:tabular-nums}
-  .cv .contact{grid-column:1/-1;margin-top:40px}
-  .cv .contact a{border-bottom:1px solid currentColor}
+    main a { color: inherit; text-decoration: none; }
+    main a:hover {
+      text-decoration: underline 1px solid #111;
+      text-underline-offset: 2px;
+    }
+    main p { margin: 0; }
 
-  /* index overlay */
-  .index{position:fixed;inset:0;z-index:30;background:#fff;overflow-y:auto;padding:calc(64px + env(safe-area-inset-top,0px)) 20px 40px;
-         display:none;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:20px 14px;align-content:start}
-  body.idx .index{display:grid}
-  body.idx{overflow:hidden}
-  .index a{display:flex;flex-direction:column;gap:4px}
-  .index img{width:100%;aspect-ratio:4/5;object-fit:contain;background:#f4f4f4}
-  .index span{color:rgba(0,0,0,.45);font-variant-numeric:tabular-nums}
-  .index a:hover span{color:#000}
+    /* Works·About 드롭다운이 열리면 사진은 잠시 숨김 (메뉴 글자가 사진과 겹치지 않게) */
+    body:has(.d-nav-item.open) main {
+      opacity: 0;
+    }
 
-  @media (max-width:760px){
-    .bar{padding-left:14px;padding-right:14px}
-    .bar .who{display:none}
-    .intro,.cv{padding-left:14px;padding-right:14px;grid-template-columns:1fr}
-    .stmt,.stmt.kr,.cv section{grid-column:1/-1}
-    .stmt.kr{margin-top:28px}
-    .work{padding:56px 0 20px;min-height:auto}
-    .work + .work{margin-top:40px}
-    .work img{max-height:none;width:100%}
-    .work figcaption{padding:0 14px}
-    .index{grid-template-columns:repeat(3,1fr);padding-left:14px;padding-right:14px;gap:14px 8px}
-  }
-</style>
+    .prints-note {
+      max-width: 520px;
+      margin-bottom: 64px;
+    }
+
+    .prints-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 36px;
+      row-gap: 72px;
+      align-items: start;
+    }
+
+    .work img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* PC: 모든 사진을 가로 사진 높이(가로 박스 10:7)에 맞추고, 박스 안에서 좌측 정렬.
+       세로·정사각 사진은 박스 높이에 맞춰 줄어들고 왼쪽에 붙음 (그리드 칸은 그대로) */
+    @media (min-width: 601px) {
+      .work img {
+        aspect-ratio: 10 / 7;
+        height: auto;
+        object-fit: contain;
+        object-position: left top;
+      }
+    }
+
+    .caption { margin-top: 10px; }
+    .caption .inquire { display: inline-block; margin-top: 6px; }
+    .prints-foot { margin-top: 96px; }
+
+    /* 모바일 상단 정보 (PC용 .d-info/.d-nav는 style.css가 600px 이하에서 숨김) */
+    .p-minfo { display: none; }
+
+    @media (max-width: 600px) {
+      .p-minfo {
+        display: block;
+        position: absolute;
+        top: calc(env(safe-area-inset-top) + 20px);
+        left: calc(env(safe-area-inset-left) + 20px);
+        font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
+        font-size: 10pt;
+        line-height: 16px;
+        color: #111;
+      }
+      .p-minfo p { margin: 0 0 10px 0; }
+      .p-minfo .spacer { height: 14px; }
+      .p-minfo a { color: inherit; text-decoration: none; }
+      main { padding: 300px 20px 80px; }
+      .prints-grid { grid-template-columns: 1fr 1fr; column-gap: 12px; row-gap: 40px; }
+      /* 모바일도 PC처럼 가로 박스(10:7) 높이에 맞춰 좌측 정렬 — 2열에서 행 높이가 들쭉날쭉하지 않게 */
+      .work img { aspect-ratio: 10 / 7; object-fit: contain; object-position: left top; }
+    }
+
+    /* forbazaar: prints 페이지와 같은 틀, 작가노트·CV 블록 추가 */
+    .fb-head { margin-bottom: 64px; }
+    .fb-text { display: grid; grid-template-columns: 1fr 1fr; column-gap: 36px; margin-bottom: 120px; }
+    .fb-text section { max-width: 520px; }
+    .fb-text p + p { margin-top: var(--d-line); }
+    .fb-text [lang="ko"] { word-break: keep-all; }
+    .fb-cv { margin-top: 160px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 36px; row-gap: 48px; }
+    .fb-cv dl { margin: 0; display: grid; grid-template-columns: 96px 1fr; column-gap: 12px; }
+    .fb-cv dd { margin: 0; }
+    .fb-cv .lbl { margin-bottom: var(--d-line); }
+    .caption .sub { color: #111; }
+    @media (max-width: 600px) {
+      .fb-text, .fb-cv { grid-template-columns: 1fr; row-gap: 40px; }
+      .fb-cv dl { grid-template-columns: 76px 1fr; }
+    }
+  </style>
 </head>
+
 <body>
-<header class="bar">
-  <a class="who" href="#top">Kang Minje</a>
-  <nav>
-    <a href="#statement">Statement</a>
-    <button type="button" id="idxbtn" aria-expanded="false">Index</button>
-    <a href="#cv">CV</a>
-  </nav>
-  <span class="count" id="count">— / 59</span>
-</header>
-
-<div class="index" id="index" aria-label="Index"><a href="#w01"><img src="/img/web/faces-02.avif" alt="" loading="lazy" decoding="async"><span>01</span></a><a href="#w02"><img src="/img/web/faces-06.avif" alt="" loading="lazy" decoding="async"><span>02</span></a><a href="#w03"><img src="/img/web/faces-10.avif" alt="" loading="lazy" decoding="async"><span>03</span></a><a href="#w04"><img src="/img/web/faces-11.avif" alt="" loading="lazy" decoding="async"><span>04</span></a><a href="#w05"><img src="/img/web/faces-13.avif" alt="" loading="lazy" decoding="async"><span>05</span></a><a href="#w06"><img src="/img/web/faces-16.avif" alt="" loading="lazy" decoding="async"><span>06</span></a><a href="#w07"><img src="/img/web/faces-21.avif" alt="" loading="lazy" decoding="async"><span>07</span></a><a href="#w08"><img src="/img/web/faces-27.avif" alt="" loading="lazy" decoding="async"><span>08</span></a><a href="#w09"><img src="/img/web/faces-31.avif" alt="" loading="lazy" decoding="async"><span>09</span></a><a href="#w10"><img src="/img/web/faces-32.avif" alt="" loading="lazy" decoding="async"><span>10</span></a><a href="#w11"><img src="/img/web/faces-35.avif" alt="" loading="lazy" decoding="async"><span>11</span></a><a href="#w12"><img src="/img/web/faces-36.avif" alt="" loading="lazy" decoding="async"><span>12</span></a><a href="#w13"><img src="/img/web/faces-57.avif" alt="" loading="lazy" decoding="async"><span>13</span></a><a href="#w14"><img src="/img/web/faces-63.avif" alt="" loading="lazy" decoding="async"><span>14</span></a><a href="#w15"><img src="/img/web/faces-96.avif" alt="" loading="lazy" decoding="async"><span>15</span></a><a href="#w16"><img src="/img/web/faces-101.avif" alt="" loading="lazy" decoding="async"><span>16</span></a><a href="#w17"><img src="/img/web/faces-112.avif" alt="" loading="lazy" decoding="async"><span>17</span></a><a href="#w18"><img src="/img/web/faces-116.avif" alt="" loading="lazy" decoding="async"><span>18</span></a><a href="#w19"><img src="/img/web/faces-117.avif" alt="" loading="lazy" decoding="async"><span>19</span></a><a href="#w20"><img src="/img/web/faces-121.avif" alt="" loading="lazy" decoding="async"><span>20</span></a><a href="#w21"><img src="/img/web/faces-122.avif" alt="" loading="lazy" decoding="async"><span>21</span></a><a href="#w22"><img src="/img/web/faces-123.avif" alt="" loading="lazy" decoding="async"><span>22</span></a><a href="#w23"><img src="/img/web/faces-124.avif" alt="" loading="lazy" decoding="async"><span>23</span></a><a href="#w24"><img src="/img/web/faces-126.avif" alt="" loading="lazy" decoding="async"><span>24</span></a><a href="#w25"><img src="/img/web/faces-130.avif" alt="" loading="lazy" decoding="async"><span>25</span></a><a href="#w26"><img src="/img/web/faces-133.avif" alt="" loading="lazy" decoding="async"><span>26</span></a><a href="#w27"><img src="/img/web/faces-136.avif" alt="" loading="lazy" decoding="async"><span>27</span></a><a href="#w28"><img src="/img/web/faces-138.avif" alt="" loading="lazy" decoding="async"><span>28</span></a><a href="#w29"><img src="/img/web/faces-139.avif" alt="" loading="lazy" decoding="async"><span>29</span></a><a href="#w30"><img src="/img/web/faces-143.avif" alt="" loading="lazy" decoding="async"><span>30</span></a><a href="#w31"><img src="/img/web/faces-152.avif" alt="" loading="lazy" decoding="async"><span>31</span></a><a href="#w32"><img src="/img/web/faces-154.avif" alt="" loading="lazy" decoding="async"><span>32</span></a><a href="#w33"><img src="/img/web/faces-155.avif" alt="" loading="lazy" decoding="async"><span>33</span></a><a href="#w34"><img src="/img/web/faces-179.avif" alt="" loading="lazy" decoding="async"><span>34</span></a><a href="#w35"><img src="/img/web/faces-184.avif" alt="" loading="lazy" decoding="async"><span>35</span></a><a href="#w36"><img src="/img/web/walk-03.avif" alt="" loading="lazy" decoding="async"><span>36</span></a><a href="#w37"><img src="/img/web/walk-12.avif" alt="" loading="lazy" decoding="async"><span>37</span></a><a href="#w38"><img src="/img/web/walk-35.avif" alt="" loading="lazy" decoding="async"><span>38</span></a><a href="#w39"><img src="/img/web/walk-36.avif" alt="" loading="lazy" decoding="async"><span>39</span></a><a href="#w40"><img src="/img/web/ra4-04.avif" alt="" loading="lazy" decoding="async"><span>40</span></a><a href="#w41"><img src="/img/web/movingsphere/ra4-01.avif" alt="" loading="lazy" decoding="async"><span>41</span></a><a href="#w42"><img src="/img/web/movingsphere/ra4-45.avif" alt="" loading="lazy" decoding="async"><span>42</span></a><a href="#w43"><img src="/img/web/movingsphere/ra4-03.avif" alt="" loading="lazy" decoding="async"><span>43</span></a><a href="#w44"><img src="/img/web/ra4-06.avif" alt="" loading="lazy" decoding="async"><span>44</span></a><a href="#w45"><img src="/img/web/movingsphere/ra4-09.avif" alt="" loading="lazy" decoding="async"><span>45</span></a><a href="#w46"><img src="/img/web/movingsphere/ra4-12.avif" alt="" loading="lazy" decoding="async"><span>46</span></a><a href="#w47"><img src="/img/web/movingsphere/ra4-37.avif" alt="" loading="lazy" decoding="async"><span>47</span></a><a href="#w48"><img src="/img/web/movingsphere/ra4-46.avif" alt="" loading="lazy" decoding="async"><span>48</span></a><a href="#w49"><img src="/img/web/movingsphere/ra4-47.avif" alt="" loading="lazy" decoding="async"><span>49</span></a><a href="#w50"><img src="/forbazaar/img/chungyup-01-0131.webp" alt="" loading="lazy" decoding="async"><span>50</span></a><a href="#w51"><img src="/forbazaar/img/chungyup-01-0138.webp" alt="" loading="lazy" decoding="async"><span>51</span></a><a href="#w52"><img src="/forbazaar/img/chungyup-01-0192.webp" alt="" loading="lazy" decoding="async"><span>52</span></a><a href="#w53"><img src="/forbazaar/img/chungyup-01-0199.webp" alt="" loading="lazy" decoding="async"><span>53</span></a><a href="#w54"><img src="/forbazaar/img/chungyup-01-0387.webp" alt="" loading="lazy" decoding="async"><span>54</span></a><a href="#w55"><img src="/forbazaar/img/chungyup-01-0474.webp" alt="" loading="lazy" decoding="async"><span>55</span></a><a href="#w56"><img src="/forbazaar/img/chungyup-03-0749.webp" alt="" loading="lazy" decoding="async"><span>56</span></a><a href="#w57"><img src="/forbazaar/img/chungyup-03-0946.webp" alt="" loading="lazy" decoding="async"><span>57</span></a><a href="#w58"><img src="/forbazaar/img/chungyup-polaroid.webp" alt="" loading="lazy" decoding="async"><span>58</span></a><a href="#w59"><img src="/forbazaar/img/leia.webp" alt="" loading="lazy" decoding="async"><span>59</span></a></div>
-
-<main id="top">
-  <section class="intro" id="statement">
-    <h1><b>Kang Minje</b><span>Portfolio for The Korea Fashion Photography Prize 2027</span><span>Harper’s BAZAAR Korea × KFPA</span></h1>
-    <div class="stmt en">
-      <p class="lbl">Statement</p>
-      <p>Kang Minje moves the traces of suppressed emotion into matter. The emotion he works with is the hollowness of a youth pressed down within the system. It recalls han, the Korean sentiment of an earlier age.</p>
-      <p>Instead of slick digital data, he treats the photograph as an object with mass and flesh, folding the print and intervening by hand in extreme push development and printing.</p>
-      <p>Because he believes the fact that it was there still carries weight, he calls himself a photographer in the AI imaging era. His work asks again after the place of the body, lost in technological acceleration.</p>
-    </div>
-    <div class="stmt kr" lang="ko">
-      <p class="lbl">작가노트</p>
-      <p>강민제는 억눌린 감정의 자국을 물질로 옮긴다. 그가 다루는 정서는 제도 안에서 눌려 생긴 젊음의 공허다. 오래전 한국의 한이라는 정서와 닮아 있다.</p>
-      <p>매끄러운 디지털 데이터 대신, 그는 사진을 무게와 피부를 지닌 사물로 다루며 인화지를 접고 극단적인 증감 현상과 인화 과정에 직접 개입한다.</p>
-      <p>무언가 실제로 그 자리에 있었다는 사실의 무게를 믿기에, 그는 AI 이미징 시대에도 스스로를 사진가로 칭한다. 그의 작업은 기술적 가속 속에서 상실된 몸의 자리를 다시 묻는다.</p>
-    </div>
-    <a class="scroll" href="#w01">59 works ↓</a>
-  </section>
-
-  <div class="works">
-    <figure class="work" id="w01" data-n="01">
-      <img src="/img/web/faces-02.avif" width="1615" height="2400" alt="SunDimming, Kang Minje" loading="eager" decoding="async">
-      <figcaption><span class="n">01</span><span class="t">SunDimming</span></figcaption>
-    </figure>
-    <figure class="work" id="w02" data-n="02">
-      <img src="/img/web/faces-06.avif" width="1697" height="2400" alt="Blues, Kang Minje" loading="eager" decoding="async">
-      <figcaption><span class="n">02</span><span class="t">Blues</span></figcaption>
-    </figure>
-    <figure class="work" id="w03" data-n="03">
-      <img src="/img/web/faces-10.avif" width="2400" height="1920" alt="superposition, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">03</span><span class="t">superposition</span></figcaption>
-    </figure>
-    <figure class="work" id="w04" data-n="04">
-      <img src="/img/web/faces-11.avif" width="1133" height="1440" alt="Yu, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">04</span><span class="t">Yu</span></figcaption>
-    </figure>
-    <figure class="work" id="w05" data-n="05">
-      <img src="/img/web/faces-13.avif" width="1920" height="2400" alt="fluid state, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">05</span><span class="t">fluid state</span></figcaption>
-    </figure>
-    <figure class="work" id="w06" data-n="06">
-      <img src="/img/web/faces-16.avif" width="1920" height="2400" alt="Untitled, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">06</span><span class="t">Untitled</span></figcaption>
-    </figure>
-    <figure class="work" id="w07" data-n="07">
-      <img src="/img/web/faces-21.avif" width="1920" height="2400" alt="superposition, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">07</span><span class="t">superposition</span></figcaption>
-    </figure>
-    <figure class="work" id="w08" data-n="08">
-      <img src="/img/web/faces-27.avif" width="1750" height="2400" alt="rabbit hole, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">08</span><span class="t">rabbit hole</span></figcaption>
-    </figure>
-    <figure class="work" id="w09" data-n="09">
-      <img src="/img/web/faces-31.avif" width="1920" height="2400" alt="flesh, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">09</span><span class="t">flesh</span></figcaption>
-    </figure>
-    <figure class="work" id="w10" data-n="10">
-      <img src="/img/web/faces-32.avif" width="1920" height="2400" alt="flesh, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">10</span><span class="t">flesh</span></figcaption>
-    </figure>
-    <figure class="work" id="w11" data-n="11">
-      <img src="/img/web/faces-35.avif" width="1920" height="2400" alt="1/20, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">11</span><span class="t">1/20</span></figcaption>
-    </figure>
-    <figure class="work" id="w12" data-n="12">
-      <img src="/img/web/faces-36.avif" width="1920" height="2400" alt="1/20, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">12</span><span class="t">1/20</span></figcaption>
-    </figure>
-    <figure class="work" id="w13" data-n="13">
-      <img src="/img/web/faces-57.avif" width="1948" height="2400" alt="10, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">13</span><span class="t">10</span></figcaption>
-    </figure>
-    <figure class="work" id="w14" data-n="14">
-      <img src="/img/web/faces-63.avif" width="1920" height="2400" alt="Le Mile SS26, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">14</span><span class="t">Le Mile SS26</span></figcaption>
-    </figure>
-    <figure class="work" id="w15" data-n="15">
-      <img src="/img/web/faces-96.avif" width="2400" height="2400" alt="hwanhee, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">15</span><span class="t">hwanhee</span></figcaption>
-    </figure>
-    <figure class="work" id="w16" data-n="16">
-      <img src="/img/web/faces-101.avif" width="2400" height="2400" alt="hwanhee, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">16</span><span class="t">hwanhee</span></figcaption>
-    </figure>
-    <figure class="work" id="w17" data-n="17">
-      <img src="/img/web/faces-112.avif" width="1919" height="2400" alt="parkdongsun, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">17</span><span class="t">parkdongsun</span></figcaption>
-    </figure>
-    <figure class="work" id="w18" data-n="18">
-      <img src="/img/web/faces-116.avif" width="1920" height="2400" alt="ann, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">18</span><span class="t">ann</span></figcaption>
-    </figure>
-    <figure class="work" id="w19" data-n="19">
-      <img src="/img/web/faces-117.avif" width="1920" height="2400" alt="ann, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">19</span><span class="t">ann</span></figcaption>
-    </figure>
-    <figure class="work" id="w20" data-n="20">
-      <img src="/img/web/faces-121.avif" width="1919" height="2400" alt="Inès, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">20</span><span class="t">Inès</span></figcaption>
-    </figure>
-    <figure class="work" id="w21" data-n="21">
-      <img src="/img/web/faces-122.avif" width="1920" height="2400" alt="Inès, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">21</span><span class="t">Inès</span></figcaption>
-    </figure>
-    <figure class="work" id="w22" data-n="22">
-      <img src="/img/web/faces-123.avif" width="1919" height="2400" alt="Inès, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">22</span><span class="t">Inès</span></figcaption>
-    </figure>
-    <figure class="work" id="w23" data-n="23">
-      <img src="/img/web/faces-124.avif" width="1920" height="2400" alt="Inès, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">23</span><span class="t">Inès</span></figcaption>
-    </figure>
-    <figure class="work" id="w24" data-n="24">
-      <img src="/img/web/faces-126.avif" width="1920" height="2400" alt="Inès, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">24</span><span class="t">Inès</span></figcaption>
-    </figure>
-    <figure class="work" id="w25" data-n="25">
-      <img src="/img/web/faces-130.avif" width="1920" height="2400" alt="chowoohyun, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">25</span><span class="t">chowoohyun</span></figcaption>
-    </figure>
-    <figure class="work" id="w26" data-n="26">
-      <img src="/img/web/faces-133.avif" width="1920" height="2400" alt="chowooseok, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">26</span><span class="t">chowooseok</span></figcaption>
-    </figure>
-    <figure class="work" id="w27" data-n="27">
-      <img src="/img/web/faces-136.avif" width="1920" height="2400" alt="Gyeongju, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">27</span><span class="t">Gyeongju</span></figcaption>
-    </figure>
-    <figure class="work" id="w28" data-n="28">
-      <img src="/img/web/faces-138.avif" width="1920" height="2400" alt="Ripple Effects 2 2, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">28</span><span class="t">Ripple Effects 2 2</span></figcaption>
-    </figure>
-    <figure class="work" id="w29" data-n="29">
-      <img src="/img/web/faces-139.avif" width="1920" height="2400" alt="Ripple Effects 2 3, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">29</span><span class="t">Ripple Effects 2 3</span></figcaption>
-    </figure>
-    <figure class="work" id="w30" data-n="30">
-      <img src="/img/web/faces-143.avif" width="2400" height="1920" alt="milo &amp; zaya, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">30</span><span class="t">milo &amp; zaya</span></figcaption>
-    </figure>
-    <figure class="work" id="w31" data-n="31">
-      <img src="/img/web/faces-152.avif" width="1920" height="2400" alt="milo &amp; zaya, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">31</span><span class="t">milo &amp; zaya</span></figcaption>
-    </figure>
-    <figure class="work" id="w32" data-n="32">
-      <img src="/img/web/faces-154.avif" width="2400" height="1920" alt="milo &amp; zaya, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">32</span><span class="t">milo &amp; zaya</span></figcaption>
-    </figure>
-    <figure class="work" id="w33" data-n="33">
-      <img src="/img/web/faces-155.avif" width="2400" height="1920" alt="milo &amp; zaya, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">33</span><span class="t">milo &amp; zaya</span></figcaption>
-    </figure>
-    <figure class="work" id="w34" data-n="34">
-      <img src="/img/web/faces-179.avif" width="2400" height="1920" alt="leo, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">34</span><span class="t">leo</span></figcaption>
-    </figure>
-    <figure class="work" id="w35" data-n="35">
-      <img src="/img/web/faces-184.avif" width="1920" height="2400" alt="leo, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">35</span><span class="t">leo</span></figcaption>
-    </figure>
-    <figure class="work" id="w36" data-n="36">
-      <img src="/img/web/walk-03.avif" width="2400" height="1799" alt="play, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">36</span><span class="t">play</span></figcaption>
-    </figure>
-    <figure class="work" id="w37" data-n="37">
-      <img src="/img/web/walk-12.avif" width="1800" height="2400" alt="still life, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">37</span><span class="t">still life</span></figcaption>
-    </figure>
-    <figure class="work" id="w38" data-n="38">
-      <img src="/img/web/walk-35.avif" width="2400" height="2400" alt="walls, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">38</span><span class="t">walls</span></figcaption>
-    </figure>
-    <figure class="work" id="w39" data-n="39">
-      <img src="/img/web/walk-36.avif" width="2400" height="2400" alt="walls, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">39</span><span class="t">walls</span></figcaption>
-    </figure>
-    <figure class="work" id="w40" data-n="40">
-      <img src="/img/web/ra4-04.avif" width="2400" height="1680" alt="daniela, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">40</span><span class="t">daniela</span></figcaption>
-    </figure>
-    <figure class="work" id="w41" data-n="41">
-      <img src="/img/web/movingsphere/ra4-01.avif" width="2400" height="1680" alt="jeff and daniela, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">41</span><span class="t">jeff and daniela</span></figcaption>
-    </figure>
-    <figure class="work" id="w42" data-n="42">
-      <img src="/img/web/movingsphere/ra4-45.avif" width="2400" height="1592" alt="Jeff, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">42</span><span class="t">Jeff</span></figcaption>
-    </figure>
-    <figure class="work" id="w43" data-n="43">
-      <img src="/img/web/movingsphere/ra4-03.avif" width="2400" height="1611" alt="jeff, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">43</span><span class="t">jeff</span></figcaption>
-    </figure>
-    <figure class="work" id="w44" data-n="44">
-      <img src="/img/web/ra4-06.avif" width="2400" height="1670" alt="jeff, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">44</span><span class="t">jeff</span></figcaption>
-    </figure>
-    <figure class="work" id="w45" data-n="45">
-      <img src="/img/web/movingsphere/ra4-09.avif" width="1752" height="2400" alt="jeff, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">45</span><span class="t">jeff</span></figcaption>
-    </figure>
-    <figure class="work" id="w46" data-n="46">
-      <img src="/img/web/movingsphere/ra4-12.avif" width="1023" height="1453" alt="hoyeong, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">46</span><span class="t">hoyeong</span></figcaption>
-    </figure>
-    <figure class="work" id="w47" data-n="47">
-      <img src="/img/web/movingsphere/ra4-37.avif" width="1050" height="1313" alt="Legs(pixelated), Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">47</span><span class="t">Legs(pixelated)</span></figcaption>
-    </figure>
-    <figure class="work" id="w48" data-n="48">
-      <img src="/img/web/movingsphere/ra4-46.avif" width="1995" height="2400" alt="Man in the Sphere, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">48</span><span class="t">Man in the Sphere</span></figcaption>
-    </figure>
-    <figure class="work" id="w49" data-n="49">
-      <img src="/img/web/movingsphere/ra4-47.avif" width="2400" height="1686" alt="Plastic Eye, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">49</span><span class="t">Plastic Eye</span></figcaption>
-    </figure>
-    <figure class="work" id="w50" data-n="50">
-      <img src="/forbazaar/img/chungyup-01-0131.webp" width="2400" height="1920" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">50</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w51" data-n="51">
-      <img src="/forbazaar/img/chungyup-01-0138.webp" width="2400" height="1920" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">51</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w52" data-n="52">
-      <img src="/forbazaar/img/chungyup-01-0192.webp" width="1920" height="2400" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">52</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w53" data-n="53">
-      <img src="/forbazaar/img/chungyup-01-0199.webp" width="2400" height="1920" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">53</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w54" data-n="54">
-      <img src="/forbazaar/img/chungyup-01-0387.webp" width="2400" height="1920" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">54</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w55" data-n="55">
-      <img src="/forbazaar/img/chungyup-01-0474.webp" width="1920" height="2400" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">55</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w56" data-n="56">
-      <img src="/forbazaar/img/chungyup-03-0749.webp" width="1920" height="2400" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">56</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w57" data-n="57">
-      <img src="/forbazaar/img/chungyup-03-0946.webp" width="1920" height="2400" alt="Chung Yup, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">57</span><span class="t">Chung Yup</span></figcaption>
-    </figure>
-    <figure class="work" id="w58" data-n="58">
-      <img src="/forbazaar/img/chungyup-polaroid.webp" width="1312" height="1547" alt="Chung Yup, Polaroid, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">58</span><span class="t">Chung Yup, Polaroid</span></figcaption>
-    </figure>
-    <figure class="work" id="w59" data-n="59">
-      <img src="/forbazaar/img/leia.webp" width="1920" height="2400" alt="Leia, Kang Minje" loading="lazy" decoding="async">
-      <figcaption><span class="n">59</span><span class="t">Leia</span></figcaption>
-    </figure>
+  <!-- PC: 메인과 같은 좌상단 정보 + 상단 메뉴(Works·About 드롭다운, Prints) -->
+  <div class="d-info">
+    <p class="name"><a href="/" id="footer-home">Kang Minje</a></p>
+    <div class="spacer"></div>
+    <p>Photographer</p>
+    <p>flesh<br>hollow<br>breath</p>
+    <div class="spacer"></div>
+    <p>Seoul, Korea</p>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <a href="/CV+Portfolio/KangMinje_CVandPortfolio.zip" download="KangMinje_CVandPortfolio.zip" class="d-link">→ portfolio / cv</a>
+    <div class="spacer"></div>
+    <p><a href="mailto:info@kangminje.com?subject=Inquiry%20%E2%80%94%20KangMinje%20Studio" class="d-link">info@kangminje.com</a><br>+82 10 9323 9432</p>
   </div>
 
-  <section class="cv" id="cv">
-    <section>
-      <h2>CV</h2>
-      <dl>
-        <dt>2002</dt><dd>Born in Korea</dd>
-        <dt>Now</dt><dd>Freelance photographer, Seoul</dd>
-      </dl>
-    </section>
-    <section>
-      <h2>Education</h2>
-      <dl>
-        <dt>2020–2026</dt><dd>Chung-Ang University, Photography (BFA), graduated first in class</dd>
-        <dt>2025</dt><dd>Bauhaus-Universität Weimar, Visuelle Kommunikation, exchange</dd>
-        <dt>2017–2019</dt><dd>Anyang Arts High School, Photography</dd>
-      </dl>
-    </section>
-    <section>
-      <h2>Publications</h2>
-      <dl>
-        <dt>2026</dt><dd>Le Mile Magazine, SS26</dd>
-        <dt>2026</dt><dd>«Haircuts; various forms», photobook, fluidpaper</dd>
-        <dt>2025</dt><dd>Magazine «fluid» issue 11</dd>
-        <dt>2024</dt><dd>Magazine «fluid» issue 1</dd>
-      </dl>
-    </section>
-    <section>
-      <h2>Group exhibitions</h2>
-      <dl>
-        <dt>2025</dt><dd>«낯선 눈으로», 64 Gallery</dd>
-        <dt>2024</dt><dd>«낯선 눈으로», Goethe-Institut Seoul</dd>
-        <dt>2024</dt><dd>«running through», GIMYE</dd>
-        <dt>2023</dt><dd>«CAU Open Studio 2023», Anseong</dd>
-      </dl>
-    </section>
-    <section>
-      <h2>Experience</h2>
-      <dl>
-        <dt>2021–2023</dt><dd>Photographer to the Chief of Naval Operations, Republic of Korea Navy</dd>
-      </dl>
-    </section>
-    <section>
-      <h2>Process</h2>
-      <dl>
-        <dt>Film</dt><dd>35mm, 120, push development</dd>
-        <dt>Print</dt><dd>Darkroom B/W and RA-4 colour, folded and re-photographed prints</dd>
-      </dl>
-    </section>
-    <p class="contact"><a href="mailto:info@kangminje.com">info@kangminje.com</a> &nbsp; <a href="https://instagram.com/kangminjedot">@kangminjedot</a> &nbsp; <a href="/">kangminje.com</a></p>
-  </section>
-</main>
+  <nav class="d-nav">
+    <div class="d-nav-item d-nav-works">
+      <a href="#" class="d-nav-trigger" onclick="return false;">Works</a>
+      <div class="d-panel">
+        <div class="d-works">
+          <div class="d-group">
+            <a href="/?page=all" class="d-row"><span>(index)</span></a>
+          </div>
+          <div class="d-group">
+            <a href="/?page=moving_sphere" class="d-row"><span>Moving Sphere</span><span>2025 -</span></a>
+            <a href="/?page=sundimming" class="d-row"><span>SunDimming</span><span>2025 -</span></a>
+            <a href="/?page=lips" class="d-row"><span>Lips</span><span>2021 - 2026</span></a>
+            <a href="/?page=faces" class="d-row"><span>Faces</span><span>2021 -</span></a>
+            <a href="/?page=dots" class="d-row"><span>Dots</span><span>2025 -</span></a>
+          </div>
+          <div class="d-group">
+            <a href="/?page=aria" class="d-row"><span>Aria</span><span>2025</span></a>
+            <a href="/?page=fluid_state" class="d-row"><span>Rose</span><span>2024</span></a>
+            <a href="/?page=hwanhee_2024" class="d-row"><span>Hwanhee</span><span>2024</span></a>
+            <a href="/?page=hwanhee_2026" class="d-row"><span>Hwanhee</span><span>2026</span></a>
+            <a href="/?page=xinseha" class="d-row"><span>Seha</span><span>2023</span></a>
+            <a href="/?page=parkdongsun" class="d-row"><span>Dongsun</span><span>2026</span></a>
+            <a href="/?page=ann" class="d-row"><span>Ann</span><span>2026</span></a>
+            <a href="/?page=ines" class="d-row"><span>Ines</span><span>2026</span></a>
+            <a href="/?page=chowoohyun" class="d-row"><span>Woohyun</span><span>2026</span></a>
+            <a href="/?page=milozaya" class="d-row"><span>Milo&amp;Zaya</span><span>2026</span></a>
+            <a href="/?page=sihun" class="d-row"><span>Sihun</span><span>2026</span></a>
+            <a href="/?page=leo" class="d-row"><span>Leo</span><span>2026</span></a>
+          </div>
+          <div class="d-group d-group-wide">
+            <a href="/?page=ripple_effects_2" class="d-row"><span>Ripple Effects 2</span><span>2026</span><span>Just Music</span></a>
+            <a href="/?page=editorial_lemile" class="d-row"><span>When Four Players Collapse Into One Sound</span><span>2026</span><span>Le Mile</span></a>
+            <a href="/?page=heigs" class="d-row"><span>Beurre Was Here Before You Noticed</span><span>2025</span><span>Le Mile</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<script>
-(() => {
-  const total = 59, count = document.getElementById('count');
-  const works = [...document.querySelectorAll('.work')];
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) count.textContent = e.target.dataset.n + ' / ' + String(total).padStart(2,'0'); });
-  }, { rootMargin: '-45% 0px -45% 0px' });
-  works.forEach(w => io.observe(w));
-  const top = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) count.textContent = '— / ' + String(total).padStart(2,'0'); }), { threshold: .5 });
-  top.observe(document.getElementById('statement')); top.observe(document.getElementById('cv'));
+    <div class="d-nav-item d-nav-about">
+      <a href="/?page=about" class="d-nav-trigger">About</a>
+      <div class="d-panel">
+        <div class="d-about">
+          <!-- 키워드 hover → 화면 중앙에 이미지 (data-img), data-full은 브라우저 전체 크기 (가로 사진만) -->
+          <p>(EN)</p>
+          <p>Kang Minje moves the <span class="d-word" data-img="walk-19">traces</span> of suppressed <span class="d-word" data-img="faces-01">emotion</span> into <span class="d-word" data-img="ra4-11">matter</span>.
+            The <span class="d-word" data-img="24-28" data-full>emotion</span> he works with is the <span class="d-word" data-img="faces-112">hollowness</span> of a <span class="d-word" data-img="faces-69">youth</span>
+            <span class="d-word" data-img="faces-110">pressed down</span> within the system.
+            It recalls <span class="d-word" data-img="24-12" data-full>han</span>, the Korean sentiment of an earlier age.</p>
+          <p>Instead of <span class="d-word" data-img="ra4-37">slick digital data</span>, he treats the <span class="d-word" data-img="faces-05">photograph</span> as an <span class="d-word" data-img="ra4-41">object</span>
+            with <span class="d-word" data-img="walk-11" data-full>mass</span> and <span class="d-word" data-img="faces-32">flesh</span>, <span class="d-word" data-img="ra4-09">folding</span> the print and intervening by <span class="d-word" data-img="ra4-12">hand</span>
+            in extreme push development and <span class="d-word" data-img="faces-16">printing</span>.</p>
+          <p class="d-about-last">Because he believes the fact that <span class="d-word" data-img="walk-31">it was there</span> still carries <span class="d-word" data-img="walk-37">weight</span>,
+            he calls himself a <span class="d-word" data-img="ra4-45">photographer</span> in the <span class="d-word" data-img="24-30" data-full>AI imaging era</span>.
+            His work asks again after the place of the <span class="d-word" data-img="faces-116">body</span>,
+            lost in technological acceleration.</p>
+          <p>(KR)</p>
+          <p>강민제는 억눌린 <span class="d-word" data-img="faces-01">감정</span>의 <span class="d-word" data-img="walk-19">자국</span>을 <span class="d-word" data-img="ra4-11">물질</span>로 옮긴다.
+            그가 다루는 <span class="d-word" data-img="24-28" data-full>정서</span>는 제도 안에서 <span class="d-word" data-img="faces-110">눌려</span> 생긴 <span class="d-word" data-img="faces-69">젊음</span>의 <span class="d-word" data-img="faces-112">공허</span>다.
+            오래전 한국의 <span class="d-word" data-img="24-12" data-full>한</span>이라는 정서와 닮아 있다.</p>
+          <p><span class="d-word" data-img="ra4-37">매끄러운 디지털 데이터</span> 대신, 그는 <span class="d-word" data-img="faces-05">사진</span>을 <span class="d-word" data-img="walk-11" data-full>무게</span>와 <span class="d-word" data-img="faces-32">피부</span>를 지닌 <span class="d-word" data-img="ra4-41">사물</span>로 다루며
+            인화지를 <span class="d-word" data-img="ra4-09">접고</span> 극단적인 증감 현상과 <span class="d-word" data-img="faces-16">인화 과정</span>에 <span class="d-word" data-img="ra4-12">직접</span> 개입한다.</p>
+          <p>무언가 <span class="d-word" data-img="walk-31">실제로 그 자리에 있었다</span>는 사실의 <span class="d-word" data-img="walk-37">무게</span>를 믿기에,
+            그는 <span class="d-word" data-img="24-30" data-full>AI 이미징 시대</span>에도 스스로를 <span class="d-word" data-img="ra4-45">사진가</span>로 칭한다.
+            그의 작업은 기술적 가속 속에서 상실된 <span class="d-word" data-img="faces-116">몸</span>의 자리를 다시 묻는다.</p>
+          <div class="d-other-webs">
+            <p>(other webs)</p>
+            <a class="other-link other-link-fragile" href="https://kangminje.com/fragilecalendar">fragilecalendar</a><br>
+            <a class="other-link other-link-jagook" href="https://kangminje.com/jagooknetwork">jagooknetwork</a><br>
+            <a class="other-link other-link-fluidpaper" href="https://fluidpaper.com">
+              <span class="fluidpaper-text">fluidpaper</span>
+              <img src="/logo_fluidpaper.png" alt="fluidpaper" aria-hidden="true">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Prints: 패널 없는 단독 링크 (메뉴 컨트롤러 대상인 .d-nav-item이 아님), 우측 여백 = 좌상단 이름 좌측 여백 -->
+    <a href="/prints/" class="d-nav-prints">Prints</a>
+  </nav>
 
-  const btn = document.getElementById('idxbtn'), body = document.body;
-  const setIdx = on => { body.classList.toggle('idx', on); btn.setAttribute('aria-expanded', on); btn.textContent = on ? 'Close' : 'Index'; };
-  btn.addEventListener('click', () => setIdx(!body.classList.contains('idx')));
-  document.getElementById('index').addEventListener('click', e => { if (e.target.closest('a')) setIdx(false); });
+  <!-- About 키워드 hover 이미지 -->
+  <div id="word-image" aria-hidden="true"><img alt="" /></div>
 
-  const cur = () => { const y = innerHeight / 2; return works.findIndex(w => { const r = w.getBoundingClientRect(); return r.top <= y && r.bottom >= y; }); };
-  addEventListener('keydown', e => {
-    if (e.key === 'Escape') return setIdx(false);
-    if (body.classList.contains('idx') || e.metaKey || e.ctrlKey) return;
-    const k = e.key; let i = cur();
-    if (k === 'ArrowDown' || k === 'ArrowRight' || k === 'j') { e.preventDefault(); works[Math.min(i + 1, works.length - 1)].scrollIntoView(); }
-    if (k === 'ArrowUp' || k === 'ArrowLeft' || k === 'k') { e.preventDefault(); if (i > 0) works[i - 1].scrollIntoView(); else document.getElementById('statement').scrollIntoView(); }
-  });
-})();
-</script>
+  <!-- 모바일 상단 정보 -->
+  <div class="p-minfo">
+    <p class="name"><a href="/">Kang Minje</a></p>
+    <div class="spacer"></div>
+    <p>Photographer</p>
+    <p>flesh<br>hollow<br>breath</p>
+    <div class="spacer"></div>
+    <p>Seoul, Korea</p>
+    <div class="spacer"></div>
+    <p><a href="mailto:info@kangminje.com">info@kangminje.com</a><br>+82 10 9323 9432</p>
+  </div>
+
+    <main>
+    <p class="fb-head">The Korea Fashion Photography Prize 2027<br>Harper’s BAZAAR Korea × KFPA</p>
+
+    <div class="fb-text">
+      <section>
+        <p>(EN)</p>
+        <p>Kang Minje moves the traces of suppressed emotion into matter. The emotion he works with is the hollowness of a youth pressed down within the system. It recalls han, the Korean sentiment of an earlier age.</p>
+        <p>Instead of slick digital data, he treats the photograph as an object with mass and flesh, folding the print and intervening by hand in extreme push development and printing.</p>
+        <p>Because he believes the fact that it was there still carries weight, he calls himself a photographer in the AI imaging era. His work asks again after the place of the body, lost in technological acceleration.</p>
+      </section>
+      <section lang="ko">
+        <p>(KR)</p>
+        <p>강민제는 억눌린 감정의 자국을 물질로 옮긴다. 그가 다루는 정서는 제도 안에서 눌려 생긴 젊음의 공허다. 오래전 한국의 한이라는 정서와 닮아 있다.</p>
+        <p>매끄러운 디지털 데이터 대신, 그는 사진을 무게와 피부를 지닌 사물로 다루며 인화지를 접고 극단적인 증감 현상과 인화 과정에 직접 개입한다.</p>
+        <p>무언가 실제로 그 자리에 있었다는 사실의 무게를 믿기에, 그는 AI 이미징 시대에도 스스로를 사진가로 칭한다. 그의 작업은 기술적 가속 속에서 상실된 몸의 자리를 다시 묻는다.</p>
+      </section>
+    </div>
+
+    <div class="prints-grid">
+      <div class="work">
+        <img src="/img/web/faces-02.avif" width="1615" height="2400" loading="lazy" decoding="async" alt="SunDimming, 2025">
+        <div class="caption"><p>SunDimming, 2025</p><p>C-Type Print</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-06.avif" width="1697" height="2400" loading="lazy" decoding="async" alt="Blues">
+        <div class="caption"><p>Blues</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-10.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Superposition">
+        <div class="caption"><p>Superposition</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-11.avif" width="1133" height="1440" loading="lazy" decoding="async" alt="Yu">
+        <div class="caption"><p>Yu</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-13.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Fluid state, 2024">
+        <div class="caption"><p>Fluid state, 2024</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-16.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Untitled">
+        <div class="caption"><p>Untitled</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-21.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Superposition">
+        <div class="caption"><p>Superposition</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-27.avif" width="1750" height="2400" loading="lazy" decoding="async" alt="Rabbit hole">
+        <div class="caption"><p>Rabbit hole</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-31.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Aria, 2025">
+        <div class="caption"><p>Aria, 2025</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-32.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Aria, 2025">
+        <div class="caption"><p>Aria, 2025</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-35.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="1/20">
+        <div class="caption"><p>1/20</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-36.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="1/20">
+        <div class="caption"><p>1/20</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-57.avif" width="1948" height="2400" loading="lazy" decoding="async" alt="10">
+        <div class="caption"><p>10</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-63.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="When Four Players Collapse Into One Sound, 2026">
+        <div class="caption"><p>When Four Players Collapse Into One Sound, 2026</p><p>Le Mile</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-96.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Hwanhee, 2026">
+        <div class="caption"><p>Hwanhee, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-101.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Hwanhee, 2026">
+        <div class="caption"><p>Hwanhee, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-112.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Dongsun, 2026">
+        <div class="caption"><p>Dongsun, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-116.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ann, 2026">
+        <div class="caption"><p>Ann, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-117.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ann, 2026">
+        <div class="caption"><p>Ann, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-121.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
+        <div class="caption"><p>Ines, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-122.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
+        <div class="caption"><p>Ines, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-123.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
+        <div class="caption"><p>Ines, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-124.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
+        <div class="caption"><p>Ines, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-126.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
+        <div class="caption"><p>Ines, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-130.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Woohyun, 2026">
+        <div class="caption"><p>Woohyun, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-133.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Chowooseok">
+        <div class="caption"><p>Chowooseok</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-136.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Gyeongju">
+        <div class="caption"><p>Gyeongju</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-138.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ripple Effects 2, 2026">
+        <div class="caption"><p>Ripple Effects 2, 2026</p><p>Just Music</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-139.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ripple Effects 2, 2026">
+        <div class="caption"><p>Ripple Effects 2, 2026</p><p>Just Music</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-143.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
+        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-152.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
+        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-154.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
+        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-155.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
+        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-179.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Leo, 2026">
+        <div class="caption"><p>Leo, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/faces-184.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Leo, 2026">
+        <div class="caption"><p>Leo, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/walk-03.avif" width="2400" height="1799" loading="lazy" decoding="async" alt="Play">
+        <div class="caption"><p>Play</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/walk-12.avif" width="1800" height="2400" loading="lazy" decoding="async" alt="Still life">
+        <div class="caption"><p>Still life</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/walk-35.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Walls">
+        <div class="caption"><p>Walls</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/walk-36.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Walls">
+        <div class="caption"><p>Walls</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/ra4-04.avif" width="2400" height="1680" loading="lazy" decoding="async" alt="Daniela, 2025">
+        <div class="caption"><p>Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-01.avif" width="2400" height="1680" loading="lazy" decoding="async" alt="Jeff and Daniela, 2025">
+        <div class="caption"><p>Jeff and Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-45.avif" width="2400" height="1592" loading="lazy" decoding="async" alt="Jeff, 2025">
+        <div class="caption"><p>Jeff, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-03.avif" width="2400" height="1611" loading="lazy" decoding="async" alt="Jeff 1, 2025">
+        <div class="caption"><p>Jeff 1, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/ra4-06.avif" width="2400" height="1670" loading="lazy" decoding="async" alt="Jeff 2, 2025">
+        <div class="caption"><p>Jeff 2, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-09.avif" width="1752" height="2400" loading="lazy" decoding="async" alt="Jeff 4, 2025">
+        <div class="caption"><p>Jeff 4, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-12.avif" width="1023" height="1453" loading="lazy" decoding="async" alt="Hoyeong, 2025">
+        <div class="caption"><p>Hoyeong, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-37.avif" width="1050" height="1313" loading="lazy" decoding="async" alt="Legs (Pixelated), 2025">
+        <div class="caption"><p>Legs (Pixelated), 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-46.avif" width="1995" height="2400" loading="lazy" decoding="async" alt="Man in the Sphere, 2025">
+        <div class="caption"><p>Man in the Sphere, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/img/web/movingsphere/ra4-47.avif" width="2400" height="1686" loading="lazy" decoding="async" alt="Plastic Eye, 2025">
+        <div class="caption"><p>Plastic Eye, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0131.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0138.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0192.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0199.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0387.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-01-0474.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-03-0749.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-03-0946.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
+        <div class="caption"><p>Chung Yup, 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/chungyup-polaroid.webp" width="1312" height="1547" loading="lazy" decoding="async" alt="Chung Yup (Polaroid), 2026">
+        <div class="caption"><p>Chung Yup (Polaroid), 2026</p></div>
+      </div>
+      <div class="work">
+        <img src="/forbazaar/img/leia.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Leia, 2026">
+        <div class="caption"><p>Leia, 2026</p></div>
+      </div>
+    </div>
+
+    <div class="fb-cv">
+      <section>
+        <p class="lbl">(cv)</p>
+        <dl>
+          <dt>2002</dt><dd>Born in Korea</dd>
+          <dt>Now</dt><dd>Freelance photographer, Seoul</dd>
+        </dl>
+      </section>
+      <section>
+        <p class="lbl">(education)</p>
+        <dl>
+          <dt>2020 – 2026</dt><dd>Chung-Ang University, Photography, graduated first in class</dd>
+          <dt>2025</dt><dd>Bauhaus-Universität Weimar, Visuelle Kommunikation, exchange</dd>
+          <dt>2017 – 2019</dt><dd>Anyang Arts High School, Photography</dd>
+        </dl>
+      </section>
+      <section>
+        <p class="lbl">(publications)</p>
+        <dl>
+          <dt>2026</dt><dd>Le Mile, «When Four Players Collapse Into One Sound»</dd>
+          <dt>2026</dt><dd>«Haircuts; various forms», photobook, fluidpaper</dd>
+          <dt>2025</dt><dd>Magazine «fluid» issue 11</dd>
+          <dt>2024</dt><dd>Magazine «fluid» issue 1</dd>
+        </dl>
+      </section>
+      <section>
+        <p class="lbl">(group exhibitions)</p>
+        <dl>
+          <dt>2025</dt><dd>«낯선 눈으로», 64 Gallery</dd>
+          <dt>2024</dt><dd>«낯선 눈으로», Goethe-Institut Seoul</dd>
+          <dt>2024</dt><dd>«running through», GIMYE</dd>
+          <dt>2023</dt><dd>«CAU Open Studio 2023», Anseong</dd>
+        </dl>
+      </section>
+      <section>
+        <p class="lbl">(experience)</p>
+        <dl>
+          <dt>2021 – 2023</dt><dd>Photographer to the Chief of Naval Operations, Republic of Korea Navy</dd>
+        </dl>
+      </section>
+    </div>
+
+    <p class="prints-foot"><a href="mailto:info@kangminje.com">info@kangminje.com</a><br>+82 10 9323 9432</p>
+  </main>
+  <script src="/nav.js?v=20261124"></script>
 </body>
+
 </html>
