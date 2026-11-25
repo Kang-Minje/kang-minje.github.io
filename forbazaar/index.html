@@ -14,110 +14,61 @@
 
   <link rel="stylesheet" href="/style.css?v=20261125" />
   <style>
-    /* 메인 style.css(상단 정보·메뉴·드롭다운)를 그대로 쓰고, 이 페이지는 스크롤되는 문서로 */
-    html, body {
-      height: auto !important;
-      overflow: auto !important;
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif; font-size: 10pt; line-height: var(--d-line); color: #111; }
+    p { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    body:has(.d-nav-item.open) #stage { opacity: 0; }
+
+    /* the stage: right of the name block, the spread fills it */
+    #stage {
+      position: fixed; top: 120px; bottom: 96px; left: calc(574 / 1440 * 100%); right: var(--d-left);
+      transition: opacity .15s linear; user-select: none; -webkit-user-select: none;
     }
+    .spread { position: absolute; inset: 0; display: none; align-items: flex-start; justify-content: flex-start; gap: 24px; }
+    .spread.on { display: flex; }
+    .spread figure { margin: 0; flex: none; }
+    .spread figure.off { display: none; }
+    .spread img { display: block; width: var(--w, auto); height: var(--h, auto); }
+    .spread figcaption { margin-top: 10px; }
 
-    /* 상단 정보·메뉴는 문서와 함께 스크롤 (콜린 도지슨 Viewing Room처럼) */
-    .d-info,
-    .d-nav {
-      position: absolute;
-    }
-
-    main {
-      padding: 400px var(--d-left) 120px;
-      transition: opacity 0.15s ease;
-      font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-      font-size: 10pt;
-      line-height: var(--d-line);
-      color: #111;
-    }
-
-    main a { color: inherit; text-decoration: none; }
-    main a:hover {
-      text-decoration: underline 1px solid #111;
-      text-underline-offset: 2px;
-    }
-    main p { margin: 0; }
-
-    /* Works·About 드롭다운이 열리면 사진은 잠시 숨김 (메뉴 글자가 사진과 겹치지 않게) */
-    body:has(.d-nav-item.open) main {
-      opacity: 0;
-    }
-
-    .prints-note {
-      max-width: 520px;
-      margin-bottom: 64px;
-    }
-
-    .prints-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 36px;
-      row-gap: 72px;
-      align-items: start;
-    }
-
-    .work img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    /* PC: 모든 사진을 가로 사진 높이(가로 박스 10:7)에 맞추고, 박스 안에서 좌측 정렬.
-       세로·정사각 사진은 박스 높이에 맞춰 줄어들고 왼쪽에 붙음 (그리드 칸은 그대로) */
-    @media (min-width: 601px) {
-      .work img {
-        aspect-ratio: 10 / 7;
-        height: auto;
-        object-fit: contain;
-        object-position: left top;
-      }
-    }
-
-    .caption { margin-top: 10px; }
-    .caption .inquire { display: inline-block; margin-top: 6px; }
-    .prints-foot { margin-top: 96px; }
-
-    /* 모바일 상단 정보 (PC용 .d-info/.d-nav는 style.css가 600px 이하에서 숨김) */
-    .p-minfo { display: none; }
-
-    @media (max-width: 600px) {
-      .p-minfo {
-        display: block;
-        position: absolute;
-        top: calc(env(safe-area-inset-top) + 20px);
-        left: calc(env(safe-area-inset-left) + 20px);
-        font-family: -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans KR", sans-serif;
-        font-size: 10pt;
-        line-height: 16px;
-        color: #111;
-      }
-      .p-minfo p { margin: 0 0 10px 0; }
-      .p-minfo .spacer { height: 14px; }
-      .p-minfo a { color: inherit; text-decoration: none; }
-      main { padding: 300px 20px 80px; }
-      .prints-grid { grid-template-columns: 1fr 1fr; column-gap: 12px; row-gap: 40px; }
-      /* 모바일도 PC처럼 가로 박스(10:7) 높이에 맞춰 좌측 정렬 — 2열에서 행 높이가 들쭉날쭉하지 않게 */
-      .work img { aspect-ratio: 10 / 7; object-fit: contain; object-position: left top; }
-    }
-
-    /* forbazaar: prints 페이지와 같은 틀, 작가노트·CV 블록 추가 */
-    .fb-head { margin-bottom: 64px; }
-    .fb-text { display: grid; grid-template-columns: 1fr 1fr; column-gap: 36px; margin-bottom: 120px; }
-    .fb-text section { max-width: 520px; }
+    /* text pages inside the stage: statement first, cv last */
+    .sheet { position: absolute; inset: 0; display: none; overflow-y: auto; scrollbar-width: none; }
+    .sheet.on { display: grid; }
+    .fb-text { grid-template-columns: 1fr 1fr; column-gap: 36px; align-content: start; }
+    .fb-text section { max-width: 420px; }
     .fb-text p + p { margin-top: var(--d-line); }
     .fb-text [lang="ko"] { word-break: keep-all; }
-    .fb-cv { margin-top: 160px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 36px; row-gap: 48px; }
+    .fb-text .head { grid-column: 1 / -1; margin-bottom: 48px; }
+    .fb-cv { grid-template-columns: 1fr 1fr; column-gap: 36px; row-gap: 40px; align-content: start; }
     .fb-cv dl { margin: 0; display: grid; grid-template-columns: 96px 1fr; column-gap: 12px; }
     .fb-cv dd { margin: 0; }
     .fb-cv .lbl { margin-bottom: var(--d-line); }
-    .caption .sub { color: #111; }
+
+    /* counter, bottom right like the main site */
+    #count { position: fixed; right: var(--d-left); bottom: 40px; font-variant-numeric: tabular-nums; }
+
+    /* the pointer becomes a word: PREVIOUS / NEXT, FIRST IMAGE / LAST IMAGE at the ends */
+    @media (hover: hover) and (pointer: fine) {
+      #stage { cursor: none; }
+      #stage .sheet { cursor: auto; }
+    }
+    #cur { position: fixed; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity .15s linear; z-index: 50; }
+    #cur span { display: inline-block; transform: translate(-50%, -50%); background: #fff; padding: 0 5px; white-space: nowrap; letter-spacing: .02em; }
+    #cur.on { opacity: 1; }
+    @media (hover: none) { #cur { display: none; } }
+
     @media (max-width: 600px) {
-      .fb-text, .fb-cv { grid-template-columns: 1fr; row-gap: 40px; }
+      #stage { top: 300px; bottom: 64px; left: 20px; right: 20px; }
+      .fb-text, .fb-cv { grid-template-columns: 1fr; row-gap: 32px; }
       .fb-cv dl { grid-template-columns: 76px 1fr; }
+      #count { right: 20px; bottom: 24px; }
+    }
+    .p-minfo { display: none; }
+    @media (max-width: 600px) {
+      .p-minfo { display: block; position: absolute; top: calc(env(safe-area-inset-top) + 20px); left: calc(env(safe-area-inset-left) + 20px); line-height: 16px; }
+      .p-minfo p { margin: 0 0 10px 0; }
+      .p-minfo .spacer { height: 14px; }
     }
   </style>
 </head>
@@ -234,10 +185,9 @@
     <p><a href="mailto:info@kangminje.com">info@kangminje.com</a><br>+82 10 9323 9432</p>
   </div>
 
-    <main>
-    <p class="fb-head">The Korea Fashion Photography Prize 2027<br>Harper’s BAZAAR Korea × KFPA</p>
-
-    <div class="fb-text">
+    <main id="stage" aria-live="polite">
+    <div class="fb-text sheet" data-kind="text">
+      <p class="head">The Korea Fashion Photography Prize 2027<br>Harper’s BAZAAR Korea × KFPA</p>
       <section>
         <p>(EN)</p>
         <p>Kang Minje moves the traces of suppressed emotion into matter. The emotion he works with is the hollowness of a youth pressed down within the system. It recalls han, the Korean sentiment of an earlier age.</p>
@@ -251,247 +201,50 @@
         <p>무언가 실제로 그 자리에 있었다는 사실의 무게를 믿기에, 그는 AI 이미징 시대에도 스스로를 사진가로 칭한다. 그의 작업은 기술적 가속 속에서 상실된 몸의 자리를 다시 묻는다.</p>
       </section>
     </div>
-
-    <div class="prints-grid">
-      <div class="work">
-        <img src="/img/web/faces-02.avif" width="1615" height="2400" loading="lazy" decoding="async" alt="SunDimming, 2025">
-        <div class="caption"><p>SunDimming, 2025</p><p>C-Type Print</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-06.avif" width="1697" height="2400" loading="lazy" decoding="async" alt="Blues">
-        <div class="caption"><p>Blues</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-10.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Superposition">
-        <div class="caption"><p>Superposition</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-11.avif" width="1133" height="1440" loading="lazy" decoding="async" alt="Yu">
-        <div class="caption"><p>Yu</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-13.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Fluid state, 2024">
-        <div class="caption"><p>Fluid state, 2024</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-16.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Untitled">
-        <div class="caption"><p>Untitled</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-21.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Superposition">
-        <div class="caption"><p>Superposition</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-27.avif" width="1750" height="2400" loading="lazy" decoding="async" alt="Rabbit hole">
-        <div class="caption"><p>Rabbit hole</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-31.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Aria, 2025">
-        <div class="caption"><p>Aria, 2025</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-32.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Aria, 2025">
-        <div class="caption"><p>Aria, 2025</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-35.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="1/20">
-        <div class="caption"><p>1/20</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-36.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="1/20">
-        <div class="caption"><p>1/20</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-57.avif" width="1948" height="2400" loading="lazy" decoding="async" alt="10">
-        <div class="caption"><p>10</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-63.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="When Four Players Collapse Into One Sound, 2026">
-        <div class="caption"><p>When Four Players Collapse Into One Sound, 2026</p><p>Le Mile</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-96.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Hwanhee, 2026">
-        <div class="caption"><p>Hwanhee, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-101.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Hwanhee, 2026">
-        <div class="caption"><p>Hwanhee, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-112.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Dongsun, 2026">
-        <div class="caption"><p>Dongsun, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-116.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ann, 2026">
-        <div class="caption"><p>Ann, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-117.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ann, 2026">
-        <div class="caption"><p>Ann, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-121.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
-        <div class="caption"><p>Ines, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-122.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
-        <div class="caption"><p>Ines, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-123.avif" width="1919" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
-        <div class="caption"><p>Ines, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-124.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
-        <div class="caption"><p>Ines, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-126.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ines, 2026">
-        <div class="caption"><p>Ines, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-130.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Woohyun, 2026">
-        <div class="caption"><p>Woohyun, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-133.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Chowooseok">
-        <div class="caption"><p>Chowooseok</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-136.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Gyeongju">
-        <div class="caption"><p>Gyeongju</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-138.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ripple Effects 2, 2026">
-        <div class="caption"><p>Ripple Effects 2, 2026</p><p>Just Music</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-139.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Ripple Effects 2, 2026">
-        <div class="caption"><p>Ripple Effects 2, 2026</p><p>Just Music</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-143.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
-        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-152.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
-        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-154.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
-        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-155.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Milo&amp;Zaya, 2026">
-        <div class="caption"><p>Milo&amp;Zaya, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-179.avif" width="2400" height="1920" loading="lazy" decoding="async" alt="Leo, 2026">
-        <div class="caption"><p>Leo, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/faces-184.avif" width="1920" height="2400" loading="lazy" decoding="async" alt="Leo, 2026">
-        <div class="caption"><p>Leo, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/walk-03.avif" width="2400" height="1799" loading="lazy" decoding="async" alt="Play">
-        <div class="caption"><p>Play</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/walk-12.avif" width="1800" height="2400" loading="lazy" decoding="async" alt="Still life">
-        <div class="caption"><p>Still life</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/walk-35.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Walls">
-        <div class="caption"><p>Walls</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/walk-36.avif" width="2400" height="2400" loading="lazy" decoding="async" alt="Walls">
-        <div class="caption"><p>Walls</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/ra4-04.avif" width="2400" height="1680" loading="lazy" decoding="async" alt="Daniela, 2025">
-        <div class="caption"><p>Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-01.avif" width="2400" height="1680" loading="lazy" decoding="async" alt="Jeff and Daniela, 2025">
-        <div class="caption"><p>Jeff and Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-45.avif" width="2400" height="1592" loading="lazy" decoding="async" alt="Jeff, 2025">
-        <div class="caption"><p>Jeff, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-03.avif" width="2400" height="1611" loading="lazy" decoding="async" alt="Jeff 1, 2025">
-        <div class="caption"><p>Jeff 1, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/ra4-06.avif" width="2400" height="1670" loading="lazy" decoding="async" alt="Jeff 2, 2025">
-        <div class="caption"><p>Jeff 2, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-09.avif" width="1752" height="2400" loading="lazy" decoding="async" alt="Jeff 4, 2025">
-        <div class="caption"><p>Jeff 4, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-12.avif" width="1023" height="1453" loading="lazy" decoding="async" alt="Hoyeong, 2025">
-        <div class="caption"><p>Hoyeong, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-37.avif" width="1050" height="1313" loading="lazy" decoding="async" alt="Legs (Pixelated), 2025">
-        <div class="caption"><p>Legs (Pixelated), 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-46.avif" width="1995" height="2400" loading="lazy" decoding="async" alt="Man in the Sphere, 2025">
-        <div class="caption"><p>Man in the Sphere, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/img/web/movingsphere/ra4-47.avif" width="2400" height="1686" loading="lazy" decoding="async" alt="Plastic Eye, 2025">
-        <div class="caption"><p>Plastic Eye, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0131.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0138.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0192.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0199.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0387.webp" width="2400" height="1920" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-01-0474.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-03-0749.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-03-0946.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Chung Yup, 2026">
-        <div class="caption"><p>Chung Yup, 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/chungyup-polaroid.webp" width="1312" height="1547" loading="lazy" decoding="async" alt="Chung Yup (Polaroid), 2026">
-        <div class="caption"><p>Chung Yup (Polaroid), 2026</p></div>
-      </div>
-      <div class="work">
-        <img src="/forbazaar/img/leia.webp" width="1920" height="2400" loading="lazy" decoding="async" alt="Leia, 2026">
-        <div class="caption"><p>Leia, 2026</p></div>
-      </div>
-    </div>
-
-    <div class="fb-cv">
+    <div class="spread two"><figure><img data-src="/img/web/faces-02.avif" width="1615" height="2400" alt="SunDimming, 2025"><figcaption><p>SunDimming, 2025</p><p>C-Type Print</p></figcaption></figure><figure><img data-src="/img/web/faces-06.avif" width="1697" height="2400" alt="Blues"><figcaption><p>Blues</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-10.avif" width="2400" height="1920" alt="Superposition"><figcaption><p>Superposition</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-11.avif" width="1133" height="1440" alt="Yu"><figcaption><p>Yu</p></figcaption></figure><figure><img data-src="/img/web/faces-13.avif" width="1920" height="2400" alt="Fluid state, 2024"><figcaption><p>Fluid state, 2024</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-16.avif" width="1920" height="2400" alt="Untitled"><figcaption><p>Untitled</p></figcaption></figure><figure><img data-src="/img/web/faces-21.avif" width="1920" height="2400" alt="Superposition"><figcaption><p>Superposition</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-27.avif" width="1750" height="2400" alt="Rabbit hole"><figcaption><p>Rabbit hole</p></figcaption></figure><figure><img data-src="/img/web/faces-31.avif" width="1920" height="2400" alt="Aria, 2025"><figcaption><p>Aria, 2025</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-32.avif" width="1920" height="2400" alt="Aria, 2025"><figcaption><p>Aria, 2025</p></figcaption></figure><figure><img data-src="/img/web/faces-35.avif" width="1920" height="2400" alt="1/20"><figcaption><p>1/20</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-36.avif" width="1920" height="2400" alt="1/20"><figcaption><p>1/20</p></figcaption></figure><figure><img data-src="/img/web/faces-57.avif" width="1948" height="2400" alt="10"><figcaption><p>10</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-63.avif" width="1920" height="2400" alt="When Four Players Collapse Into One Sound, 2026"><figcaption><p>When Four Players Collapse Into One Sound, 2026</p><p>Le Mile</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-96.avif" width="2400" height="2400" alt="Hwanhee, 2026"><figcaption><p>Hwanhee, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-101.avif" width="2400" height="2400" alt="Hwanhee, 2026"><figcaption><p>Hwanhee, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-112.avif" width="1919" height="2400" alt="Dongsun, 2026"><figcaption><p>Dongsun, 2026</p></figcaption></figure><figure><img data-src="/img/web/faces-116.avif" width="1920" height="2400" alt="Ann, 2026"><figcaption><p>Ann, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-117.avif" width="1920" height="2400" alt="Ann, 2026"><figcaption><p>Ann, 2026</p></figcaption></figure><figure><img data-src="/img/web/faces-121.avif" width="1919" height="2400" alt="Ines, 2026"><figcaption><p>Ines, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-122.avif" width="1920" height="2400" alt="Ines, 2026"><figcaption><p>Ines, 2026</p></figcaption></figure><figure><img data-src="/img/web/faces-123.avif" width="1919" height="2400" alt="Ines, 2026"><figcaption><p>Ines, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-124.avif" width="1920" height="2400" alt="Ines, 2026"><figcaption><p>Ines, 2026</p></figcaption></figure><figure><img data-src="/img/web/faces-126.avif" width="1920" height="2400" alt="Ines, 2026"><figcaption><p>Ines, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-130.avif" width="1920" height="2400" alt="Woohyun, 2026"><figcaption><p>Woohyun, 2026</p></figcaption></figure><figure><img data-src="/img/web/faces-133.avif" width="1920" height="2400" alt="Chowooseok"><figcaption><p>Chowooseok</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/faces-136.avif" width="1920" height="2400" alt="Gyeongju"><figcaption><p>Gyeongju</p></figcaption></figure><figure><img data-src="/img/web/faces-138.avif" width="1920" height="2400" alt="Ripple Effects 2, 2026"><figcaption><p>Ripple Effects 2, 2026</p><p>Just Music</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-139.avif" width="1920" height="2400" alt="Ripple Effects 2, 2026"><figcaption><p>Ripple Effects 2, 2026</p><p>Just Music</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-143.avif" width="2400" height="1920" alt="Milo&amp;amp;Zaya, 2026"><figcaption><p>Milo&amp;Zaya, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-152.avif" width="1920" height="2400" alt="Milo&amp;amp;Zaya, 2026"><figcaption><p>Milo&amp;Zaya, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-154.avif" width="2400" height="1920" alt="Milo&amp;amp;Zaya, 2026"><figcaption><p>Milo&amp;Zaya, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-155.avif" width="2400" height="1920" alt="Milo&amp;amp;Zaya, 2026"><figcaption><p>Milo&amp;Zaya, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-179.avif" width="2400" height="1920" alt="Leo, 2026"><figcaption><p>Leo, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/faces-184.avif" width="1920" height="2400" alt="Leo, 2026"><figcaption><p>Leo, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/walk-03.avif" width="2400" height="1799" alt="Play"><figcaption><p>Play</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/walk-12.avif" width="1800" height="2400" alt="Still life"><figcaption><p>Still life</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/walk-35.avif" width="2400" height="2400" alt="Walls"><figcaption><p>Walls</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/walk-36.avif" width="2400" height="2400" alt="Walls"><figcaption><p>Walls</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/ra4-04.avif" width="2400" height="1680" alt="Daniela, 2025"><figcaption><p>Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/movingsphere/ra4-01.avif" width="2400" height="1680" alt="Jeff and Daniela, 2025"><figcaption><p>Jeff and Daniela, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/movingsphere/ra4-45.avif" width="2400" height="1592" alt="Jeff, 2025"><figcaption><p>Jeff, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/movingsphere/ra4-03.avif" width="2400" height="1611" alt="Jeff 1, 2025"><figcaption><p>Jeff 1, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/ra4-06.avif" width="2400" height="1670" alt="Jeff 2, 2025"><figcaption><p>Jeff 2, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/movingsphere/ra4-09.avif" width="1752" height="2400" alt="Jeff 4, 2025"><figcaption><p>Jeff 4, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure><figure><img data-src="/img/web/movingsphere/ra4-12.avif" width="1023" height="1453" alt="Hoyeong, 2025"><figcaption><p>Hoyeong, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/img/web/movingsphere/ra4-37.avif" width="1050" height="1313" alt="Legs (Pixelated), 2025"><figcaption><p>Legs (Pixelated), 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure><figure><img data-src="/img/web/movingsphere/ra4-46.avif" width="1995" height="2400" alt="Man in the Sphere, 2025"><figcaption><p>Man in the Sphere, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/img/web/movingsphere/ra4-47.avif" width="2400" height="1686" alt="Plastic Eye, 2025"><figcaption><p>Plastic Eye, 2025</p><p>Moving Sphere — C-Type Hand Print (RA-4)</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/chungyup-01-0131.webp" width="2400" height="1920" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/chungyup-01-0138.webp" width="2400" height="1920" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/chungyup-01-0192.webp" width="1920" height="2400" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/chungyup-01-0199.webp" width="2400" height="1920" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/chungyup-01-0387.webp" width="2400" height="1920" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/forbazaar/img/chungyup-01-0474.webp" width="1920" height="2400" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure><figure><img data-src="/forbazaar/img/chungyup-03-0749.webp" width="1920" height="2400" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure></div>
+    <div class="spread two"><figure><img data-src="/forbazaar/img/chungyup-03-0946.webp" width="1920" height="2400" alt="Chung Yup, 2026"><figcaption><p>Chung Yup, 2026</p></figcaption></figure><figure><img data-src="/forbazaar/img/chungyup-polaroid.webp" width="1312" height="1547" alt="Chung Yup (Polaroid), 2026"><figcaption><p>Chung Yup (Polaroid), 2026</p></figcaption></figure></div>
+    <div class="spread"><figure><img data-src="/forbazaar/img/leia.webp" width="1920" height="2400" alt="Leia, 2026"><figcaption><p>Leia, 2026</p></figcaption></figure></div>
+    <div class="fb-cv sheet">
       <section>
         <p class="lbl">(cv)</p>
         <dl>
@@ -533,8 +286,102 @@
       </section>
     </div>
 
-    <p class="prints-foot"><a href="mailto:info@kangminje.com">info@kangminje.com</a><br>+82 10 9323 9432</p>
   </main>
+  <p id="count"></p>
+  <div id="cur" aria-hidden="true"><span></span></div>
+  <script>
+  (() => {
+    const stage = document.getElementById('stage');
+    const blocks = [...stage.children];               // statement, spreads, cv
+    const count = document.getElementById('count'), cur = document.getElementById('cur'), lbl = cur.firstElementChild;
+    const small = matchMedia('(max-width: 600px)'), fine = matchMedia('(hover: hover) and (pointer: fine)');
+    const pad = n => String(n).padStart(4, '0');
+    const GAP = () => small.matches ? 12 : 24, CAP = 44;
+    let steps = [], i = 0;
+
+    // a step is a whole spread on a computer, one picture on a phone
+    function build() {
+      steps = [];
+      blocks.forEach(b => {
+        if (!b.classList.contains('spread')) steps.push({ el: b });
+        else if (small.matches) [...b.children].forEach(f => steps.push({ el: b, figs: [f] }));
+        else steps.push({ el: b, figs: [...b.children] });
+      });
+    }
+    const total = () => steps.filter(s => s.figs).length;
+    const load = st => st && st.figs && st.figs.forEach(f => { const im = f.firstElementChild; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } });
+
+    // pictures in a spread share one height, as large as the stage allows
+    function fit(st) {
+      if (!st.figs) return;
+      const W = stage.clientWidth, H = stage.clientHeight - CAP;
+      const rs = st.figs.map(f => +f.firstElementChild.getAttribute('width') / +f.firstElementChild.getAttribute('height'));
+      const h = Math.min(H, (W - GAP() * (rs.length - 1)) / rs.reduce((a, r) => a + r, 0));
+      st.figs.forEach((f, k) => { f.style.setProperty('--h', Math.floor(h) + 'px'); f.style.setProperty('--w', Math.floor(h * rs[k]) + 'px'); });
+      st.el.style.gap = GAP() + 'px';
+    }
+
+    function show(n) {
+      i = Math.max(0, Math.min(steps.length - 1, n));
+      const st = steps[i];
+      blocks.forEach(b => b.classList.toggle('on', b === st.el));
+      if (st.figs) [...st.el.children].forEach(f => f.classList.toggle('off', !st.figs.includes(f)));
+      fit(st); load(st); load(steps[i + 1]); load(steps[i - 1]);
+      const k = steps.slice(0, i + 1).filter(s => s.figs).length;
+      count.textContent = st.figs ? pad(k) + ' / ' + pad(total()) : '';
+      if (hover) label(lastX, lastY);
+    }
+    const go = d => show(i + d);
+
+    // the word that follows the pointer
+    let lastX = 0, lastY = 0, hover = false;
+    function label(x, y) {
+      const r = stage.getBoundingClientRect(), d = x < r.left + r.width / 2 ? -1 : 1, n = i + d;
+      const t = n < 0 ? 'FIRST IMAGE' : n >= steps.length ? 'LAST IMAGE' : d < 0 ? 'PREVIOUS' : 'NEXT';
+      if (lbl.textContent !== t) lbl.textContent = t;
+      cur.style.transform = `translate(${x}px, ${y}px)`;
+    }
+    stage.addEventListener('mousemove', e => {
+      lastX = e.clientX; lastY = e.clientY;
+      if (!fine.matches) return;
+      const onText = !!e.target.closest('.sheet a, .sheet dl, .sheet section, .sheet .head');
+      hover = !onText; cur.classList.toggle('on', hover); stage.style.cursor = onText ? 'auto' : '';
+      if (hover) label(lastX, lastY);
+    });
+    stage.addEventListener('mouseleave', () => { hover = false; cur.classList.remove('on'); });
+    stage.addEventListener('click', e => {
+      if (e.target.closest('a')) return;
+      const r = stage.getBoundingClientRect();
+      go(e.clientX < r.left + r.width / 2 ? -1 : 1);
+    });
+    addEventListener('keydown', e => {
+      if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+      if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+    });
+    // one step per scroll gesture
+    const wh = { sum: 0, last: 0, locked: false };
+    addEventListener('wheel', e => {
+      const sh = e.target.closest && e.target.closest('.sheet');
+      if (sh && sh.scrollHeight > sh.clientHeight + 2) return;
+      const now = performance.now();
+      if (now - wh.last > 200) { wh.sum = 0; wh.locked = false; }
+      wh.last = now; if (wh.locked) return;
+      wh.sum += e.deltaY + e.deltaX;
+      if (Math.abs(wh.sum) >= 30) { go(wh.sum > 0 ? 1 : -1); wh.locked = true; wh.sum = 0; }
+    }, { passive: true });
+    let sx = null, sy = null;
+    stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    stage.addEventListener('touchend', e => {
+      if (sx == null) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+    });
+    addEventListener('dragstart', e => e.preventDefault());
+    addEventListener('resize', () => fit(steps[i]));
+    small.addEventListener('change', () => { const el = steps[i].el, f = steps[i].figs && steps[i].figs[0]; build(); show(Math.max(0, steps.findIndex(s => s.el === el && (!f || s.figs.includes(f))))); });
+    build(); show(0);
+  })();
+  </script>
   <script src="/nav.js?v=20261124"></script>
 </body>
 
