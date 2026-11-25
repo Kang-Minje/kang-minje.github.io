@@ -553,7 +553,7 @@
     </div>
     <div class="group">
       <h2>Import</h2>
-      <p class="sub">A plain data file or an unencrypted backup. The page reloads when it's done.</p>
+      <p class="sub">A plain data file or an unencrypted backup replaces everything. A file with only an "add" key adds rows to your lists and keeps the rest. The page reloads when it's done.</p>
       <div class="fields"><input type="file" id="importfile" accept=".json,application/json"></div>
       <textarea id="importbox" placeholder="Or paste the contents here"></textarea>
       <div class="fields">
@@ -1304,6 +1304,27 @@
     var p;
     try{p=JSON.parse(raw);}catch(e){$("importmsg").textContent="That isn't valid JSON. Check you chose the whole file.";return;}
     if(!p||typeof p!=="object"||p.ct){$("importmsg").textContent="That isn't a data file. Vault and sync files are encrypted and can't be imported here.";return;}
+    /* merge: {"add":{"dir":[...],"warm":[...]}} appends rows to existing lists, skipping names already there.
+       Appending keeps every existing row at its index, so checks stay attached to the right rows. */
+    if(p.add&&typeof p.add==="object"&&!p.data){
+      S.data=S.data||{};
+      var added=0, skipped=0;
+      Object.keys(p.add).forEach(function(k){
+        var rows=p.add[k]; if(!Array.isArray(rows)) return;
+        var cur=Array.isArray(S.data[k])?S.data[k]:(S.data[k]=[]);
+        var have={}; cur.forEach(function(r){if(Array.isArray(r)&&r[0]) have[String(r[0]).trim().toLowerCase()]=1;});
+        rows.forEach(function(r){
+          if(!Array.isArray(r)||!r[0]) return;
+          var key=String(r[0]).trim().toLowerCase();
+          if(have[key]){skipped++;return;}
+          have[key]=1; cur.push(r); added++;
+        });
+      });
+      save();
+      $("importmsg").textContent="Added "+added+(skipped?", skipped "+skipped+" already there":"")+". Reloading…";
+      setTimeout(function(){location.reload();},900);
+      return;
+    }
     if(p.data) S.data=p.data;
     ["checks","money","notes","audit","tier3","weekstamp","shoots","shootGoal"].forEach(function(k){
       if(p[k]!==undefined&&p[k]!==null) S[k]=p[k];
